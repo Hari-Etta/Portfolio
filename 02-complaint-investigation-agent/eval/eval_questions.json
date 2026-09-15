@@ -1,0 +1,117 @@
+[
+  {
+    "id": 1,
+    "question": "Which product has received the most complaints overall?",
+    "expected_answer_contains": ["Credit reporting"]
+  },
+  {
+    "id": 2,
+    "question": "Which state has the most complaints filed?",
+    "expected_answer_contains": ["California", "CA"]
+  },
+  {
+    "id": 3,
+    "question": "What percentage of all complaints received a timely response?",
+    "expected_answer_contains": ["98.5", "98.50"]
+  },
+  {
+    "id": 4,
+    "question": "Which company has received the most complaints in this database?",
+    "expected_answer_contains": ["Equifax"]
+  },
+  {
+    "id": 5,
+    "question": "What is the top issue reported for Mortgage complaints?",
+    "expected_answer_contains": ["Loan modification", "foreclosure"]
+  },
+  {
+    "id": 6,
+    "question": "Among Debt collection complaints where a dispute status was actually recorded (excluding complaints with no dispute status on file), what percentage were disputed by the consumer?",
+    "expected_answer_contains": ["17.5", "17.6"]
+  },
+  {
+    "id": 7,
+    "question": "What is the most common channel consumers use to submit complaints to the CFPB?",
+    "expected_answer_contains": ["Web"]
+  },
+  {
+    "id": 8,
+    "question": "What is the most common company response category to consumer complaints?",
+    "expected_answer_contains": ["Closed with explanation"]
+  },
+  {
+    "id": 9,
+    "question": "How many total complaints are in the database?",
+    "expected_answer_contains": ["3458906"]
+  },
+  {
+    "id": 10,
+    "question": "What are the top two states by number of complaints filed, and how do their totals compare?",
+    "expected_answer_contains_all": ["California", "Florida"]
+  },
+  {
+    "id": 11,
+    "question": "Compare the total number of complaints for the Mortgage product versus the Checking or savings account product.",
+    "expected_answer_contains_all": ["373639", "158988"]
+  },
+  {
+    "id": 12,
+    "question": "What is the most recent date of complaints in this dataset?",
+    "expected_answer_contains": ["2023-03-23", "March 23, 2023", "March 2023"]
+  },
+  {
+    "id": 13,
+    "question": "What is the earliest date of complaints in this dataset?",
+    "expected_answer_contains": ["2011-12-01", "December 2011", "2011"]
+  },
+  {
+    "id": 14,
+    "question": "What are the top three companies by complaint volume?",
+    "expected_answer_contains_all": ["Equifax", "TransUnion", "Experian"]
+  },
+  {
+    "id": 15,
+    "question": "What is the second most common product category by complaint volume?",
+    "expected_answer_contains": ["Debt collection"]
+  },
+  {
+    "id": 16,
+    "question": "What percentage of all complaints resulted in a company response of 'Closed with explanation'?",
+    "expected_answer_contains": ["75.5", "75.52"]
+  },
+  {
+    "id": 17,
+    "question": "Which state has the second highest total number of complaints, after California?",
+    "expected_answer_contains": ["Florida", "FL"]
+  },
+  {
+    "id": 18,
+    "question": "How many complaints were submitted via Phone?",
+    "expected_answer_contains": ["154119"]
+  },
+  {
+    "id": 19,
+    "question": "How many complaints currently have a company response status of 'In progress'?",
+    "expected_answer_contains": ["103560"]
+  },
+  {
+    "id": 20,
+    "question": "What percentage of all complaints were submitted via the Web?",
+    "expected_answer_contains": ["85.2", "85.3"]
+  },
+  {
+    "id": 21,
+    "question": "Which product has more complaints: Mortgage or Credit card or prepaid card?",
+    "expected_answer_contains": ["Mortgage"]
+  },
+  {
+    "id": 22,
+    "question": "What was the total complaint volume in the first quarter of 2023?",
+    "expected_answer_contains": ["244675"]
+  },
+  {
+    "id": 23,
+    "question": "Compare the timely response rates between Mortgage complaints and Credit card complaints.",
+    "expected_answer_contains_all": ["98.0", "98.9"]
+  }
+]

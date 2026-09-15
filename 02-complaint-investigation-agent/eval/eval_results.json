@@ -1,0 +1,216 @@
+{
+  "accuracy": 1.0,
+  "num_correct": 23,
+  "num_total": 23,
+  "avg_latency_sec": 2.96,
+  "avg_subqueries": 1.0,
+  "details": [
+    {
+      "id": 1,
+      "question": "Which product has received the most complaints overall?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 3.72,
+      "answer": "The product that has received the most complaints overall is **Credit reporting, credit repair services, or other personal consumer reports**, with **1,714,173 complaints**."
+    },
+    {
+      "id": 2,
+      "question": "Which state has the most complaints filed?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 2.61,
+      "answer": "**California (CA) has the most complaints filed with 414,208 complaints.**"
+    },
+    {
+      "id": 3,
+      "question": "What percentage of all complaints received a timely response?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 2.89,
+      "answer": "Based on the data analysis, **98.5% of all complaints received a timely response**.\n\nThis means that out of all complaints in the database, the vast majority were addressed within the expected timeframe."
+    },
+    {
+      "id": 4,
+      "question": "Which company has received the most complaints in this database?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 2.76,
+      "answer": "**Equifax, Inc.** has received the most complaints in this database, with **619,370 complaints**."
+    },
+    {
+      "id": 5,
+      "question": "What is the top issue reported for Mortgage complaints?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 2.59,
+      "answer": "The top issue reported for Mortgage complaints is **Loan modification, collection, and foreclosure**, with **112,307 complaints**."
+    },
+    {
+      "id": 6,
+      "question": "Among Debt collection complaints where a dispute status was actually recorded (excluding complaints with no dispute status on file), what percentage were disputed by the consumer?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 3.57,
+      "answer": "Among debt collection complaints with a recorded dispute status, **17.58%** were disputed by the consumer. This represents 25,634 disputed complaints out of 145,775 total complaints that had dispute status information on file."
+    },
+    {
+      "id": 7,
+      "question": "What is the most common channel consumers use to submit complaints to the CFPB?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 2.83,
+      "answer": "# Most Common CFPB Complaint Channel\n\nThe most common channel consumers use to submit complaints to the CFPB is **the Web**, accounting for **2,950,186 complaints**."
+    },
+    {
+      "id": 8,
+      "question": "What is the most common company response category to consumer complaints?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 3.27,
+      "answer": "Based on the analysis of consumer complaints, the most common company response category is **\"Closed with explanation,\"** which accounts for **2,612,184 complaints**.\n\nThis response type represents the largest share of how companies handle consumer complaints in the database."
+    },
+    {
+      "id": 9,
+      "question": "How many total complaints are in the database?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 2.29,
+      "answer": "There are **3,458,906 total complaints** in the database."
+    },
+    {
+      "id": 10,
+      "question": "What are the top two states by number of complaints filed, and how do their totals compare?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 3.05,
+      "answer": "# Top Two States by Complaint Volume\n\n**California (CA)** leads with **414,208 complaints**, followed by **Florida (FL)** with **389,321 complaints**.\n\nCalifornia has filed **24,887 more complaints** than Florida, representing approximately a 6.4% higher complaint volume."
+    },
+    {
+      "id": 11,
+      "question": "Compare the total number of complaints for the Mortgage product versus the Checking or savings account product.",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 3.22,
+      "answer": "Based on the complaint data:\n\n- **Mortgage** products received **373,639 total complaints**\n- **Checking or savings account** products received **158,988 total complaints**\n\nMortgage complaints are more than double those of checking or savings accounts, with approximately 214,651 more complaints (or about 2.35 times as many)."
+    },
+    {
+      "id": 12,
+      "question": "What is the most recent date of complaints in this dataset?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 3.11,
+      "answer": "The most recent date of complaints in this dataset is **March 23, 2023**."
+    },
+    {
+      "id": 13,
+      "question": "What is the earliest date of complaints in this dataset?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 2.47,
+      "answer": "The earliest date of complaints in this dataset is **December 1, 2011**."
+    },
+    {
+      "id": 14,
+      "question": "What are the top three companies by complaint volume?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 3.1,
+      "answer": "The top three companies by complaint volume are:\n\n1. **Equifax, Inc.** with 619,370 complaints\n2. **TransUnion Intermediate Holdings, Inc.** with 526,785 complaints\n3. **Experian Information Solutions Inc.** with 492,153 complaints\n\nThese three credit reporting agencies account for a significant portion of the complaints in the database, with Equifax receiving notably more complaints than the other two."
+    },
+    {
+      "id": 15,
+      "question": "What is the second most common product category by complaint volume?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 2.55,
+      "answer": "The second most common product category by complaint volume is **Debt collection**, with **473,071 complaints**."
+    },
+    {
+      "id": 16,
+      "question": "What percentage of all complaints resulted in a company response of 'Closed with explanation'?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 2.93,
+      "answer": "**75.52% of all complaints resulted in a company response of 'Closed with explanation'.**\n\nThis means that in the complaint database, approximately three-quarters of complaints received this type of resolution from the company."
+    },
+    {
+      "id": 17,
+      "question": "Which state has the second highest total number of complaints, after California?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 3.17,
+      "answer": "Based on the analysis, **Florida (FL) has the second highest total number of complaints with 389,321 complaints**, after California which leads with 414,208 complaints."
+    },
+    {
+      "id": 18,
+      "question": "How many complaints were submitted via Phone?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 2.47,
+      "answer": "Based on the query results, **154,119 complaints were submitted via Phone**."
+    },
+    {
+      "id": 19,
+      "question": "How many complaints currently have a company response status of 'In progress'?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 2.63,
+      "answer": "There are currently **103,560 complaints** with a company response status of \"In progress.\""
+    },
+    {
+      "id": 20,
+      "question": "What percentage of all complaints were submitted via the Web?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 2.93,
+      "answer": "**85.29% of all complaints were submitted via the Web.**"
+    },
+    {
+      "id": 21,
+      "question": "Which product has more complaints: Mortgage or Credit card or prepaid card?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 3.57,
+      "answer": "Based on the complaint data, **Mortgage has significantly more complaints than the other two products**.\n\nHere are the numbers:\n\n- **Mortgage: 373,639 complaints**\n- Credit card: 89,190 complaints\n- Prepaid card: 3,819 complaints\n\nMortgage products receive more than 4 times as many complaints as credit cards, and over 97 times more complaints than prepaid cards."
+    },
+    {
+      "id": 22,
+      "question": "What was the total complaint volume in the first quarter of 2023?",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 2.32,
+      "answer": "The total complaint volume in the first quarter of 2023 was **244,675 complaints**."
+    },
+    {
+      "id": 23,
+      "question": "Compare the timely response rates between Mortgage complaints and Credit card complaints.",
+      "correct": true,
+      "num_subqueries": 1,
+      "tool_errors": 0,
+      "latency_sec": 3.99,
+      "answer": "# Timely Response Rate Comparison\n\n**Credit Card complaints** have a higher timely response rate at **98.9%**, compared to **Mortgage complaints** at **98.09%**.\n\nWhile both product categories demonstrate strong compliance with timely response requirements, Credit Card complaints are resolved on time at a rate 0.81 percentage points higher than Mortgage complaints. This difference is based on 89,190 total Credit Card complaints and 373,639 total Mortgage complaints in the data."
+    }
+  ]
+}

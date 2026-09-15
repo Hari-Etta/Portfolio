@@ -1,0 +1,11 @@
+langgraph
+langchain-anthropic
+google-cloud-bigquery
+anthropic
+pandas
+streamlit
+python-dotenv
+matplotlib
+pandas-gbq
+pyarrow
+db-dtypes

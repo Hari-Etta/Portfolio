@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+.env
+gcp-service-account.json
+.streamlit/secrets.toml
+*.egg-info/
+.DS_Store
+.env.example

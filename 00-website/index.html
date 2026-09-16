@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[Your Name] — Data Analyst / Data Scientist</title>
+<meta name="description" content="[Your Name] — Portfolio: Data Analyst / Business Analyst / Data Scientist / AI-ML Engineer">
+
+<!-- Fonts: Sora (display), IBM Plex Sans (body), IBM Plex Mono (data/tags) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============================================================
+     STICKY SIDE NAV DOTS
+     Add/remove a <a class="navdot"> if you add/remove a section.
+     data-label shows on hover; href must match the section id.
+============================================================= -->
+<nav class="navdots" aria-label="Section navigation">
+  <a class="navdot" href="#hero" data-label="Hero"><span></span></a>
+  <a class="navdot" href="#contact" data-label="Contact"><span></span></a>
+  <a class="navdot" href="#education" data-label="Education"><span></span></a>
+  <a class="navdot" href="#experience" data-label="Experience"><span></span></a>
+  <a class="navdot" href="#stack" data-label="Tech Stack"><span></span></a>
+  <a class="navdot" href="#projects" data-label="Projects"><span></span></a>
+</nav>
+
+<!-- ============================================================
+     1. HERO / PERSONAL DETAILS
+============================================================= -->
+<header id="hero" class="section hero reveal">
+  <div class="hero-inner">
+    <p class="terminal-line">
+      <span class="prompt">$</span>
+      <span id="terminal-text" class="typed"></span><span class="cursor" aria-hidden="true">▌</span>
+    </p>
+
+    <!-- Fallback for no-JS / screen readers: real content lives here too -->
+    <h1 class="name">[Your Full Name]</h1>
+    <p class="role-line">
+      <span class="role-tag">Data Analyst</span>
+      <span class="role-tag">Business Analyst</span>
+      <span class="role-tag">Data Scientist</span>
+      <span class="role-tag">AI/ML Engineer</span>
+    </p>
+    <p class="positioning">[One-line positioning statement — e.g. "I turn messy data into decisions people actually act on."]</p>
+
+    <a href="#contact" class="btn-primary">Get in touch ↓</a>
+  </div>
+</header>
+
+<!-- ============================================================
+     2. CONTACT DETAILS
+============================================================= -->
+<section id="contact" class="section reveal">
+  <h2 class="section-heading"><span class="heading-index">01</span> Contact</h2>
+  <div class="contact-grid">
+    <a class="contact-card" href="mailto:[your-email@example.com]">
+      <span class="contact-label">Email</span>
+      <span class="contact-value">[your-email@example.com]</span>
+    </a>
+    <a class="contact-card" href="tel:[+1-000-000-0000]">
+      <span class="contact-label">Phone</span>
+      <span class="contact-value">[+1 000 000 0000]</span>
+    </a>
+    <a class="contact-card" href="[https://linkedin.com/in/your-handle]" target="_blank" rel="noopener">
+      <span class="contact-label">LinkedIn</span>
+      <span class="contact-value">linkedin.com/in/[your-handle]</span>
+    </a>
+    <a class="contact-card" href="[https://github.com/your-handle]" target="_blank" rel="noopener">
+      <span class="contact-label">GitHub</span>
+      <span class="contact-value">github.com/[your-handle]</span>
+    </a>
+    <div class="contact-card contact-static">
+      <span class="contact-label">Location</span>
+      <span class="contact-value">[City, State]</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     3. EDUCATION
+     Duplicate the .edu-entry block to add another degree.
+============================================================= -->
+<section id="education" class="section reveal">
+  <h2 class="section-heading"><span class="heading-index">02</span> Education</h2>
+  <div class="edu-list">
+    <article class="edu-entry">
+      <div class="edu-top">
+        <h3>[Degree, e.g. B.S. in Data Science]</h3>
+        <span class="edu-year">[Year – Year]</span>
+      </div>
+      <p class="edu-institution">[Institution Name]</p>
+      <p class="edu-detail">[Relevant coursework / honors / GPA — optional, remove if not applicable]</p>
+    </article>
+
+    <!-- <?claude add-education?> Duplicate .edu-entry above this line for another degree -->
+  </div>
+</section>
+
+<!-- ============================================================
+     4. WORK EXPERIENCE
+     Duplicate the .exp-entry block to add another role.
+============================================================= -->
+<section id="experience" class="section reveal">
+  <h2 class="section-heading"><span class="heading-index">03</span> Work Experience</h2>
+  <div class="exp-list">
+    <article class="exp-entry">
+      <div class="exp-top">
+        <h3>[Role Title] · <span class="exp-company">[Company Name]</span></h3>
+        <span class="exp-dates">[Month Year] – [Month Year / Present]</span>
+      </div>
+      <ul class="exp-bullets">
+        <li>[Add impact bullet — quantify where possible, e.g. "Reduced X by Y% through..."]</li>
+        <li>[Add impact bullet]</li>
+        <li>[Add impact bullet]</li>
+      </ul>
+    </article>
+
+    <!-- <?claude add-experience?> Duplicate .exp-entry above this line for another role -->
+  </div>
+</section>
+
+<!-- ============================================================
+     5. TECH STACK — signature interactive skill map
+     Nodes are grouped by category (data-group). Add/remove nodes
+     freely; edges are auto-generated by shared group in script.js.
+============================================================= -->
+<section id="stack" class="section reveal">
+  <h2 class="section-heading"><span class="heading-index">04</span> Tech Stack</h2>
+  <p class="section-sub">Hover or tap a node to see how it connects. Grouped by category — click a category chip to isolate it.</p>
+
+  <div class="stack-filters" role="group" aria-label="Filter tech stack by category">
+    <button class="stack-filter active" data-group="all">All</button>
+    <button class="stack-filter" data-group="languages">Languages</button>
+    <button class="stack-filter" data-group="analytics">Analytics / BI</button>
+    <button class="stack-filter" data-group="ml">ML</button>
+    <button class="stack-filter" data-group="engineering">Engineering</button>
+    <button class="stack-filter" data-group="cloud">Cloud</button>
+  </div>
+
+  <div class="stack-map-wrap">
+    <canvas id="stack-canvas" aria-hidden="true"></canvas>
+    <ul id="stack-nodes" class="stack-nodes">
+      <!-- <?claude add-skill?> Add/remove <li> nodes here. data-group must match a filter button's data-group above. -->
+      <li class="node" data-group="languages" style="--x:15%; --y:30%;">Python</li>
+      <li class="node" data-group="languages" style="--x:30%; --y:60%;">SQL</li>
+      <li class="node" data-group="languages" style="--x:10%; --y:75%;">R</li>
+
+      <li class="node" data-group="analytics" style="--x:50%; --y:20%;">Power BI</li>
+      <li class="node" data-group="analytics" style="--x:65%; --y:40%;">Tableau</li>
+      <li class="node" data-group="analytics" style="--x:45%; --y:55%;">Excel</li>
+
+      <li class="node" data-group="ml" style="--x:80%; --y:25%;">scikit-learn</li>
+      <li class="node" data-group="ml" style="--x:88%; --y:50%;">PyTorch</li>
+      <li class="node" data-group="ml" style="--x:75%; --y:65%;">Pandas</li>
+
+      <li class="node" data-group="engineering" style="--x:25%; --y:10%;">Git</li>
+      <li class="node" data-group="engineering" style="--x:55%; --y:80%;">Airflow</li>
+      <li class="node" data-group="engineering" style="--x:35%; --y:88%;">Docker</li>
+
+      <li class="node" data-group="cloud" style="--x:90%; --y:80%;">AWS</li>
+      <li class="node" data-group="cloud" style="--x:70%; --y:10%;">Azure</li>
+    </ul>
+  </div>
+
+  <!-- Screen-reader / no-JS fallback list -->
+  <div class="stack-fallback">
+    <div><strong>Languages:</strong> Python, SQL, R</div>
+    <div><strong>Analytics / BI:</strong> Power BI, Tableau, Excel</div>
+    <div><strong>ML:</strong> scikit-learn, PyTorch, Pandas</div>
+    <div><strong>Engineering:</strong> Git, Airflow, Docker</div>
+    <div><strong>Cloud:</strong> AWS, Azure</div>
+  </div>
+</section>
+
+<!-- ============================================================
+     6. PROJECTS
+     Duplicate the .project-card block to add another project.
+     Card is a real <a> — set href to the live demo if deployed,
+     otherwise the GitHub repo. Set data-status to planned |
+     in-progress | live to control the badge.
+============================================================= -->
+<section id="projects" class="section reveal">
+  <h2 class="section-heading"><span class="heading-index">05</span> Projects</h2>
+  <p class="section-sub">Filter by tech below, or scroll to browse everything.</p>
+
+  <div class="project-filters" role="group" aria-label="Filter projects by tech">
+    <button class="project-filter active" data-tag="all">All</button>
+    <button class="project-filter" data-tag="python">Python</button>
+    <button class="project-filter" data-tag="sql">SQL</button>
+    <button class="project-filter" data-tag="ml">ML</button>
+    <button class="project-filter" data-tag="viz">Visualization</button>
+  </div>
+
+  <div class="project-grid">
+
+    <!-- <?claude add-project?> Duplicate this whole <a class="project-card"> block for a new project -->
+    <a class="project-card" href="[https://github.com/your-handle/project-repo]" target="_blank" rel="noopener" data-tags="python,sql">
+      <div class="project-top">
+        <h3>[Project Title]</h3>
+        <span class="status-badge status-planned">Planned</span>
+      </div>
+      <p class="project-desc">[One-paragraph description of what the project does, the problem it solves, and your role in building it.]</p>
+      <div class="project-tags">
+        <span class="tag">Python</span>
+        <span class="tag">SQL</span>
+      </div>
+      <span class="project-link-hint">View repo →</span>
+    </a>
+
+    <a class="project-card" href="[https://your-live-demo-url.com]" target="_blank" rel="noopener" data-tags="ml,viz">
+      <div class="project-top">
+        <h3>[Project Title]</h3>
+        <span class="status-badge status-in-progress">In Progress</span>
+      </div>
+      <p class="project-desc">[One-paragraph description of what the project does, the problem it solves, and your role in building it.]</p>
+      <div class="project-tags">
+        <span class="tag">Machine Learning</span>
+        <span class="tag">Visualization</span>
+      </div>
+      <span class="project-link-hint">View live demo →</span>
+    </a>
+
+    <a class="project-card" href="[https://your-live-demo-url.com]" target="_blank" rel="noopener" data-tags="sql,viz">
+      <div class="project-top">
+        <h3>[Project Title]</h3>
+        <span class="status-badge status-live">Live</span>
+      </div>
+      <p class="project-desc">[One-paragraph description of what the project does, the problem it solves, and your role in building it.]</p>
+      <div class="project-tags">
+        <span class="tag">SQL</span>
+        <span class="tag">Dashboarding</span>
+      </div>
+      <span class="project-link-hint">View live demo →</span>
+    </a>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <p>[Your Name] · Built from scratch, deployed on Netlify · <span class="footer-year"></span></p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

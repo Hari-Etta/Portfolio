@@ -3,3 +3,4 @@ pyspark
 dbt-databricks
 pandas
 python-dotenv
+kaggle

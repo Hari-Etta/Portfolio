@@ -14,6 +14,125 @@ document.documentElement.classList.remove('no-js');
 
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+/* ---------- 1b. Hero backdrop: animated scatter-plot field ----------
+   Signature hero moment (inspired by an animated low-poly hero seen on a
+   reference site, reworked here as a literal scatter plot to match the
+   data-analyst identity). Dots drift slowly; a faint regression line
+   fades in and out periodically. Frozen to a single static frame when
+   prefers-reduced-motion is set. */
+(function heroScatterField() {
+  const canvas = document.getElementById('hero-canvas');
+  const hero = document.getElementById('hero');
+  if (!canvas || !hero) return;
+  const ctx = canvas.getContext('2d');
+
+  const POINT_COUNT = 70;
+  const CONNECT_DIST = 90;
+  const CYCLE_MS = 9000; // how often the trend line fades in and back out
+  let points = [];
+  let width = 0, height = 0;
+
+  function seedPoints() {
+    points = Array.from({ length: POINT_COUNT }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.12,
+      vy: (Math.random() - 0.5) * 0.12,
+      r: 1 + Math.random() * 1.8
+    }));
+  }
+
+  function resize() {
+    const rect = hero.getBoundingClientRect();
+    width = rect.width;
+    height = rect.height;
+    canvas.width = width * devicePixelRatio;
+    canvas.height = height * devicePixelRatio;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+    seedPoints();
+  }
+
+  function trendLine(alpha) {
+    // simple least-squares fit over current point positions
+    const n = points.length;
+    let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+    points.forEach(p => { sumX += p.x; sumY += p.y; sumXY += p.x * p.y; sumXX += p.x * p.x; });
+    const denom = (n * sumXX - sumX * sumX) || 1;
+    const slope = (n * sumXY - sumX * sumY) / denom;
+    const intercept = (sumY - slope * sumX) / n;
+    ctx.beginPath();
+    ctx.moveTo(0, intercept);
+    ctx.lineTo(width, slope * width + intercept);
+    ctx.strokeStyle = `rgba(245, 166, 35, ${alpha * 0.55})`;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+
+  function drawStatic() {
+    ctx.clearRect(0, 0, width, height);
+    points.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(245, 166, 35, 0.35)';
+      ctx.fill();
+    });
+    trendLine(0.6);
+  }
+
+  function frame(t) {
+    ctx.clearRect(0, 0, width, height);
+
+    points.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0) p.x = width; else if (p.x > width) p.x = 0;
+      if (p.y < 0) p.y = height; else if (p.y > height) p.y = 0;
+    });
+
+    // faint connective lines between nearby points
+    for (let i = 0; i < points.length; i++) {
+      for (let j = i + 1; j < points.length; j++) {
+        const dx = points[i].x - points[j].x;
+        const dy = points[i].y - points[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < CONNECT_DIST) {
+          ctx.beginPath();
+          ctx.moveTo(points[i].x, points[i].y);
+          ctx.lineTo(points[j].x, points[j].y);
+          ctx.strokeStyle = `rgba(154, 164, 174, ${0.08 * (1 - dist / CONNECT_DIST)})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      }
+    }
+
+    points.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(245, 166, 35, 0.5)';
+      ctx.fill();
+    });
+
+    // periodic trend line: fades in over first half of cycle, out over second half
+    const phase = (t % CYCLE_MS) / CYCLE_MS;
+    const alpha = Math.sin(phase * Math.PI); // 0 -> 1 -> 0
+    if (alpha > 0.02) trendLine(alpha);
+
+    requestAnimationFrame(frame);
+  }
+
+  resize();
+  window.addEventListener('resize', resize, { passive: true });
+
+  if (prefersReducedMotion) {
+    drawStatic();
+  } else {
+    requestAnimationFrame(frame);
+  }
+})();
+
 /* ---------- 2. Terminal typed intro ---------- */
 (function typedIntro() {
   const el = document.getElementById('terminal-text');

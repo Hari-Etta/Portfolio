@@ -1,6 +1,6 @@
 /* ==========================================================================
    PORTFOLIO STYLES
-   Theme: "Slate & Signal-Amber" — terminal/technical tone
+   Theme: "Slate & Terracotta" — terminal/technical tone
    Fonts: Sora (display) / IBM Plex Sans (body) / IBM Plex Mono (data/tags)
 
    Quick-edit map:
@@ -10,7 +10,8 @@
    ========================================================================== */
 
 :root {
-  /* --- Color palette: Slate & Signal-Amber --- */
+  /* --- Color palette: Slate & Terracotta (accent from a user-supplied palette:
+       dusty blue-grays through a dark slate-navy into warm terracotta) --- */
   --bg: #1B1F24;              /* deep slate base */
   --bg-alt: #20262D;          /* slightly lifted panel background */
   --bg-raised: #262D35;       /* cards, nodes */
@@ -21,9 +22,10 @@
   --text-dim: #9AA4AE;        /* secondary text */
   --text-faint: #6B7580;
 
-  --accent: #F5A623;          /* signal amber */
-  --accent-dim: #B87E1B;
-  --accent-tint: rgba(245, 166, 35, 0.12);
+  --accent: #B17861;          /* terracotta — replaces the old signal amber */
+  --accent-dim: #815645;
+  --accent-tint: rgba(177, 120, 97, 0.12);
+  --accent-secondary: #4F587F; /* dark slate-navy from the same palette — used sparingly for variety */
 
   --ok: #5FBF88;
   --warn: #E0A93E;
@@ -58,6 +60,60 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
+/* ---------- Boot screen (full-screen terminal boot sequence, first visit only) ---------- */
+.boot-screen {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--bg);
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 12vh var(--space-3) 0;
+  transition: opacity 0.35s ease;
+}
+html.boot-pending .boot-screen {
+  display: flex;
+}
+html.boot-pending,
+html.boot-pending body {
+  overflow: hidden;
+}
+.boot-log {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+  min-height: 7.5em; /* reserves space for all lines so nothing shifts as they appear */
+}
+.boot-log-line { color: var(--text); }
+.boot-prompt { color: var(--text-dim); margin-right: 0.4em; }
+.boot-line-text { color: var(--accent); }
+.boot-cursor {
+  color: var(--accent);
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+}
+.boot-progress {
+  width: min(320px, 60vw);
+  height: 3px;
+  margin-top: 22px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.boot-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+}
+.boot-screen.boot-fade {
+  opacity: 0;
+  pointer-events: none;
+}
+
 h1, h2, h3 { font-family: var(--font-display); margin: 0; color: var(--text); }
 p { margin: 0; }
 ul { margin: 0; padding: 0; list-style: none; }
@@ -142,7 +198,8 @@ button:focus-visible,
   transform: translateY(0);
 }
 
-/* ---------- Sticky nav dots ---------- */
+/* ---------- Sticky labeled sidebar (was a minimal dot-nav; expanded to
+   always-visible text links now that the site has more sections) ---------- */
 .navdots {
   position: fixed;
   right: var(--space-2);
@@ -150,55 +207,38 @@ button:focus-visible,
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 3px;
   z-index: 100;
+  background: rgba(32, 38, 45, 0.7);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  padding: 10px 4px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 .navdot {
   position: relative;
-  width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.navdot span {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--border);
-  transition: background 0.2s ease, transform 0.2s ease;
   display: block;
-}
-.navdot:hover span,
-.navdot.active span {
-  background: var(--accent);
-  transform: scale(1.3);
-}
-.navdot::before {
-  content: attr(data-label);
-  position: absolute;
-  right: 22px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: var(--bg-raised);
-  border: 1px solid var(--border);
-  color: var(--text);
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  padding: 3px 8px;
-  border-radius: 4px;
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  color: var(--text-faint);
+  padding: 5px 12px 5px 10px;
+  border-left: 2px solid transparent;
   white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s ease;
+  transition: color 0.15s ease, border-color 0.15s ease;
 }
-.navdot:hover::before,
-.navdot:focus-visible::before {
-  opacity: 1;
+.navdot:hover,
+.navdot:focus-visible {
+  color: var(--text);
+}
+.navdot.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
 }
 
-@media (max-width: 700px) {
-  .navdots { display: none; } /* nav dots hidden on mobile to save space; sections still reachable by scroll */
+@media (max-width: 900px) {
+  .navdots { display: none; } /* sidebar hidden below 900px to save space; sections still reachable by scroll */
 }
 
 /* ---------- Hero ---------- */
@@ -216,29 +256,82 @@ button:focus-visible,
   width: 100%;
   height: 100%;
   z-index: 0;
+  will-change: transform; /* cursor-parallax drift, applied in script.js */
 }
-.hero-inner {
-  max-width: 760px;
+.hero-flex {
   position: relative;
   z-index: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+.hero-inner {
+  max-width: 700px;
   /* soft backdrop so the scatter-plot animation never fights with text legibility */
   background: radial-gradient(ellipse 120% 100% at 0% 50%, var(--bg) 55%, transparent 100%);
   padding: var(--space-3) var(--space-3) var(--space-3) 0;
 }
 
-.terminal-line {
+/* ---------- Hero avatar (placeholder) ----------
+   No real photo yet — this is an abstract geometric placeholder built from
+   layered SVG shapes in the site's own palette, with a slow idle float/rotate
+   so it doesn't sit dead on the page. Swap the whole <div class="avatar-shape">
+   for a real <img src="your-photo.jpg" alt="Hari Etta"> when you have one —
+   keep the .hero-avatar-ring wrapper for the border/glow if you'd like. */
+.hero-avatar-wrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-avatar-ring {
+  position: relative;
+  width: clamp(120px, 16vw, 210px);
+  height: clamp(120px, 16vw, 210px);
+  border-radius: 50%;
+  border: 1px solid var(--border-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-alt);
+}
+.avatar-shape {
+  width: 78%;
+  height: 78%;
+  animation: avatarFloat 7s ease-in-out infinite;
+}
+.avatar-shape .a-tri {
+  animation: avatarSpin 22s linear infinite;
+  transform-origin: 50% 50%;
+}
+.hero-avatar-badge {
+  position: absolute;
+  bottom: -6px;
+  right: -6px;
   font-family: var(--font-mono);
-  color: var(--accent);
-  font-size: 0.95rem;
-  margin-bottom: var(--space-3);
-  min-height: 1.4em;
+  font-size: 0.62rem;
+  color: var(--text-faint);
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  padding: 2px 7px;
+  border-radius: 999px;
+  white-space: nowrap;
 }
-.terminal-line .prompt { color: var(--text-dim); margin-right: 0.5em; }
-.cursor {
-  display: inline-block;
-  color: var(--accent);
-  animation: blink 1s step-end infinite;
+@keyframes avatarFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
+@keyframes avatarSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@media (max-width: 760px) {
+  .hero-flex { flex-direction: column-reverse; align-items: flex-start; gap: var(--space-3); }
+  .hero-avatar-ring { width: 96px; height: 96px; }
+}
+
 @keyframes blink { 50% { opacity: 0; } }
 
 .name {
@@ -278,7 +371,7 @@ button:focus-visible,
   border-radius: 6px;
   transition: transform 0.15s ease, background 0.15s ease;
 }
-.btn-primary:hover { background: #ffb84d; transform: translateY(-2px); }
+.btn-primary:hover { background: #C3A193; transform: translateY(-2px); }
 
 /* ---------- Contact ---------- */
 .contact-grid {
@@ -398,31 +491,55 @@ a.contact-card:hover {
   font-weight: 600;
 }
 
-.stack-map-wrap {
-  position: relative;
-  width: 100%;
-  height: 420px;
+/* Tech stack is now grouped into one panel per category (was a single flat
+   cloud of ~44 tags, which read as chaotic). Each panel keeps its own small
+   connecting-line canvas — the signature "skill map" idea — but now the
+   lines only ever connect tools that are already grouped together, so it
+   reads as organized rather than a tangle. Clicking a filter chip isolates
+   that one panel; "All" shows every panel. */
+.stack-panels-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+.stack-panel {
   background: var(--bg-alt);
   border: 1px solid var(--border-soft);
   border-radius: var(--radius);
-  margin-top: var(--space-2);
-  overflow: hidden;
+  padding: var(--space-3);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
-#stack-canvas {
+.stack-panel.hidden-panel { display: none; }
+.stack-panel-title {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: var(--space-2);
+}
+.stack-panel-map {
+  position: relative;
+  min-height: 40px;
+}
+.stack-panel canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  z-index: 1;
 }
 .stack-nodes {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 8px 10px;
 }
 .node {
-  position: absolute;
-  left: var(--x);
-  top: var(--y);
-  transform: translate(-50%, -50%);
+  position: relative;
   background: var(--bg-raised);
   border: 1px solid var(--border);
   color: var(--text);
@@ -433,12 +550,11 @@ a.contact-card:hover {
   cursor: pointer;
   white-space: nowrap;
   transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
-  z-index: 2;
 }
 .node:hover, .node.active, .node:focus-visible {
   border-color: var(--accent);
   background: var(--accent-tint);
-  transform: translate(-50%, -50%) scale(1.08);
+  transform: scale(1.08);
 }
 .node.dimmed { opacity: 0.25; }
 
@@ -450,7 +566,7 @@ a.contact-card:hover {
   gap: 6px;
   flex-direction: column;
 }
-.no-js .stack-map-wrap { display: none; }
+.no-js .stack-panels-grid { display: none; }
 .no-js .stack-fallback { display: flex; }
 
 /* ---------- Projects ---------- */
@@ -559,7 +675,11 @@ a.contact-card:hover {
 }
 .status-planned { background: rgba(154,164,174,0.15); color: var(--text-dim); }
 .status-in-progress { background: rgba(224,169,62,0.15); color: var(--warn); }
+.status-construction { background: rgba(79,88,127,0.25); color: #9AA3D6; }
+.status-deploy-pending { background: rgba(177,120,97,0.18); color: var(--accent); }
 .status-live { background: rgba(95,191,136,0.15); color: var(--live); }
+.status-idling { background: rgba(154,164,174,0.1); color: var(--text-faint); }
+.status-awaiting-ideas { background: transparent; border: 1px dashed var(--border); color: var(--text-faint); }
 
 .project-desc { color: var(--text-dim); font-size: 0.94rem; flex-grow: 1; }
 .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -575,6 +695,565 @@ a.contact-card:hover {
   font-family: var(--font-mono);
   font-size: 0.82rem;
   color: var(--accent);
+}
+
+/* ---------- Bonus sections (GitHub Activity, Beat the Algorithm) ----------
+   Deliberately styled a little differently from the 6 required sections —
+   a "// live" / "// bonus" tag instead of a numbered heading-index — so they
+   read as extras, not part of the core resume flow. */
+.bonus-heading { border-bottom-color: var(--border-soft); }
+.bonus-tag {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-faint);
+  font-weight: 500;
+}
+
+.github-heatmap-link {
+  display: block;
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  background: var(--bg-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  overflow-x: auto;
+  transition: border-color 0.18s ease;
+}
+.github-heatmap-link:hover { border-color: var(--accent); }
+.github-heatmap {
+  display: block;
+  max-width: 100%;
+  min-width: 640px; /* the chart is unreadable squeezed narrower than this; container scrolls on mobile instead */
+  /* ghchart only renders on a plain white background with no theming option —
+     this CSS trick (invert + counter-rotate the hue) flips that background
+     dark while leaving the terracotta contribution squares looking correct,
+     without needing any extra network request. */
+  filter: invert(0.877) hue-rotate(180deg);
+  border-radius: 4px;
+}
+/* Shown by script.js if the embedded graph image fails to load (the free
+   third-party embed services this relies on have been unreliable) — never
+   leaves a visibly-broken image on the page. */
+.github-fallback {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+.github-heatmap-link.embed-failed .github-heatmap { display: none; }
+.github-heatmap-link.embed-failed .github-fallback { display: flex; }
+
+/* ---------- About ---------- */
+.about-bio {
+  max-width: 70ch;
+  color: var(--text-dim);
+  font-size: 1.02rem;
+  margin-top: var(--space-3);
+}
+
+/* ---------- Interests ---------- */
+.interest-groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+.interest-group-title {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: var(--space-1);
+}
+.interest-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.interest-chip {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  background: var(--bg-alt);
+  border: 1px solid var(--border-soft);
+  padding: 6px 14px;
+  border-radius: 999px;
+}
+
+/* ---------- Articles ---------- */
+.article-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+.article-card {
+  display: block;
+  background: var(--bg-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+a.article-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+.article-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+.article-card p { color: var(--text-dim); font-size: 0.9rem; }
+.article-date {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  display: block;
+  margin-bottom: 8px;
+}
+/* Always shown — these are other people's articles, so the byline/publication
+   credit stays visible on every card, not just implied by the outbound link. */
+.article-source {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--accent);
+}
+.article-source::before { content: '↗ via '; color: var(--text-faint); }
+
+/* ---------- Recommend a project idea / message form ----------
+   Sends via Netlify Forms (data-netlify on the <form> in index.html) — free,
+   no API key, no backend code. Submissions land in the Netlify dashboard's
+   "Forms" tab; turn on email notifications there (Site settings → Forms →
+   Form notifications) to also get them in your inbox. */
+.idea-form {
+  max-width: 560px;
+  margin-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.idea-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.idea-field label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+}
+.idea-field input,
+.idea-field textarea {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  resize: vertical;
+}
+.idea-field input:focus-visible,
+.idea-field textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.idea-submit {
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--bg);
+  background: var(--accent);
+  border: none;
+  padding: 11px 22px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.idea-submit:hover { background: #C3A193; transform: translateY(-2px); }
+.idea-note {
+  font-size: 0.82rem;
+  color: var(--text-faint);
+}
+.idea-success {
+  display: none;
+  color: var(--live);
+  font-size: 0.92rem;
+  margin-top: var(--space-2);
+}
+
+/* ---------- Play & Build — two bonus toys side by side in one section ---------- */
+.play-build-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+  align-items: start;
+}
+.play-build-col { min-width: 0; }
+.subsection-heading {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.play-build-col .rps-game,
+.play-build-col .lego-canvas { max-width: none; }
+@media (max-width: 860px) {
+  .play-build-grid { grid-template-columns: 1fr; gap: var(--space-4); }
+}
+
+.rps-game {
+  margin-top: var(--space-3);
+  padding: var(--space-4);
+  background: var(--bg-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  max-width: 720px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+.rps-main {
+  text-align: center;
+  flex: 1 1 260px;
+}
+.rps-choices {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-3);
+}
+
+/* Live stats panel beside the game — see rpsGame() in script.js */
+.rps-stats {
+  flex: 0 0 200px;
+  border-left: 1px solid var(--border-soft);
+  padding-left: var(--space-3);
+}
+@media (max-width: 620px) {
+  .rps-stats { border-left: none; border-top: 1px solid var(--border-soft); padding-left: 0; padding-top: var(--space-3); flex-basis: 100%; }
+}
+.rps-vs {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-faint);
+  margin-bottom: var(--space-2);
+}
+.rps-bot-name { color: var(--accent); font-weight: 600; }
+.rps-stat-list { display: flex; flex-direction: column; gap: 6px; }
+.rps-stat {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: 0.85rem;
+}
+.rps-stat dt { color: var(--text-faint); font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; align-self: center; }
+.rps-stat dd { margin: 0; font-weight: 600; color: var(--text); }
+.rps-btn {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease;
+}
+.rps-btn:hover {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+  transform: translateY(-2px);
+}
+.rps-btn.pressed { transform: scale(0.9); }
+
+/* Result feedback: a quick pop-in plus a colour cue per outcome, and a
+   small shake on the whole card for a loss. All skipped under
+   prefers-reduced-motion (see the reduced-motion block below). */
+.rps-result {
+  min-height: 1.6em;
+  color: var(--text);
+  font-size: 0.98rem;
+  margin-bottom: var(--space-1);
+}
+.rps-result.rps-pop { animation: rpsPop 0.35s ease; }
+.rps-result.result-win { color: var(--live); }
+.rps-result.result-loss { color: #F16565; }
+.rps-result.result-tie { color: #9CA3C2; } /* lightened accent-secondary for AA contrast on dark cards */
+.rps-game.rps-shake { animation: rpsShake 0.4s ease; }
+@keyframes rpsPop {
+  0% { opacity: 0; transform: translateY(4px) scale(0.97); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes rpsShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+.rps-reset {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  background: none;
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.rps-reset:hover { border-color: var(--accent); color: var(--text); }
+
+/* ---------- RPS hands: shake → reveal animation ----------
+   Each hand is one SVG with three <g> shape groups (fist/paper/scissors)
+   layered in the same spot; [data-shape] on the <svg> shows only the
+   matching one via plain CSS, same pattern as the lego-block shapes. JS
+   just flips data-shape and toggles two classes for the shake and reveal
+   phases — see rpsGame() in script.js. */
+.rps-hands {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-3);
+}
+.rps-hand-wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.rps-hand-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+.rps-hands-vs {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-faint);
+  align-self: center;
+  margin-top: 18px;
+}
+.rps-hand {
+  width: 54px;
+  height: auto;
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.35));
+}
+.rps-hand-bot { transform: scaleX(-1); } /* faces the player's hand */
+.rps-hand-palm { fill: var(--accent); }
+.fingers path, .fingers rect { fill: var(--accent-dim); }
+.fingers circle { fill: var(--accent-secondary); opacity: 0.55; }
+.fingers-paper rect:nth-child(odd) { fill: #C9A392; }
+
+/* Only the group matching the current shape is shown */
+.rps-hand[data-shape="rock"] .fingers-paper,
+.rps-hand[data-shape="rock"] .fingers-scissors { display: none; }
+.rps-hand[data-shape="paper"] .fingers-rock,
+.rps-hand[data-shape="paper"] .fingers-scissors { display: none; }
+.rps-hand[data-shape="scissors"] .fingers-rock,
+.rps-hand[data-shape="scissors"] .fingers-paper { display: none; }
+
+.rps-hands.rps-hands-shaking .rps-hand { animation: handShake 0.26s ease-in-out infinite; }
+.rps-hands.rps-hands-shaking .rps-hand-bot { animation-name: handShakeBot; animation-delay: 0.06s; }
+@keyframes handShake {
+  0%, 100% { transform: rotate(-8deg); }
+  50% { transform: rotate(8deg); }
+}
+@keyframes handShakeBot {
+  0%, 100% { transform: scaleX(-1) rotate(-8deg); }
+  50% { transform: scaleX(-1) rotate(8deg); }
+}
+
+.rps-hands.rps-hands-reveal .rps-hand { animation: handReveal 0.4s ease; }
+@keyframes handReveal {
+  0% { transform: scale(0.82); opacity: 0.6; }
+  55% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.rps-hands.rps-hands-reveal .rps-hand-bot {
+  animation-name: handRevealBot;
+}
+@keyframes handRevealBot {
+  0% { transform: scaleX(-1) scale(0.82); opacity: 0.6; }
+  55% { transform: scaleX(-1) scale(1.1); }
+  100% { transform: scaleX(-1) scale(1); opacity: 1; }
+}
+
+/* ---------- Build / Create Your Own Bot (freeform block canvas) ----------
+   Purely playful, in the spirit of the hero avatar's geometric art. Blocks
+   are fixed-size squares whose visible shape comes only from
+   border-radius/clip-path, positioned absolutely within .lego-canvas and
+   dragged with pointer events (see legoBuilder() in script.js). Saved
+   arrangements ("bots") are rendered as small non-interactive previews in
+   the gallery below, using the same shape attribute selectors at a smaller
+   scale. */
+.lego-builder {
+  margin-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+.lego-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+.lego-shape-picker {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px;
+}
+.lego-shape-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 32px;
+  height: 32px;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--text-dim);
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.lego-shape-btn:hover, .lego-shape-btn:focus-visible { background: var(--accent-tint); color: var(--accent); }
+.lego-btn {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.lego-btn:hover { border-color: var(--accent); color: var(--text); }
+.lego-btn-save { border-color: var(--accent); color: var(--accent); }
+.lego-btn-save:hover { background: var(--accent); color: var(--bg); }
+
+.lego-canvas {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  height: 260px;
+  background: var(--bg-alt);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  touch-action: none; /* dragging handles its own scrolling/panning */
+}
+.lego-block {
+  appearance: none;
+  -webkit-appearance: none;
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 1px solid rgba(0,0,0,0.2);
+  cursor: grab;
+  transition: border-radius 0.2s ease, clip-path 0.2s ease, background 0.2s ease;
+}
+.lego-block:active { cursor: grabbing; }
+.lego-block:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.lego-block[data-shape="square"] { border-radius: 6px; clip-path: none; }
+.lego-block[data-shape="circle"] { border-radius: 50%; clip-path: none; }
+.lego-block[data-shape="diamond"] { border-radius: 0; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+.lego-block[data-shape="triangle"] { border-radius: 0; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.lego-block[data-shape="hexagon"] { border-radius: 0; clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%); }
+.lego-block[data-shape="star"] { border-radius: 0; clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+
+.lego-count {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+.lego-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+.lego-gallery-item {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.lego-gallery-item .lego-block {
+  cursor: default;
+  width: 16px;
+  height: 16px;
+  border-width: 1px;
+}
+
+/* ---------- Space scene scroll animation ---------- */
+.space-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  overflow: hidden;
+  pointer-events: none;
+}
+.spaceship {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 68px;
+  height: auto;
+  opacity: 1;
+  filter: drop-shadow(0 3px 10px rgba(0,0,0,0.5)) drop-shadow(0 0 10px rgba(177,120,97,0.35));
+  will-change: transform;
+}
+.spaceship-flame {
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+  animation: flameFlicker 0.5s ease-in-out infinite alternate;
+}
+@keyframes flameFlicker {
+  0% { transform: scaleY(0.75); opacity: 0.75; }
+  100% { transform: scaleY(1.15); opacity: 1; }
+}
+.asteroid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: auto;
+  will-change: transform, opacity;
+  transition: opacity 0.3s linear;
+  animation: asteroidSpin linear infinite;
+  transform-box: fill-box;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.45));
+}
+.asteroid:nth-of-type(1) { animation-duration: 16s; }
+.asteroid:nth-of-type(2) { animation-duration: 22s; animation-direction: reverse; }
+.asteroid:nth-of-type(3) { animation-duration: 19s; }
+.asteroid:nth-of-type(4) { animation-duration: 25s; animation-direction: reverse; }
+.asteroid:nth-of-type(5) { animation-duration: 14s; }
+.asteroid:nth-of-type(6) { animation-duration: 21s; animation-direction: reverse; }
+.asteroid:nth-of-type(7) { animation-duration: 17s; }
+@keyframes asteroidSpin {
+  from { rotate: 0deg; }
+  to { rotate: 360deg; }
+}
+@media (max-width: 900px) {
+  .space-scene { display: none; } /* same breakpoint as the sidebar — no room for it on narrow layouts */
 }
 
 /* ---------- Footer ---------- */
@@ -595,19 +1274,26 @@ a.contact-card:hover {
     transform: none;
     transition: none;
   }
-  .cursor { animation: none; }
-  .project-card:hover, a.contact-card:hover, .btn-primary:hover, .node:hover {
+  .boot-cursor { animation: none; }
+  .project-card:hover, a.contact-card:hover, .btn-primary:hover, .node:hover, .rps-btn:hover,
+  .idea-submit:hover, a.article-card:hover, .lego-block:hover, .lego-block:active {
     transform: none;
   }
   .project-card:hover .preview-body {
     transition: none;
   }
+  .avatar-shape, .avatar-shape .a-tri { animation: none; }
+  .rps-result.rps-pop, .rps-game.rps-shake { animation: none; }
+  .rps-hands.rps-hands-shaking .rps-hand,
+  .rps-hands.rps-hands-shaking .rps-hand-bot,
+  .rps-hands.rps-hands-reveal .rps-hand,
+  .rps-hands.rps-hands-reveal .rps-hand-bot { animation: none; }
+  .space-scene { display: none; } /* scroll-linked ship/asteroid movement, spin and flame flicker all skipped */
 }
 
 /* ---------- Mobile ---------- */
 @media (max-width: 600px) {
   .section { padding: var(--space-5) var(--space-2); }
-  .stack-map-wrap { height: 340px; }
   .node { font-size: 0.72rem; padding: 5px 10px; }
   .section-ghost { font-size: 2.4rem; opacity: 0.04; }
   .hero-inner { background: none; } /* radial fade less needed on narrow screens; keeps text readable via denser dot fade in JS instead */

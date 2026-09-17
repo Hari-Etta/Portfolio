@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>[Your Name] — Data Analyst / Data Scientist</title>
-<meta name="description" content="[Your Name] — Portfolio: Data Analyst / Business Analyst / Data Scientist / AI-ML Engineer">
+<title>Hari Etta — Data Scientist / AI-ML Engineer</title>
+<meta name="description" content="Hari Etta — Portfolio: Data Analyst / Business Analyst / Data Scientist / AI-ML Engineer">
 
 <!-- Fonts: Sora (display), IBM Plex Sans (body), IBM Plex Mono (data/tags) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,21 +12,53 @@
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
+
+<!-- Runs synchronously before first paint so the boot screen shows with zero flash
+     of the real page underneath. Skips itself (no boot screen at all) if the visitor
+     has already seen it this browser session, or has prefers-reduced-motion on. -->
+<script>
+(function () {
+  try {
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce && !sessionStorage.getItem('bootShown')) {
+      document.documentElement.classList.add('boot-pending');
+    }
+  } catch (e) {}
+})();
+</script>
 </head>
 <body>
 
 <!-- ============================================================
-     STICKY SIDE NAV DOTS
+     BOOT SCREEN — full-screen terminal boot sequence, shown once per
+     browser session (see the inline <script> in <head> and the
+     bootSequence() function in script.js). Purely decorative: if JS
+     never runs, .boot-pending is never added and this stays hidden.
+============================================================= -->
+<div id="boot-screen" class="boot-screen" aria-hidden="true">
+  <div class="boot-log" id="boot-log"></div>
+  <div class="boot-progress"><div class="boot-progress-bar" id="boot-progress-bar"></div></div>
+</div>
+
+<!-- ============================================================
+     STICKY SIDEBAR NAV
      Add/remove a <a class="navdot"> if you add/remove a section.
-     data-label shows on hover; href must match the section id.
+     href must match the section id; the link text is the label shown.
+     Order here should match the actual section order on the page.
 ============================================================= -->
 <nav class="navdots" aria-label="Section navigation">
-  <a class="navdot" href="#hero" data-label="Hero"><span></span></a>
-  <a class="navdot" href="#contact" data-label="Contact"><span></span></a>
-  <a class="navdot" href="#education" data-label="Education"><span></span></a>
-  <a class="navdot" href="#experience" data-label="Experience"><span></span></a>
-  <a class="navdot" href="#stack" data-label="Tech Stack"><span></span></a>
-  <a class="navdot" href="#projects" data-label="Projects"><span></span></a>
+  <a class="navdot" href="#hero">Hero</a>
+  <a class="navdot" href="#about">About</a>
+  <a class="navdot" href="#play-build">Play &amp; Build</a>
+  <a class="navdot" href="#contact">Contact</a>
+  <a class="navdot" href="#education">Education</a>
+  <a class="navdot" href="#experience">Experience</a>
+  <a class="navdot" href="#stack">Tech Stack</a>
+  <a class="navdot" href="#projects">Projects</a>
+  <a class="navdot" href="#ideas">Ideas</a>
+  <a class="navdot" href="#interests">Interests</a>
+  <a class="navdot" href="#articles">Articles</a>
+  <a class="navdot" href="#github-activity">GitHub</a>
 </nav>
 
 <!-- ============================================================
@@ -36,25 +68,172 @@
   <!-- Signature hero backdrop: animated scatter-plot field (script.js draws it on #hero-canvas).
        Respects prefers-reduced-motion (freezes to a static scatter). -->
   <canvas id="hero-canvas" aria-hidden="true"></canvas>
-  <div class="hero-inner">
-    <p class="terminal-line">
-      <span class="prompt">$</span>
-      <span id="terminal-text" class="typed"></span><span class="cursor" aria-hidden="true">▌</span>
-    </p>
+  <div class="hero-flex">
+    <div class="hero-inner">
+      <h1 class="name">Hari Etta</h1>
+      <p class="role-line">
+        <span class="role-tag">Data Analyst</span>
+        <span class="role-tag">Business Analyst</span>
+        <span class="role-tag">Data Scientist</span>
+        <span class="role-tag">AI/ML Engineer</span>
+      </p>
+      <p class="positioning">Data Scientist bridging LLMs, causal inference, and production data engineering to solve real business problems.</p>
 
-    <!-- Fallback for no-JS / screen readers: real content lives here too -->
-    <h1 class="name">[Your Full Name]</h1>
-    <p class="role-line">
-      <span class="role-tag">Data Analyst</span>
-      <span class="role-tag">Business Analyst</span>
-      <span class="role-tag">Data Scientist</span>
-      <span class="role-tag">AI/ML Engineer</span>
-    </p>
-    <p class="positioning">[One-line positioning statement — e.g. "I turn messy data into decisions people actually act on."]</p>
+      <a href="#contact" class="btn-primary">Get in touch ↓</a>
+    </div>
 
-    <a href="#contact" class="btn-primary">Get in touch ↓</a>
+    <!-- Placeholder avatar — no real photo yet. Abstract geometric shape in the
+         site's own palette so it reads as intentional, not a broken image.
+         Swap for <img src="your-photo.jpg" alt="Hari Etta" class="avatar-shape">
+         inside .hero-avatar-ring when you have a real photo. -->
+    <div class="hero-avatar-wrap">
+      <div class="hero-avatar-ring">
+        <svg class="avatar-shape" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="46" fill="none" stroke="#333B44" stroke-width="1"/>
+          <polygon class="a-tri" points="50,14 83,68 17,68" fill="none" stroke="#B17861" stroke-width="2.5"/>
+          <circle cx="50" cy="50" r="20" fill="none" stroke="#4F587F" stroke-width="2"/>
+          <circle cx="50" cy="30" r="3" fill="#B17861"/>
+        </svg>
+        <span class="hero-avatar-badge">photo soon</span>
+      </div>
+    </div>
   </div>
 </header>
+
+<!-- ============================================================
+     ABOUT — not one of the 6 required sections, added on request.
+     Placeholder bio: replace the paragraph below with real content
+     whenever you're ready (per the content-honesty rule, nothing here
+     is invented).
+============================================================= -->
+<section id="about" class="section reveal">
+  <span class="section-ghost" aria-hidden="true">whoami</span>
+  <h2 class="section-heading"><span class="heading-index">00</span> About</h2>
+  <p class="about-bio">[Add a short bio here — 2–4 sentences on your background, what drives you as a data professional, and what kind of role or team you're looking for next.]</p>
+</section>
+
+<!-- ============================================================
+     BONUS: PLAY & BUILD — the RPS game and the bot-builder toy live
+     side by side in one section (two-column on desktop, stacked on
+     mobile) so both bonus toys read as one "play around" stop rather
+     than two separate ones. Placed right after About so visitors see
+     it early. Both persist their own state in the visitor's own
+     browser (localStorage) only — see rpsGame() and legoBuilder() in
+     script.js.
+============================================================= -->
+<section id="play-build" class="section reveal bonus-section">
+  <span class="section-ghost" aria-hidden="true">rock.paper.scissors() · stack.push()</span>
+  <h2 class="section-heading bonus-heading"><span class="bonus-tag">// bonus</span> Play &amp; Build</h2>
+  <p class="section-sub">A quick game, and a small toy for building your own bot — both save your progress in this browser.</p>
+
+  <div class="play-build-grid">
+    <div class="play-build-col" id="rps-game">
+      <h3 class="subsection-heading">Beat the Algorithm</h3>
+      <p class="section-sub">Playing against <strong>RHO</strong> — picks purely at random, no ML involved. Yet.</p>
+
+      <div class="rps-game" id="rps-card">
+        <div class="rps-main">
+          <!-- Two animated hands that shake, then reveal the shape each side
+               played. Each SVG has a rock/paper/scissors group toggled purely
+               with CSS via the [data-shape] attribute — see rpsGame() in
+               script.js for the shake → reveal sequence. -->
+          <div class="rps-hands" id="rps-hands" aria-hidden="true">
+            <div class="rps-hand-wrap">
+              <span class="rps-hand-label">You</span>
+              <svg class="rps-hand" id="rps-hand-player" data-shape="rock" viewBox="0 0 60 80">
+                <path class="rps-hand-palm" d="M8 40 Q8 76 30 76 Q52 76 52 40 Z"/>
+                <g class="fingers fingers-rock">
+                  <path d="M10 20 Q10 8 30 8 Q50 8 50 20 L50 40 L10 40 Z"/>
+                  <circle cx="18" cy="22" r="4"/><circle cx="30" cy="18" r="4"/><circle cx="42" cy="22" r="4"/>
+                </g>
+                <g class="fingers fingers-paper">
+                  <rect x="10" y="10" width="8" height="34" rx="4"/>
+                  <rect x="20" y="4" width="8" height="40" rx="4"/>
+                  <rect x="30" y="2" width="8" height="42" rx="4"/>
+                  <rect x="40" y="6" width="8" height="38" rx="4"/>
+                  <rect x="49" y="14" width="7" height="30" rx="4"/>
+                </g>
+                <g class="fingers fingers-scissors">
+                  <circle cx="14" cy="34" r="5"/><circle cx="44" cy="34" r="5"/>
+                  <rect x="20" y="4" width="8" height="40" rx="4"/>
+                  <rect x="30" y="2" width="8" height="42" rx="4"/>
+                </g>
+              </svg>
+            </div>
+            <span class="rps-hands-vs">VS</span>
+            <div class="rps-hand-wrap">
+              <span class="rps-hand-label rps-bot-name">RHO</span>
+              <svg class="rps-hand rps-hand-bot" id="rps-hand-bot" data-shape="rock" viewBox="0 0 60 80">
+                <path class="rps-hand-palm" d="M8 40 Q8 76 30 76 Q52 76 52 40 Z"/>
+                <g class="fingers fingers-rock">
+                  <path d="M10 20 Q10 8 30 8 Q50 8 50 20 L50 40 L10 40 Z"/>
+                  <circle cx="18" cy="22" r="4"/><circle cx="30" cy="18" r="4"/><circle cx="42" cy="22" r="4"/>
+                </g>
+                <g class="fingers fingers-paper">
+                  <rect x="10" y="10" width="8" height="34" rx="4"/>
+                  <rect x="20" y="4" width="8" height="40" rx="4"/>
+                  <rect x="30" y="2" width="8" height="42" rx="4"/>
+                  <rect x="40" y="6" width="8" height="38" rx="4"/>
+                  <rect x="49" y="14" width="7" height="30" rx="4"/>
+                </g>
+                <g class="fingers fingers-scissors">
+                  <circle cx="14" cy="34" r="5"/><circle cx="44" cy="34" r="5"/>
+                  <rect x="20" y="4" width="8" height="40" rx="4"/>
+                  <rect x="30" y="2" width="8" height="42" rx="4"/>
+                </g>
+              </svg>
+            </div>
+          </div>
+          <div class="rps-choices" role="group" aria-label="Choose rock, paper, or scissors">
+            <button class="rps-btn" data-choice="rock">ROCK</button>
+            <button class="rps-btn" data-choice="paper">PAPER</button>
+            <button class="rps-btn" data-choice="scissors">SCISSORS</button>
+          </div>
+          <p class="rps-result" id="rps-result" aria-live="polite">Make your move.</p>
+          <button class="rps-reset" id="rps-reset" type="button">Reset score</button>
+        </div>
+
+        <!-- Live metrics, shown beside the game as you play (see rpsGame() in script.js) -->
+        <div class="rps-stats" aria-live="polite">
+          <div class="rps-vs">VS <span class="rps-bot-name">RHO</span></div>
+          <dl class="rps-stat-list">
+            <div class="rps-stat"><dt>Wins</dt><dd id="rps-wins">0</dd></div>
+            <div class="rps-stat"><dt>Losses</dt><dd id="rps-losses">0</dd></div>
+            <div class="rps-stat"><dt>Ties</dt><dd id="rps-ties">0</dd></div>
+            <div class="rps-stat"><dt>Win rate</dt><dd id="rps-winrate">—</dd></div>
+            <div class="rps-stat"><dt>Best streak</dt><dd id="rps-streak">0</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="play-build-col" id="build">
+      <h3 class="subsection-heading">Build / Create Your Own Bot</h3>
+      <p class="section-sub">Pick a shape to add it, drag blocks anywhere, click one to remove it — then save your bot.</p>
+
+      <div class="lego-builder">
+        <div class="lego-controls">
+          <div class="lego-shape-picker" role="group" aria-label="Add a block of this shape">
+            <button class="lego-shape-btn" data-shape="square" title="Add square">▪</button>
+            <button class="lego-shape-btn" data-shape="circle" title="Add circle">●</button>
+            <button class="lego-shape-btn" data-shape="triangle" title="Add triangle">▲</button>
+            <button class="lego-shape-btn" data-shape="diamond" title="Add diamond">◆</button>
+            <button class="lego-shape-btn" data-shape="hexagon" title="Add hexagon">⬡</button>
+            <button class="lego-shape-btn" data-shape="star" title="Add star">★</button>
+          </div>
+          <button class="lego-btn" id="lego-recolor" type="button">⟲ Recolor</button>
+          <button class="lego-btn" id="lego-clear" type="button">✕ Clear canvas</button>
+          <button class="lego-btn lego-btn-save" id="lego-save" type="button">✓ Save bot</button>
+        </div>
+
+        <div class="lego-canvas" id="lego-canvas" aria-label="Drag blocks to build your bot; click a block to remove it"></div>
+
+        <p class="lego-count" id="lego-count">Bots created so far: 0</p>
+        <div class="lego-gallery" id="lego-gallery" aria-label="Your saved bots"></div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ============================================================
      2. CONTACT DETAILS
@@ -63,25 +242,22 @@
   <span class="section-ghost" aria-hidden="true">connect()</span>
   <h2 class="section-heading"><span class="heading-index">01</span> Contact</h2>
   <div class="contact-grid">
-    <a class="contact-card" href="mailto:[your-email@example.com]">
+    <a class="contact-card" href="mailto:hetta.ds@gmail.com">
       <span class="contact-label">Email</span>
-      <span class="contact-value">[your-email@example.com]</span>
+      <span class="contact-value">hetta.ds@gmail.com</span>
     </a>
-    <a class="contact-card" href="tel:[+1-000-000-0000]">
-      <span class="contact-label">Phone</span>
-      <span class="contact-value">[+1 000 000 0000]</span>
-    </a>
-    <a class="contact-card" href="[https://linkedin.com/in/your-handle]" target="_blank" rel="noopener">
+    <!-- Phone skipped — add back with <a class="contact-card" href="tel:+1XXXXXXXXXX"> if wanted later -->
+    <a class="contact-card" href="https://www.linkedin.com/in/hari-etta-0840a5368/" target="_blank" rel="noopener">
       <span class="contact-label">LinkedIn</span>
-      <span class="contact-value">linkedin.com/in/[your-handle]</span>
+      <span class="contact-value">linkedin.com/in/hari-etta</span>
     </a>
-    <a class="contact-card" href="[https://github.com/your-handle]" target="_blank" rel="noopener">
+    <a class="contact-card" href="https://github.com/Hari-Etta" target="_blank" rel="noopener">
       <span class="contact-label">GitHub</span>
-      <span class="contact-value">github.com/[your-handle]</span>
+      <span class="contact-value">github.com/Hari-Etta</span>
     </a>
     <div class="contact-card contact-static">
       <span class="contact-label">Location</span>
-      <span class="contact-value">[City, State]</span>
+      <span class="contact-value">San Jose, CA</span>
     </div>
   </div>
 </section>
@@ -96,11 +272,18 @@
   <div class="edu-list">
     <article class="edu-entry">
       <div class="edu-top">
-        <h3>[Degree, e.g. B.S. in Data Science]</h3>
-        <span class="edu-year">[Year – Year]</span>
+        <h3>M.S. in Information Technology &amp; Management — Data Science &amp; Applied AI</h3>
+        <span class="edu-year">2024 – 2026</span>
       </div>
-      <p class="edu-institution">[Institution Name]</p>
-      <p class="edu-detail">[Relevant coursework / honors / GPA — optional, remove if not applicable]</p>
+      <p class="edu-institution">Illinois Institute of Technology</p>
+    </article>
+
+    <article class="edu-entry">
+      <div class="edu-top">
+        <h3>B.E. in Engineering</h3>
+        <span class="edu-year">2017 – 2021</span>
+      </div>
+      <p class="edu-institution">Manipal University</p>
     </article>
 
     <!-- <?claude add-education?> Duplicate .edu-entry above this line for another degree -->
@@ -117,8 +300,32 @@
   <div class="exp-list">
     <article class="exp-entry">
       <div class="exp-top">
-        <h3>[Role Title] · <span class="exp-company">[Company Name]</span></h3>
-        <span class="exp-dates">[Month Year] – [Month Year / Present]</span>
+        <h3>Data Scientist and VC Analyst · <span class="exp-company">UruQAI</span></h3>
+        <span class="exp-dates">May 2026 – Present</span>
+      </div>
+      <ul class="exp-bullets">
+        <li>[Add impact bullet — quantify where possible, e.g. "Reduced X by Y% through..."]</li>
+        <li>[Add impact bullet]</li>
+        <li>[Add impact bullet]</li>
+      </ul>
+    </article>
+
+    <article class="exp-entry">
+      <div class="exp-top">
+        <h3>Student Assistant · <span class="exp-company">Chicago Public Schools</span></h3>
+        <span class="exp-dates">Sept 2025 – Apr 2026</span>
+      </div>
+      <ul class="exp-bullets">
+        <li>[Add impact bullet — quantify where possible, e.g. "Reduced X by Y% through..."]</li>
+        <li>[Add impact bullet]</li>
+        <li>[Add impact bullet]</li>
+      </ul>
+    </article>
+
+    <article class="exp-entry">
+      <div class="exp-top">
+        <h3>Assistant Manager · <span class="exp-company">Total Environment Pvt. Ltd.</span></h3>
+        <span class="exp-dates">July 2021 – July 2024</span>
       </div>
       <ul class="exp-bullets">
         <li>[Add impact bullet — quantify where possible, e.g. "Reduced X by Y% through..."]</li>
@@ -150,38 +357,108 @@
     <button class="stack-filter" data-group="cloud">Cloud</button>
   </div>
 
-  <div class="stack-map-wrap">
-    <canvas id="stack-canvas" aria-hidden="true"></canvas>
-    <ul id="stack-nodes" class="stack-nodes">
-      <!-- <?claude add-skill?> Add/remove <li> nodes here. data-group must match a filter button's data-group above. -->
-      <li class="node" data-group="languages" style="--x:15%; --y:30%;">Python</li>
-      <li class="node" data-group="languages" style="--x:30%; --y:60%;">SQL</li>
-      <li class="node" data-group="languages" style="--x:10%; --y:75%;">R</li>
+  <div class="stack-panels-grid" id="stack-panels">
+    <!-- <?claude add-skill?> Each category is its own panel. Add/remove <li>
+         nodes within a panel's <ul class="stack-nodes"> freely — they flow
+         naturally, no manual x/y needed. To add a whole new category, copy
+         a .stack-panel block and add a matching filter button above. -->
+    <div class="stack-panel" data-group="languages">
+      <h3 class="stack-panel-title">Languages</h3>
+      <div class="stack-panel-map">
+        <canvas aria-hidden="true"></canvas>
+        <ul class="stack-nodes">
+          <li class="node" data-group="languages">Python</li>
+          <li class="node" data-group="languages">pandas</li>
+          <li class="node" data-group="languages">NumPy</li>
+          <li class="node" data-group="languages">scikit-learn</li>
+          <li class="node" data-group="languages">R</li>
+          <li class="node" data-group="languages">SQL</li>
+        </ul>
+      </div>
+    </div>
 
-      <li class="node" data-group="analytics" style="--x:50%; --y:20%;">Power BI</li>
-      <li class="node" data-group="analytics" style="--x:65%; --y:40%;">Tableau</li>
-      <li class="node" data-group="analytics" style="--x:45%; --y:55%;">Excel</li>
+    <div class="stack-panel" data-group="analytics">
+      <h3 class="stack-panel-title">Analytics / BI</h3>
+      <div class="stack-panel-map">
+        <canvas aria-hidden="true"></canvas>
+        <ul class="stack-nodes">
+          <li class="node" data-group="analytics">Tableau</li>
+          <li class="node" data-group="analytics">Looker Studio</li>
+          <li class="node" data-group="analytics">Power BI</li>
+          <li class="node" data-group="analytics">A/B Testing</li>
+          <li class="node" data-group="analytics">Cohort Analysis</li>
+          <li class="node" data-group="analytics">Causal Inference</li>
+          <li class="node" data-group="analytics">Statistical Testing</li>
+        </ul>
+      </div>
+    </div>
 
-      <li class="node" data-group="ml" style="--x:80%; --y:25%;">scikit-learn</li>
-      <li class="node" data-group="ml" style="--x:88%; --y:50%;">PyTorch</li>
-      <li class="node" data-group="ml" style="--x:75%; --y:65%;">Pandas</li>
+    <div class="stack-panel" data-group="ml">
+      <h3 class="stack-panel-title">ML</h3>
+      <div class="stack-panel-map">
+        <canvas aria-hidden="true"></canvas>
+        <ul class="stack-nodes">
+          <li class="node" data-group="ml">MLflow</li>
+          <li class="node" data-group="ml">XGBoost</li>
+          <li class="node" data-group="ml">SHAP</li>
+          <li class="node" data-group="ml">HuggingFace</li>
+          <li class="node" data-group="ml">RAG</li>
+          <li class="node" data-group="ml">LLMs</li>
+          <li class="node" data-group="ml">Azure OpenAI GPT-4.1</li>
+          <li class="node" data-group="ml">LLMOps</li>
+          <li class="node" data-group="ml">LangChain</li>
+          <li class="node" data-group="ml">LangGraph</li>
+          <li class="node" data-group="ml">Claude API (Anthropic)</li>
+          <li class="node" data-group="ml">EconML</li>
+          <li class="node" data-group="ml">pytest</li>
+          <li class="node" data-group="ml">Prompt Engineering</li>
+        </ul>
+      </div>
+    </div>
 
-      <li class="node" data-group="engineering" style="--x:25%; --y:10%;">Git</li>
-      <li class="node" data-group="engineering" style="--x:55%; --y:80%;">Airflow</li>
-      <li class="node" data-group="engineering" style="--x:35%; --y:88%;">Docker</li>
+    <div class="stack-panel" data-group="engineering">
+      <h3 class="stack-panel-title">Engineering</h3>
+      <div class="stack-panel-map">
+        <canvas aria-hidden="true"></canvas>
+        <ul class="stack-nodes">
+          <li class="node" data-group="engineering">dbt Core</li>
+          <li class="node" data-group="engineering">Databricks</li>
+          <li class="node" data-group="engineering">Delta Lake</li>
+          <li class="node" data-group="engineering">Airflow</li>
+          <li class="node" data-group="engineering">Prefect</li>
+          <li class="node" data-group="engineering">Elasticsearch</li>
+          <li class="node" data-group="engineering">Pinecone</li>
+        </ul>
+      </div>
+    </div>
 
-      <li class="node" data-group="cloud" style="--x:90%; --y:80%;">AWS</li>
-      <li class="node" data-group="cloud" style="--x:70%; --y:10%;">Azure</li>
-    </ul>
+    <div class="stack-panel" data-group="cloud">
+      <h3 class="stack-panel-title">Cloud</h3>
+      <div class="stack-panel-map">
+        <canvas aria-hidden="true"></canvas>
+        <ul class="stack-nodes">
+          <li class="node" data-group="cloud">GCP</li>
+          <li class="node" data-group="cloud">BigQuery</li>
+          <li class="node" data-group="cloud">Cloud Run</li>
+          <li class="node" data-group="cloud">GCS</li>
+          <li class="node" data-group="cloud">AWS</li>
+          <li class="node" data-group="cloud">S3</li>
+          <li class="node" data-group="cloud">Lambda</li>
+          <li class="node" data-group="cloud">Docker</li>
+          <li class="node" data-group="cloud">FastAPI</li>
+          <li class="node" data-group="cloud">GitHub Actions CI/CD</li>
+        </ul>
+      </div>
+    </div>
   </div>
 
   <!-- Screen-reader / no-JS fallback list -->
   <div class="stack-fallback">
-    <div><strong>Languages:</strong> Python, SQL, R</div>
-    <div><strong>Analytics / BI:</strong> Power BI, Tableau, Excel</div>
-    <div><strong>ML:</strong> scikit-learn, PyTorch, Pandas</div>
-    <div><strong>Engineering:</strong> Git, Airflow, Docker</div>
-    <div><strong>Cloud:</strong> AWS, Azure</div>
+    <div><strong>Languages:</strong> Python (pandas, NumPy, scikit-learn), R, SQL</div>
+    <div><strong>Analytics / BI:</strong> Tableau, Looker Studio, Power BI, A/B Testing, Cohort Analysis, Causal Inference, Statistical Testing</div>
+    <div><strong>ML:</strong> MLflow, XGBoost, SHAP, HuggingFace, RAG, LLMs, Azure OpenAI GPT-4.1, LLMOps, LangChain, LangGraph, Claude API (Anthropic), EconML, pytest, Prompt Engineering</div>
+    <div><strong>Engineering:</strong> dbt Core, Databricks, Delta Lake, Airflow, Prefect, Elasticsearch, Pinecone</div>
+    <div><strong>Cloud:</strong> GCP (BigQuery, Cloud Run, GCS), AWS (S3, Lambda), Docker, FastAPI, GitHub Actions CI/CD</div>
   </div>
 </section>
 
@@ -210,46 +487,56 @@
     <!-- <?claude add-project?> Duplicate this whole <a class="project-card"> block for a new project.
          To show a real screenshot: replace the .project-preview div's content with
          <img src="path/to/screenshot.png" alt=""> — the browser-chrome frame around it stays. -->
-    <a class="project-card" href="[https://github.com/your-handle/project-repo]" target="_blank" rel="noopener" data-tags="python,sql">
+
+    <!-- Real project — repo/demo link and status still needed from Hari; href is a placeholder until then -->
+    <a class="project-card" href="[add repo or live link]" target="_blank" rel="noopener" data-tags="python,sql,ml">
       <div class="project-preview preview-pattern-1">
         <div class="preview-chrome">
           <span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
-          <span class="chrome-url">github.com/your-handle/project-repo</span>
+          <span class="chrome-url">[add repo or live link]</span>
         </div>
         <div class="preview-body" aria-hidden="true"></div>
       </div>
       <div class="project-top">
-        <h3>[Project Title]</h3>
-        <span class="status-badge status-planned">Planned</span>
+        <h3>Complaint Investigation Agent</h3>
+        <span class="status-badge status-deploy-pending">Deployment Pending</span>
       </div>
-      <p class="project-desc">[One-paragraph description of what the project does, the problem it solves, and your role in building it.]</p>
+      <p class="project-desc">A multi-step agentic system built with LangGraph's plan-execute-synthesize state machine that turns plain-English business questions into executable BigQuery SQL over the real CFPB Consumer Complaint Database (3.4M+ records) — cutting query turnaround from days to under 3 seconds average latency. A guardrailed execution layer blocks destructive SQL and prompt-injection attempts before anything runs, and a schema-reference layer grounded in real BigQuery data (18 product categories, 7 submission channels) eliminates hallucinated values.</p>
       <div class="project-tags">
+        <span class="tag">LangGraph</span>
+        <span class="tag">Claude API</span>
+        <span class="tag">BigQuery</span>
+        <span class="tag">Streamlit</span>
         <span class="tag">Python</span>
-        <span class="tag">SQL</span>
       </div>
       <span class="project-link-hint">View repo →</span>
     </a>
 
-    <a class="project-card" href="[https://your-live-demo-url.com]" target="_blank" rel="noopener" data-tags="ml,viz">
+    <!-- Real project — repo/demo link and status still needed from Hari; href is a placeholder until then -->
+    <a class="project-card" href="[add repo or live link]" target="_blank" rel="noopener" data-tags="python,ml">
       <div class="project-preview preview-pattern-2">
         <div class="preview-chrome">
           <span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
-          <span class="chrome-url">your-live-demo-url.com</span>
+          <span class="chrome-url">[add repo or live link]</span>
         </div>
         <div class="preview-body" aria-hidden="true"></div>
       </div>
       <div class="project-top">
-        <h3>[Project Title]</h3>
-        <span class="status-badge status-in-progress">In Progress</span>
+        <h3>IIT International Student Policy Chatbot</h3>
+        <span class="status-badge status-deploy-pending">Deployment Pending</span>
       </div>
-      <p class="project-desc">[One-paragraph description of what the project does, the problem it solves, and your role in building it.]</p>
+      <p class="project-desc">A policy-grounded RAG chatbot answering international-student compliance questions (F-1 status, CPT/OPT, SSN) for IIT. Led the Azure OpenAI migration to GPT-4.1 with text-embedding-3-small for semantic search, contributing to a team-wide accuracy improvement from 72.1% to 90.4% on a 52-question evaluation benchmark. Built the production feedback system on Neon Postgres with dual-write reliability, and supported a 5-service cloud deployment (Azure OpenAI, Elastic Cloud, Render, Netlify, Neon) with per-IP rate limiting and automated health checks for 24/7 uptime on free-tier infrastructure.</p>
       <div class="project-tags">
-        <span class="tag">Machine Learning</span>
-        <span class="tag">Visualization</span>
+        <span class="tag">FastAPI</span>
+        <span class="tag">Azure OpenAI</span>
+        <span class="tag">Elasticsearch</span>
+        <span class="tag">RAG</span>
+        <span class="tag">Next.js</span>
       </div>
       <span class="project-link-hint">View live demo →</span>
     </a>
 
+    <!-- 3rd project slot — e-commerce medallion platform, details pending from Hari -->
     <a class="project-card" href="[https://your-live-demo-url.com]" target="_blank" rel="noopener" data-tags="sql,viz">
       <div class="project-preview preview-pattern-3">
         <div class="preview-chrome">
@@ -260,7 +547,7 @@
       </div>
       <div class="project-top">
         <h3>[Project Title]</h3>
-        <span class="status-badge status-live">Live</span>
+        <span class="status-badge status-idling">Idling</span>
       </div>
       <p class="project-desc">[One-paragraph description of what the project does, the problem it solves, and your role in building it.]</p>
       <div class="project-tags">
@@ -270,12 +557,273 @@
       <span class="project-link-hint">View live demo →</span>
     </a>
 
+    <!-- 4th project slot — fully placeholder, ready whenever you have a new project.
+         Swap the status class + label as it moves along: status-awaiting-ideas →
+         status-construction → status-deploy-pending → status-live (see the
+         status-badge rules in style.css). -->
+    <a class="project-card" href="[add repo or live link]" target="_blank" rel="noopener" data-tags="python">
+      <div class="project-preview preview-pattern-1">
+        <div class="preview-chrome">
+          <span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
+          <span class="chrome-url">[add repo or live link]</span>
+        </div>
+        <div class="preview-body" aria-hidden="true"></div>
+      </div>
+      <div class="project-top">
+        <h3>[Project Title]</h3>
+        <span class="status-badge status-awaiting-ideas">Awaiting Ideas</span>
+      </div>
+      <p class="project-desc">[One-paragraph description of what the project does, the problem it solves, and your role in building it.]</p>
+      <div class="project-tags">
+        <span class="tag">[Tech]</span>
+      </div>
+      <span class="project-link-hint">View repo →</span>
+    </a>
+
+    <!-- 5th project slot — fully placeholder, ready whenever you have a new project. -->
+    <a class="project-card" href="[add repo or live link]" target="_blank" rel="noopener" data-tags="python">
+      <div class="project-preview preview-pattern-2">
+        <div class="preview-chrome">
+          <span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
+          <span class="chrome-url">[add repo or live link]</span>
+        </div>
+        <div class="preview-body" aria-hidden="true"></div>
+      </div>
+      <div class="project-top">
+        <h3>[Project Title]</h3>
+        <span class="status-badge status-awaiting-ideas">Awaiting Ideas</span>
+      </div>
+      <p class="project-desc">[One-paragraph description of what the project does, the problem it solves, and your role in building it.]</p>
+      <div class="project-tags">
+        <span class="tag">[Tech]</span>
+      </div>
+      <span class="project-link-hint">View live demo →</span>
+    </a>
+
+    <!-- <?claude add-project?> Duplicate any card above this line for another project. -->
+
   </div>
 </section>
 
+<!-- ============================================================
+     BONUS: RECOMMEND A PROJECT IDEA — not one of the 6 required sections.
+     A simple message form so visitors can suggest a project idea. Uses
+     Netlify Forms (data-netlify="true" + the hidden form-name input below)
+     since this site already deploys on Netlify — free, no API key, no
+     backend code needed.
+     REMINDER FOR HARI: once deployed, go to your Netlify site dashboard →
+     Site configuration → Forms → Form notifications, and add an email
+     notification so submissions land in your inbox (they're also always
+     viewable in the dashboard's Forms tab, which acts as your "database").
+============================================================= -->
+<section id="ideas" class="section reveal bonus-section">
+  <span class="section-ghost" aria-hidden="true">POST /ideas</span>
+  <h2 class="section-heading bonus-heading"><span class="bonus-tag">// bonus</span> Recommend a Project Idea</h2>
+  <p class="section-sub">Got an idea for something I should build next? Drop it below — I read every one.</p>
+
+  <form class="idea-form" name="project-ideas" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="idea-form">
+    <input type="hidden" name="form-name" value="project-ideas" />
+    <p class="hidden" style="display:none">
+      <label>Don't fill this out: <input name="bot-field" /></label>
+    </p>
+    <div class="idea-field">
+      <label for="idea-name">Name (optional)</label>
+      <input type="text" id="idea-name" name="name" autocomplete="name">
+    </div>
+    <div class="idea-field">
+      <label for="idea-email">Email (optional, if you'd like a reply)</label>
+      <input type="email" id="idea-email" name="email" autocomplete="email">
+    </div>
+    <div class="idea-field">
+      <label for="idea-message">Your idea</label>
+      <textarea id="idea-message" name="message" rows="4" required></textarea>
+    </div>
+    <button type="submit" class="idea-submit">Send idea</button>
+    <p class="idea-note">Sent privately via Netlify Forms — not posted publicly on this site.</p>
+    <p class="idea-success" id="idea-success" role="status">Thanks — your idea has been sent.</p>
+  </form>
+</section>
+
+<!-- ============================================================
+     INTERESTS — not one of the 6 required sections, added on request.
+     Placeholder chips: replace with real interests whenever you're ready.
+============================================================= -->
+<section id="interests" class="section reveal">
+  <span class="section-ghost" aria-hidden="true">interests = [...]</span>
+  <h2 class="section-heading"><span class="heading-index">06</span> Interests</h2>
+  <p class="section-sub">Outside of work, roughly grouped.</p>
+
+  <div class="interest-groups">
+    <!-- <?claude add-interest?> Duplicate a chip within a group, or a whole
+         .interest-group block for a new category. -->
+    <div class="interest-group">
+      <h3 class="interest-group-title">Sports &amp; Fitness</h3>
+      <div class="interest-list">
+        <span class="interest-chip">Running</span>
+        <span class="interest-chip">Pickleball</span>
+        <span class="interest-chip">Baseball</span>
+        <span class="interest-chip">Volleyball</span>
+      </div>
+    </div>
+
+    <div class="interest-group">
+      <h3 class="interest-group-title">Reading &amp; Sci-Fi</h3>
+      <div class="interest-list">
+        <span class="interest-chip">Reading</span>
+        <span class="interest-chip">Sci-Fi</span>
+      </div>
+    </div>
+
+    <div class="interest-group">
+      <h3 class="interest-group-title">Food &amp; Cooking</h3>
+      <div class="interest-list">
+        <span class="interest-chip">Cooking</span>
+        <span class="interest-chip">Trying new food</span>
+      </div>
+    </div>
+
+    <div class="interest-group">
+      <h3 class="interest-group-title">Travel &amp; Exploring</h3>
+      <div class="interest-list">
+        <span class="interest-chip">Exploring new places</span>
+        <span class="interest-chip">Nature &amp; cities</span>
+      </div>
+    </div>
+
+    <div class="interest-group">
+      <h3 class="interest-group-title">Making &amp; Creating</h3>
+      <div class="interest-list">
+        <span class="interest-chip">Designing</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ARTICLES — not one of the 6 required sections, added on request.
+     These are OTHER PEOPLE'S articles found elsewhere on the web that
+     Hari wants to point visitors to — not his own writing. Each card
+     therefore always credits the original author/publication and links
+     out to the original, for copyright/attribution reasons. Never strip
+     the .article-source line when adding a real one.
+============================================================= -->
+<section id="articles" class="section reveal">
+  <span class="section-ghost" aria-hidden="true">cat articles/*.md</span>
+  <h2 class="section-heading"><span class="heading-index">07</span> Articles</h2>
+  <p class="section-sub">Reads from around the web I'd recommend — full credit to their original authors and publications, linked below.</p>
+  <div class="article-grid">
+    <!-- <?claude add-article?> Duplicate a card below for another article.
+         href = the original article's URL. .article-source = author name
+         and/or publication (e.g. "Jane Doe · Towards Data Science") so
+         credit is always visible, not just implied by the link. -->
+    <a class="article-card" href="[add original article link]" target="_blank" rel="noopener">
+      <span class="article-date">[Month Year]</span>
+      <h3>[Article Title]</h3>
+      <p>[One-line summary of what the article covers.]</p>
+      <span class="article-source">[Author name · Publication]</span>
+    </a>
+    <a class="article-card" href="[add original article link]" target="_blank" rel="noopener">
+      <span class="article-date">[Month Year]</span>
+      <h3>[Article Title]</h3>
+      <p>[One-line summary of what the article covers.]</p>
+      <span class="article-source">[Author name · Publication]</span>
+    </a>
+  </div>
+</section>
+
+<!-- ============================================================
+     BONUS: GITHUB ACTIVITY — not one of the 6 required sections, added
+     on request.
+
+     NOTE (Sept 2026): the two free embeddable-graph services this section
+     has tried — github-readme-activity-graph.vercel.app and
+     ghchart.rshah.org — are both currently erroring server-side (one
+     returns "402 Payment Required", the other a server error). These are
+     unmaintained community projects, not something in this site's own
+     code, and they're prone to breaking or going away over time. Using
+     ghchart for now since a 402 tends to be permanent while a server
+     error can be transient; a JS check in script.js hides the image and
+     shows a plain "view on GitHub" link instead if it fails to load, so
+     the section never looks broken either way. If this keeps failing,
+     the most reliable long-term fix is dropping the live embed and just
+     linking out to the GitHub profile.
+     To point at a different GitHub username, change "Hari-Etta" in the
+     img src below (and in the href).
+============================================================= -->
+<section id="github-activity" class="section reveal bonus-section">
+  <span class="section-ghost" aria-hidden="true">git log --oneline</span>
+  <h2 class="section-heading bonus-heading"><span class="bonus-tag">// live</span> GitHub Activity</h2>
+  <p class="section-sub">Pulled straight from GitHub — <a href="https://github.com/Hari-Etta" target="_blank" rel="noopener">github.com/Hari-Etta</a></p>
+  <a class="github-heatmap-link" href="https://github.com/Hari-Etta" target="_blank" rel="noopener" id="github-heatmap-link">
+    <img class="github-heatmap" id="github-heatmap-img" src="https://ghchart.rshah.org/B17861/Hari-Etta" alt="Hari Etta's GitHub contribution graph" loading="lazy">
+    <span class="github-fallback">⎋ Live graph unavailable right now — view activity on github.com/Hari-Etta →</span>
+  </a>
+</section>
+
 <footer class="site-footer">
-  <p>[Your Name] · Built from scratch, deployed on Netlify · <span class="footer-year"></span></p>
+  <p>Hari Etta · Built from scratch, deployed on Netlify · <span class="footer-year"></span></p>
 </footer>
+
+<!-- ============================================================
+     SPACE SCENE SCROLL ANIMATION — purely decorative, replaces the
+     earlier koi fish. Fits the hero's scatter-plot/starfield look
+     better: a ship follows one smooth, fixed S-curve path down the left
+     side of the viewport as you scroll the whole page (see PATH_AMPLITUDE
+     / PATH_CYCLES in spaceScene(), script.js) — a single deterministic
+     curve, not a reactive dodge, so the motion reads as an intentional
+     flight line rather than random jitter. Each asteroid sits at a fixed
+     point along that same curve, offset to one side of it (data-lane, now
+     an offset in percent, not an absolute position), so the ship's own
+     path naturally threads past it. Sized up and fully opaque so the
+     scene reads clearly against the hero's starfield rather than blending
+     into it. Every position updates every animation frame with smoothing
+     (lerp) toward its scroll-derived target, not just on the scroll
+     event, so the motion stays smooth even during fast/inertial
+     scrolling. Hidden below 900px width (same breakpoint as the sidebar)
+     and under prefers-reduced-motion (see style.css).
+============================================================= -->
+<div id="space-scene" class="space-scene" aria-hidden="true">
+  <svg class="asteroid" data-progress="0.06" data-lane="-12" style="width:36px" viewBox="0 0 40 40">
+    <polygon points="8,4 24,2 36,14 38,28 26,38 10,36 2,22" fill="#454C56" stroke="#B17861" stroke-width="1.5"/>
+    <circle cx="14" cy="16" r="3" fill="#2A2F36"/>
+    <circle cx="26" cy="24" r="2.3" fill="#2A2F36"/>
+  </svg>
+  <svg class="asteroid" data-progress="0.20" data-lane="11" style="width:26px" viewBox="0 0 40 40">
+    <polygon points="8,4 24,2 36,14 38,28 26,38 10,36 2,22" fill="#454C56" stroke="#B17861" stroke-width="1.5"/>
+    <circle cx="18" cy="18" r="3" fill="#2A2F36"/>
+  </svg>
+  <svg class="asteroid" data-progress="0.36" data-lane="12" style="width:44px" viewBox="0 0 40 40">
+    <polygon points="8,4 24,2 36,14 38,28 26,38 10,36 2,22" fill="#454C56" stroke="#B17861" stroke-width="1.5"/>
+    <circle cx="14" cy="16" r="3.4" fill="#2A2F36"/>
+    <circle cx="27" cy="25" r="2.6" fill="#2A2F36"/>
+  </svg>
+  <svg class="asteroid" data-progress="0.50" data-lane="-13" style="width:30px" viewBox="0 0 40 40">
+    <polygon points="8,4 24,2 36,14 38,28 26,38 10,36 2,22" fill="#454C56" stroke="#B17861" stroke-width="1.5"/>
+    <circle cx="16" cy="18" r="3" fill="#2A2F36"/>
+  </svg>
+  <svg class="asteroid" data-progress="0.65" data-lane="-11" style="width:28px" viewBox="0 0 40 40">
+    <polygon points="8,4 24,2 36,14 38,28 26,38 10,36 2,22" fill="#454C56" stroke="#B17861" stroke-width="1.5"/>
+    <circle cx="20" cy="20" r="2.8" fill="#2A2F36"/>
+  </svg>
+  <svg class="asteroid" data-progress="0.80" data-lane="13" style="width:42px" viewBox="0 0 40 40">
+    <polygon points="8,4 24,2 36,14 38,28 26,38 10,36 2,22" fill="#454C56" stroke="#B17861" stroke-width="1.5"/>
+    <circle cx="14" cy="16" r="3.2" fill="#2A2F36"/>
+    <circle cx="26" cy="24" r="2.4" fill="#2A2F36"/>
+  </svg>
+  <svg class="asteroid" data-progress="0.92" data-lane="12" style="width:28px" viewBox="0 0 40 40">
+    <polygon points="8,4 24,2 36,14 38,28 26,38 10,36 2,22" fill="#454C56" stroke="#B17861" stroke-width="1.5"/>
+    <circle cx="18" cy="18" r="2.6" fill="#2A2F36"/>
+  </svg>
+
+  <svg id="spaceship" class="spaceship" viewBox="0 0 60 70">
+    <path class="spaceship-flame" d="M24 54 L30 68 L36 54 Z" fill="#B17861"/>
+    <path d="M22 46 L10 58 L22 58 Z" fill="#4F587F"/>
+    <path d="M38 46 L50 58 L38 58 Z" fill="#4F587F"/>
+    <path d="M30 4 C40 18, 42 34, 38 54 L22 54 C18 34, 20 18, 30 4 Z" fill="#C9A392"/>
+    <path d="M30 4 C36 12, 38 20, 36 26 L24 26 C22 20, 24 12, 30 4 Z" fill="#B17861"/>
+    <circle cx="30" cy="24" r="6" fill="#20262D" stroke="#4F587F" stroke-width="2"/>
+  </svg>
+</div>
 
 <script src="script.js"></script>
 </body>

@@ -49,16 +49,13 @@
 <nav class="navdots" aria-label="Section navigation">
   <a class="navdot" href="#hero">Hero</a>
   <a class="navdot" href="#about">About</a>
-  <a class="navdot" href="#play-build">Play &amp; Build</a>
-  <a class="navdot" href="#contact">Contact</a>
-  <a class="navdot" href="#education">Education</a>
-  <a class="navdot" href="#experience">Experience</a>
   <a class="navdot" href="#stack">Tech Stack</a>
+  <a class="navdot" href="#experience">Experience</a>
   <a class="navdot" href="#projects">Projects</a>
+  <a class="navdot" href="#education">Education</a>
+  <a class="navdot" href="#contact">Contact</a>
   <a class="navdot" href="#ideas">Ideas</a>
-  <a class="navdot" href="#interests">Interests</a>
-  <a class="navdot" href="#articles">Articles</a>
-  <a class="navdot" href="#github-activity">GitHub</a>
+  <a class="navdot" href="#play-build">Play &amp; Build</a>
 </nav>
 
 <!-- ============================================================
@@ -82,19 +79,14 @@
       <a href="#contact" class="btn-primary">Get in touch ↓</a>
     </div>
 
-    <!-- Placeholder avatar — no real photo yet. Abstract geometric shape in the
-         site's own palette so it reads as intentional, not a broken image.
-         Swap for <img src="your-photo.jpg" alt="Hari Etta" class="avatar-shape">
-         inside .hero-avatar-ring when you have a real photo. -->
+    <!-- Real photo — lives at images/hari-photo.jpg alongside this file
+         (i.e. 00-website/images/hari-photo.jpg). Swap the src if you save
+         a different filename or want to update the photo later; the ring
+         wrapper handles the circular crop via object-fit: cover, so any
+         reasonably square, centered headshot will fit without stretching. -->
     <div class="hero-avatar-wrap">
       <div class="hero-avatar-ring">
-        <svg class="avatar-shape" viewBox="0 0 100 100" aria-hidden="true">
-          <circle cx="50" cy="50" r="46" fill="none" stroke="#333B44" stroke-width="1"/>
-          <polygon class="a-tri" points="50,14 83,68 17,68" fill="none" stroke="#B17861" stroke-width="2.5"/>
-          <circle cx="50" cy="50" r="20" fill="none" stroke="#4F587F" stroke-width="2"/>
-          <circle cx="50" cy="30" r="3" fill="#B17861"/>
-        </svg>
-        <span class="hero-avatar-badge">photo soon</span>
+        <img class="hero-avatar-photo" src="images/hari-photo.jpeg" alt="Hari Etta">
       </div>
     </div>
   </div>
@@ -102,240 +94,11 @@
 
 <!-- ============================================================
      ABOUT — not one of the 6 required sections, added on request.
-     Placeholder bio: replace the paragraph below with real content
-     whenever you're ready (per the content-honesty rule, nothing here
-     is invented).
 ============================================================= -->
 <section id="about" class="section reveal">
   <span class="section-ghost" aria-hidden="true">whoami</span>
   <h2 class="section-heading"><span class="heading-index">00</span> About</h2>
-  <p class="about-bio">[Add a short bio here — 2–4 sentences on your background, what drives you as a data professional, and what kind of role or team you're looking for next.]</p>
-</section>
-
-<!-- ============================================================
-     BONUS: PLAY & BUILD — the RPS game and the bot-builder toy live
-     side by side in one section (two-column on desktop, stacked on
-     mobile) so both bonus toys read as one "play around" stop rather
-     than two separate ones. Placed right after About so visitors see
-     it early. Both persist their own state in the visitor's own
-     browser (localStorage) only — see rpsGame() and legoBuilder() in
-     script.js.
-============================================================= -->
-<section id="play-build" class="section reveal bonus-section">
-  <span class="section-ghost" aria-hidden="true">rock.paper.scissors() · stack.push()</span>
-  <h2 class="section-heading bonus-heading"><span class="bonus-tag">// bonus</span> Play &amp; Build</h2>
-  <p class="section-sub">A quick game, and a small toy for building your own bot — both save your progress in this browser.</p>
-
-  <div class="play-build-grid">
-    <div class="play-build-col" id="rps-game">
-      <h3 class="subsection-heading">Beat the Algorithm</h3>
-      <p class="section-sub">Playing against <strong>RHO</strong> — picks purely at random, no ML involved. Yet.</p>
-
-      <div class="rps-game" id="rps-card">
-        <div class="rps-main">
-          <!-- Two animated hands that shake, then reveal the shape each side
-               played. Each SVG has a rock/paper/scissors group toggled purely
-               with CSS via the [data-shape] attribute — see rpsGame() in
-               script.js for the shake → reveal sequence. -->
-          <div class="rps-hands" id="rps-hands" aria-hidden="true">
-            <div class="rps-hand-wrap">
-              <span class="rps-hand-label">You</span>
-              <svg class="rps-hand" id="rps-hand-player" data-shape="rock" viewBox="0 0 60 80">
-                <path class="rps-hand-palm" d="M8 40 Q8 76 30 76 Q52 76 52 40 Z"/>
-                <g class="fingers fingers-rock">
-                  <path d="M10 20 Q10 8 30 8 Q50 8 50 20 L50 40 L10 40 Z"/>
-                  <circle cx="18" cy="22" r="4"/><circle cx="30" cy="18" r="4"/><circle cx="42" cy="22" r="4"/>
-                </g>
-                <g class="fingers fingers-paper">
-                  <rect x="10" y="10" width="8" height="34" rx="4"/>
-                  <rect x="20" y="4" width="8" height="40" rx="4"/>
-                  <rect x="30" y="2" width="8" height="42" rx="4"/>
-                  <rect x="40" y="6" width="8" height="38" rx="4"/>
-                  <rect x="49" y="14" width="7" height="30" rx="4"/>
-                </g>
-                <g class="fingers fingers-scissors">
-                  <circle cx="14" cy="34" r="5"/><circle cx="44" cy="34" r="5"/>
-                  <rect x="20" y="4" width="8" height="40" rx="4"/>
-                  <rect x="30" y="2" width="8" height="42" rx="4"/>
-                </g>
-              </svg>
-            </div>
-            <span class="rps-hands-vs">VS</span>
-            <div class="rps-hand-wrap">
-              <span class="rps-hand-label rps-bot-name">RHO</span>
-              <svg class="rps-hand rps-hand-bot" id="rps-hand-bot" data-shape="rock" viewBox="0 0 60 80">
-                <path class="rps-hand-palm" d="M8 40 Q8 76 30 76 Q52 76 52 40 Z"/>
-                <g class="fingers fingers-rock">
-                  <path d="M10 20 Q10 8 30 8 Q50 8 50 20 L50 40 L10 40 Z"/>
-                  <circle cx="18" cy="22" r="4"/><circle cx="30" cy="18" r="4"/><circle cx="42" cy="22" r="4"/>
-                </g>
-                <g class="fingers fingers-paper">
-                  <rect x="10" y="10" width="8" height="34" rx="4"/>
-                  <rect x="20" y="4" width="8" height="40" rx="4"/>
-                  <rect x="30" y="2" width="8" height="42" rx="4"/>
-                  <rect x="40" y="6" width="8" height="38" rx="4"/>
-                  <rect x="49" y="14" width="7" height="30" rx="4"/>
-                </g>
-                <g class="fingers fingers-scissors">
-                  <circle cx="14" cy="34" r="5"/><circle cx="44" cy="34" r="5"/>
-                  <rect x="20" y="4" width="8" height="40" rx="4"/>
-                  <rect x="30" y="2" width="8" height="42" rx="4"/>
-                </g>
-              </svg>
-            </div>
-          </div>
-          <div class="rps-choices" role="group" aria-label="Choose rock, paper, or scissors">
-            <button class="rps-btn" data-choice="rock">ROCK</button>
-            <button class="rps-btn" data-choice="paper">PAPER</button>
-            <button class="rps-btn" data-choice="scissors">SCISSORS</button>
-          </div>
-          <p class="rps-result" id="rps-result" aria-live="polite">Make your move.</p>
-          <button class="rps-reset" id="rps-reset" type="button">Reset score</button>
-        </div>
-
-        <!-- Live metrics, shown beside the game as you play (see rpsGame() in script.js) -->
-        <div class="rps-stats" aria-live="polite">
-          <div class="rps-vs">VS <span class="rps-bot-name">RHO</span></div>
-          <dl class="rps-stat-list">
-            <div class="rps-stat"><dt>Wins</dt><dd id="rps-wins">0</dd></div>
-            <div class="rps-stat"><dt>Losses</dt><dd id="rps-losses">0</dd></div>
-            <div class="rps-stat"><dt>Ties</dt><dd id="rps-ties">0</dd></div>
-            <div class="rps-stat"><dt>Win rate</dt><dd id="rps-winrate">—</dd></div>
-            <div class="rps-stat"><dt>Best streak</dt><dd id="rps-streak">0</dd></div>
-          </dl>
-        </div>
-      </div>
-    </div>
-
-    <div class="play-build-col" id="build">
-      <h3 class="subsection-heading">Build / Create Your Own Bot</h3>
-      <p class="section-sub">Pick a shape to add it, drag blocks anywhere, click one to remove it — then save your bot.</p>
-
-      <div class="lego-builder">
-        <div class="lego-controls">
-          <div class="lego-shape-picker" role="group" aria-label="Add a block of this shape">
-            <button class="lego-shape-btn" data-shape="square" title="Add square">▪</button>
-            <button class="lego-shape-btn" data-shape="circle" title="Add circle">●</button>
-            <button class="lego-shape-btn" data-shape="triangle" title="Add triangle">▲</button>
-            <button class="lego-shape-btn" data-shape="diamond" title="Add diamond">◆</button>
-            <button class="lego-shape-btn" data-shape="hexagon" title="Add hexagon">⬡</button>
-            <button class="lego-shape-btn" data-shape="star" title="Add star">★</button>
-          </div>
-          <button class="lego-btn" id="lego-recolor" type="button">⟲ Recolor</button>
-          <button class="lego-btn" id="lego-clear" type="button">✕ Clear canvas</button>
-          <button class="lego-btn lego-btn-save" id="lego-save" type="button">✓ Save bot</button>
-        </div>
-
-        <div class="lego-canvas" id="lego-canvas" aria-label="Drag blocks to build your bot; click a block to remove it"></div>
-
-        <p class="lego-count" id="lego-count">Bots created so far: 0</p>
-        <div class="lego-gallery" id="lego-gallery" aria-label="Your saved bots"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     2. CONTACT DETAILS
-============================================================= -->
-<section id="contact" class="section reveal">
-  <span class="section-ghost" aria-hidden="true">connect()</span>
-  <h2 class="section-heading"><span class="heading-index">01</span> Contact</h2>
-  <div class="contact-grid">
-    <a class="contact-card" href="mailto:hetta.ds@gmail.com">
-      <span class="contact-label">Email</span>
-      <span class="contact-value">hetta.ds@gmail.com</span>
-    </a>
-    <!-- Phone skipped — add back with <a class="contact-card" href="tel:+1XXXXXXXXXX"> if wanted later -->
-    <a class="contact-card" href="https://www.linkedin.com/in/hari-etta-0840a5368/" target="_blank" rel="noopener">
-      <span class="contact-label">LinkedIn</span>
-      <span class="contact-value">linkedin.com/in/hari-etta</span>
-    </a>
-    <a class="contact-card" href="https://github.com/Hari-Etta" target="_blank" rel="noopener">
-      <span class="contact-label">GitHub</span>
-      <span class="contact-value">github.com/Hari-Etta</span>
-    </a>
-    <div class="contact-card contact-static">
-      <span class="contact-label">Location</span>
-      <span class="contact-value">San Jose, CA</span>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     3. EDUCATION
-     Duplicate the .edu-entry block to add another degree.
-============================================================= -->
-<section id="education" class="section reveal">
-  <span class="section-ghost" aria-hidden="true">SELECT * FROM education;</span>
-  <h2 class="section-heading"><span class="heading-index">02</span> Education</h2>
-  <div class="edu-list">
-    <article class="edu-entry">
-      <div class="edu-top">
-        <h3>M.S. in Information Technology &amp; Management — Data Science &amp; Applied AI</h3>
-        <span class="edu-year">2024 – 2026</span>
-      </div>
-      <p class="edu-institution">Illinois Institute of Technology</p>
-    </article>
-
-    <article class="edu-entry">
-      <div class="edu-top">
-        <h3>B.E. in Engineering</h3>
-        <span class="edu-year">2017 – 2021</span>
-      </div>
-      <p class="edu-institution">Manipal University</p>
-    </article>
-
-    <!-- <?claude add-education?> Duplicate .edu-entry above this line for another degree -->
-  </div>
-</section>
-
-<!-- ============================================================
-     4. WORK EXPERIENCE
-     Duplicate the .exp-entry block to add another role.
-============================================================= -->
-<section id="experience" class="section reveal">
-  <span class="section-ghost" aria-hidden="true">df.groupby('role')</span>
-  <h2 class="section-heading"><span class="heading-index">03</span> Work Experience</h2>
-  <div class="exp-list">
-    <article class="exp-entry">
-      <div class="exp-top">
-        <h3>Data Scientist and VC Analyst · <span class="exp-company">UruQAI</span></h3>
-        <span class="exp-dates">May 2026 – Present</span>
-      </div>
-      <ul class="exp-bullets">
-        <li>[Add impact bullet — quantify where possible, e.g. "Reduced X by Y% through..."]</li>
-        <li>[Add impact bullet]</li>
-        <li>[Add impact bullet]</li>
-      </ul>
-    </article>
-
-    <article class="exp-entry">
-      <div class="exp-top">
-        <h3>Student Assistant · <span class="exp-company">Chicago Public Schools</span></h3>
-        <span class="exp-dates">Sept 2025 – Apr 2026</span>
-      </div>
-      <ul class="exp-bullets">
-        <li>[Add impact bullet — quantify where possible, e.g. "Reduced X by Y% through..."]</li>
-        <li>[Add impact bullet]</li>
-        <li>[Add impact bullet]</li>
-      </ul>
-    </article>
-
-    <article class="exp-entry">
-      <div class="exp-top">
-        <h3>Assistant Manager · <span class="exp-company">Total Environment Pvt. Ltd.</span></h3>
-        <span class="exp-dates">July 2021 – July 2024</span>
-      </div>
-      <ul class="exp-bullets">
-        <li>[Add impact bullet — quantify where possible, e.g. "Reduced X by Y% through..."]</li>
-        <li>[Add impact bullet]</li>
-        <li>[Add impact bullet]</li>
-      </ul>
-    </article>
-
-    <!-- <?claude add-experience?> Duplicate .exp-entry above this line for another role -->
-  </div>
+  <p class="about-bio">I'm Hari, a data scientist and ML engineer who ships production ML. From a live RAG chatbot to cost-sensitive risk models and LLM-powered data pipelines, I build systems that are accurate, explainable, and tied to real business outcomes.</p>
 </section>
 
 <!-- ============================================================
@@ -345,7 +108,7 @@
 ============================================================= -->
 <section id="stack" class="section reveal">
   <span class="section-ghost" aria-hidden="true">import numpy as np</span>
-  <h2 class="section-heading"><span class="heading-index">04</span> Tech Stack</h2>
+  <h2 class="section-heading"><span class="heading-index">01</span> Tech Stack</h2>
   <p class="section-sub">Hover or tap a node to see how it connects. Grouped by category — click a category chip to isolate it.</p>
 
   <div class="stack-filters" role="group" aria-label="Filter tech stack by category">
@@ -463,15 +226,73 @@
 </section>
 
 <!-- ============================================================
+     4. WORK EXPERIENCE
+     Duplicate the .exp-entry block to add another role.
+============================================================= -->
+<section id="experience" class="section reveal">
+  <span class="section-ghost" aria-hidden="true">df.groupby('role')</span>
+  <h2 class="section-heading"><span class="heading-index">02</span> Work Experience</h2>
+  <div class="exp-list">
+    <article class="exp-entry">
+      <div class="exp-top">
+        <h3>Data Scientist &amp; VC Analyst</h3>
+        <span class="exp-dates">Jan 2026 – Apr 2026</span>
+      </div>
+      <p class="exp-company-line"><span class="exp-company">UruQAI</span>, a quantum computing startup (Remote, Uruguay)</p>
+      <ul class="exp-bullets">
+        <li>Built predictive scoring models and analytics pipelines on early-stage investment data, using quantitative traction analysis to evaluate companies. Investor engagement grew 25x, from 2 to 50 interactions in 8 weeks.</li>
+        <li>Designed Python pipelines to process quantum experiment results and surface performance patterns and error rates in circuit behavior. These findings informed algorithm optimization decisions.</li>
+        <li>Turned technical and statistical findings into clear, decision-ready narratives for engineering teams and investors.</li>
+      </ul>
+    </article>
+
+    <article class="exp-entry">
+      <div class="exp-top">
+        <h3>Data &amp; Analytics Assistant <span class="exp-parttime">(part-time)</span></h3>
+        <span class="exp-dates">Sep 2025 – Apr 2026</span>
+      </div>
+      <p class="exp-company-line"><span class="exp-company">Chicago Public Schools</span> at Illinois Institute of Technology (Chicago, IL)</p>
+      <ul class="exp-bullets">
+        <li>Maintained assessment records for 100–200 students daily across an 18-week semester, covering 3 exam cycles per student and 5,000+ data points.</li>
+        <li>Ran daily quality checks to keep student records 100% accurate across administrative systems.</li>
+        <li>Produced analytics reports for faculty on assessment trends, scheduling compliance, and cohort performance.</li>
+      </ul>
+    </article>
+
+    <article class="exp-entry">
+      <div class="exp-top">
+        <h3>Associate, Design Technology &amp; Client Analytics</h3>
+        <span class="exp-dates">Jul 2021 – Jul 2024</span>
+      </div>
+      <p class="exp-company-line"><span class="exp-company">Total Environment</span> (Bengaluru, India)</p>
+      <ul class="exp-bullets">
+        <li>Delivered 3–5 dashboards weekly for client meetings and internal reviews, giving leadership real-time visibility into $3–5M project portfolios.</li>
+        <li>Managed delivery of $3–5M projects, including project plans and coordinating architecture and engineering teams.</li>
+        <li>Analyzed operational data to find bottlenecks, which cut client deliverable turnaround time by 30%.</li>
+        <li>Replaced manual multi-sheet tracking with unified internal dashboards, and presented the findings to non-technical executives.</li>
+      </ul>
+    </article>
+
+    <!-- <?claude add-experience?> Duplicate .exp-entry above this line for another role -->
+  </div>
+</section>
+
+<!-- ============================================================
      6. PROJECTS
      Duplicate the .project-card block to add another project.
      Card is a real <a> — set href to the live demo if deployed,
      otherwise the GitHub repo. Set data-status to planned |
      in-progress | live to control the badge.
+
+     NOTE (Sept 2026): per-project repos aren't split out yet, so every
+     card below links to the main Portfolio repo as a placeholder and
+     shows "View repo" only (no separate live-demo link/button) — swap
+     each href for that project's own repo (or live URL) as they're
+     ready, and bring back a demo link/button at that point if wanted.
 ============================================================= -->
 <section id="projects" class="section reveal">
   <span class="section-ghost" aria-hidden="true">git push origin</span>
-  <h2 class="section-heading"><span class="heading-index">05</span> Projects</h2>
+  <h2 class="section-heading"><span class="heading-index">03</span> Projects</h2>
   <p class="section-sub">Filter by tech below, or scroll to browse everything.</p>
 
   <div class="project-filters" role="group" aria-label="Filter projects by tech">
@@ -488,12 +309,11 @@
          To show a real screenshot: replace the .project-preview div's content with
          <img src="path/to/screenshot.png" alt=""> — the browser-chrome frame around it stays. -->
 
-    <!-- Real project — repo/demo link and status still needed from Hari; href is a placeholder until then -->
-    <a class="project-card" href="[add repo or live link]" target="_blank" rel="noopener" data-tags="python,sql,ml">
+    <a class="project-card" href="https://github.com/Hari-Etta/Portfolio/tree/main" target="_blank" rel="noopener" data-tags="python,sql,ml">
       <div class="project-preview preview-pattern-1">
         <div class="preview-chrome">
           <span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
-          <span class="chrome-url">[add repo or live link]</span>
+          <span class="chrome-url">github.com/Hari-Etta/Portfolio</span>
         </div>
         <div class="preview-body" aria-hidden="true"></div>
       </div>
@@ -512,12 +332,11 @@
       <span class="project-link-hint">View repo →</span>
     </a>
 
-    <!-- Real project — repo/demo link and status still needed from Hari; href is a placeholder until then -->
-    <a class="project-card" href="[add repo or live link]" target="_blank" rel="noopener" data-tags="python,ml">
+    <a class="project-card" href="https://github.com/Hari-Etta/Portfolio/tree/main" target="_blank" rel="noopener" data-tags="python,ml">
       <div class="project-preview preview-pattern-2">
         <div class="preview-chrome">
           <span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
-          <span class="chrome-url">[add repo or live link]</span>
+          <span class="chrome-url">github.com/Hari-Etta/Portfolio</span>
         </div>
         <div class="preview-body" aria-hidden="true"></div>
       </div>
@@ -533,20 +352,20 @@
         <span class="tag">RAG</span>
         <span class="tag">Next.js</span>
       </div>
-      <span class="project-link-hint">View live demo →</span>
+      <span class="project-link-hint">View repo →</span>
     </a>
 
-    <!-- 3rd project slot — e-commerce medallion platform, details pending from Hari -->
-    <a class="project-card" href="[https://your-live-demo-url.com]" target="_blank" rel="noopener" data-tags="sql,viz">
+    <!-- 3rd project slot — e-commerce data pipeline -->
+    <a class="project-card" href="https://github.com/Hari-Etta/Portfolio/tree/main" target="_blank" rel="noopener" data-tags="sql,viz">
       <div class="project-preview preview-pattern-3">
         <div class="preview-chrome">
           <span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
-          <span class="chrome-url">your-live-demo-url.com</span>
+          <span class="chrome-url">github.com/Hari-Etta/Portfolio</span>
         </div>
         <div class="preview-body" aria-hidden="true"></div>
       </div>
       <div class="project-top">
-        <h3>[Project Title]</h3>
+        <h3>E-commerce Data Pipeline</h3>
         <span class="status-badge status-idling">Idling</span>
       </div>
       <p class="project-desc">[One-paragraph description of what the project does, the problem it solves, and your role in building it.]</p>
@@ -554,18 +373,18 @@
         <span class="tag">SQL</span>
         <span class="tag">Dashboarding</span>
       </div>
-      <span class="project-link-hint">View live demo →</span>
+      <span class="project-link-hint">View repo →</span>
     </a>
 
     <!-- 4th project slot — fully placeholder, ready whenever you have a new project.
          Swap the status class + label as it moves along: status-awaiting-ideas →
          status-construction → status-deploy-pending → status-live (see the
          status-badge rules in style.css). -->
-    <a class="project-card" href="[add repo or live link]" target="_blank" rel="noopener" data-tags="python">
+    <a class="project-card" href="https://github.com/Hari-Etta/Portfolio/tree/main" target="_blank" rel="noopener" data-tags="python">
       <div class="project-preview preview-pattern-1">
         <div class="preview-chrome">
           <span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
-          <span class="chrome-url">[add repo or live link]</span>
+          <span class="chrome-url">github.com/Hari-Etta/Portfolio</span>
         </div>
         <div class="preview-body" aria-hidden="true"></div>
       </div>
@@ -581,11 +400,11 @@
     </a>
 
     <!-- 5th project slot — fully placeholder, ready whenever you have a new project. -->
-    <a class="project-card" href="[add repo or live link]" target="_blank" rel="noopener" data-tags="python">
+    <a class="project-card" href="https://github.com/Hari-Etta/Portfolio/tree/main" target="_blank" rel="noopener" data-tags="python">
       <div class="project-preview preview-pattern-2">
         <div class="preview-chrome">
           <span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
-          <span class="chrome-url">[add repo or live link]</span>
+          <span class="chrome-url">github.com/Hari-Etta/Portfolio</span>
         </div>
         <div class="preview-body" aria-hidden="true"></div>
       </div>
@@ -597,11 +416,66 @@
       <div class="project-tags">
         <span class="tag">[Tech]</span>
       </div>
-      <span class="project-link-hint">View live demo →</span>
+      <span class="project-link-hint">View repo →</span>
     </a>
 
     <!-- <?claude add-project?> Duplicate any card above this line for another project. -->
 
+  </div>
+</section>
+
+<!-- ============================================================
+     3. EDUCATION
+     Duplicate the .edu-entry block to add another degree.
+============================================================= -->
+<section id="education" class="section reveal">
+  <span class="section-ghost" aria-hidden="true">SELECT * FROM education;</span>
+  <h2 class="section-heading"><span class="heading-index">04</span> Education</h2>
+  <div class="edu-list">
+    <article class="edu-entry">
+      <div class="edu-top">
+        <h3>M.S. in Information Technology &amp; Management — Data Science &amp; Applied AI</h3>
+        <span class="edu-year">2024 – 2026</span>
+      </div>
+      <p class="edu-institution">Illinois Institute of Technology</p>
+    </article>
+
+    <article class="edu-entry">
+      <div class="edu-top">
+        <h3>B.E. in Engineering</h3>
+        <span class="edu-year">2017 – 2021</span>
+      </div>
+      <p class="edu-institution">Manipal University</p>
+    </article>
+
+    <!-- <?claude add-education?> Duplicate .edu-entry above this line for another degree -->
+  </div>
+</section>
+
+<!-- ============================================================
+     2. CONTACT DETAILS
+============================================================= -->
+<section id="contact" class="section reveal">
+  <span class="section-ghost" aria-hidden="true">connect()</span>
+  <h2 class="section-heading"><span class="heading-index">05</span> Contact</h2>
+  <div class="contact-grid">
+    <a class="contact-card" href="mailto:hetta.ds@gmail.com">
+      <span class="contact-label">Email</span>
+      <span class="contact-value">hetta.ds@gmail.com</span>
+    </a>
+    <!-- Phone skipped — add back with <a class="contact-card" href="tel:+1XXXXXXXXXX"> if wanted later -->
+    <a class="contact-card" href="https://www.linkedin.com/in/hari-etta-0840a5368/" target="_blank" rel="noopener">
+      <span class="contact-label">LinkedIn</span>
+      <span class="contact-value">linkedin.com/in/hari-etta</span>
+    </a>
+    <a class="contact-card" href="https://github.com/Hari-Etta" target="_blank" rel="noopener">
+      <span class="contact-label">GitHub</span>
+      <span class="contact-value">github.com/Hari-Etta</span>
+    </a>
+    <div class="contact-card contact-static">
+      <span class="contact-label">Location</span>
+      <span class="contact-value">San Jose, CA</span>
+    </div>
   </div>
 </section>
 
@@ -645,119 +519,125 @@
 </section>
 
 <!-- ============================================================
-     INTERESTS — not one of the 6 required sections, added on request.
-     Placeholder chips: replace with real interests whenever you're ready.
+     BONUS: PLAY & BUILD — the RPS game and the bot-builder toy live
+     side by side in one section (two-column on desktop, stacked on
+     mobile) so both bonus toys read as one "play around" stop rather
+     than two separate ones. Both persist their own state in the
+     visitor's own browser (localStorage) only — see rpsGame() and
+     legoBuilder() in script.js.
 ============================================================= -->
-<section id="interests" class="section reveal">
-  <span class="section-ghost" aria-hidden="true">interests = [...]</span>
-  <h2 class="section-heading"><span class="heading-index">06</span> Interests</h2>
-  <p class="section-sub">Outside of work, roughly grouped.</p>
+<section id="play-build" class="section reveal bonus-section">
+  <span class="section-ghost" aria-hidden="true">rock.paper.scissors() · stack.push()</span>
+  <h2 class="section-heading bonus-heading"><span class="bonus-tag">// bonus</span> Play &amp; Build</h2>
+  <p class="section-sub">A quick game, and a small toy for building your own bot — both save your progress in this browser.</p>
 
-  <div class="interest-groups">
-    <!-- <?claude add-interest?> Duplicate a chip within a group, or a whole
-         .interest-group block for a new category. -->
-    <div class="interest-group">
-      <h3 class="interest-group-title">Sports &amp; Fitness</h3>
-      <div class="interest-list">
-        <span class="interest-chip">Running</span>
-        <span class="interest-chip">Pickleball</span>
-        <span class="interest-chip">Baseball</span>
-        <span class="interest-chip">Volleyball</span>
+  <div class="play-build-grid">
+    <div class="play-build-col" id="rps-game">
+      <h3 class="subsection-heading">Beat the Algorithm</h3>
+      <p class="section-sub">Playing against <strong>RHO</strong> — picks purely at random, no ML involved. Yet.</p>
+
+      <div class="rps-game" id="rps-card">
+        <div class="rps-main">
+          <!-- Two animated hands that shake, then reveal the shape each side
+               played. Each SVG has a rock/paper/scissors group toggled purely
+               with CSS via the [data-shape] attribute — see rpsGame() in
+               script.js for the shake → reveal sequence. -->
+          <div class="rps-hands" id="rps-hands" aria-hidden="true">
+            <div class="rps-hand-wrap">
+              <span class="rps-hand-label">You</span>
+              <svg class="rps-hand" id="rps-hand-player" data-shape="rock" viewBox="0 0 60 80">
+                <path class="rps-hand-palm" d="M8 40 Q8 76 30 76 Q52 76 52 40 Z"/>
+                <g class="fingers fingers-rock">
+                  <path d="M10 20 Q10 8 30 8 Q50 8 50 20 L50 40 L10 40 Z"/>
+                  <circle cx="18" cy="22" r="4"/><circle cx="30" cy="18" r="4"/><circle cx="42" cy="22" r="4"/>
+                </g>
+                <g class="fingers fingers-paper">
+                  <rect x="10" y="10" width="8" height="34" rx="4"/>
+                  <rect x="20" y="4" width="8" height="40" rx="4"/>
+                  <rect x="30" y="2" width="8" height="42" rx="4"/>
+                  <rect x="40" y="6" width="8" height="38" rx="4"/>
+                  <rect x="49" y="14" width="7" height="30" rx="4"/>
+                </g>
+                <g class="fingers fingers-scissors">
+                  <circle cx="14" cy="34" r="5"/><circle cx="44" cy="34" r="5"/>
+                  <rect x="20" y="4" width="8" height="40" rx="4"/>
+                  <rect x="30" y="2" width="8" height="42" rx="4"/>
+                </g>
+              </svg>
+            </div>
+            <span class="rps-hands-vs">VS</span>
+            <div class="rps-hand-wrap">
+              <span class="rps-hand-label rps-bot-name">RHO</span>
+              <svg class="rps-hand rps-hand-bot" id="rps-hand-bot" data-shape="rock" viewBox="0 0 60 80">
+                <path class="rps-hand-palm" d="M8 40 Q8 76 30 76 Q52 76 52 40 Z"/>
+                <g class="fingers fingers-rock">
+                  <path d="M10 20 Q10 8 30 8 Q50 8 50 20 L50 40 L10 40 Z"/>
+                  <circle cx="18" cy="22" r="4"/><circle cx="30" cy="18" r="4"/><circle cx="42" cy="22" r="4"/>
+                </g>
+                <g class="fingers fingers-paper">
+                  <rect x="10" y="10" width="8" height="34" rx="4"/>
+                  <rect x="20" y="4" width="8" height="40" rx="4"/>
+                  <rect x="30" y="2" width="8" height="42" rx="4"/>
+                  <rect x="40" y="6" width="8" height="38" rx="4"/>
+                  <rect x="49" y="14" width="7" height="30" rx="4"/>
+                </g>
+                <g class="fingers fingers-scissors">
+                  <circle cx="14" cy="34" r="5"/><circle cx="44" cy="34" r="5"/>
+                  <rect x="20" y="4" width="8" height="40" rx="4"/>
+                  <rect x="30" y="2" width="8" height="42" rx="4"/>
+                </g>
+              </svg>
+            </div>
+          </div>
+          <div class="rps-choices" role="group" aria-label="Choose rock, paper, or scissors">
+            <button class="rps-btn" data-choice="rock">ROCK</button>
+            <button class="rps-btn" data-choice="paper">PAPER</button>
+            <button class="rps-btn" data-choice="scissors">SCISSORS</button>
+          </div>
+          <p class="rps-result" id="rps-result" aria-live="polite">Make your move.</p>
+          <button class="rps-reset" id="rps-reset" type="button">Reset score</button>
+        </div>
+
+        <!-- Live metrics, shown beside the game as you play (see rpsGame() in script.js) -->
+        <div class="rps-stats" aria-live="polite">
+          <div class="rps-vs">VS <span class="rps-bot-name">RHO</span></div>
+          <dl class="rps-stat-list">
+            <div class="rps-stat"><dt>Wins</dt><dd id="rps-wins">0</dd></div>
+            <div class="rps-stat"><dt>Losses</dt><dd id="rps-losses">0</dd></div>
+            <div class="rps-stat"><dt>Ties</dt><dd id="rps-ties">0</dd></div>
+            <div class="rps-stat"><dt>Win rate</dt><dd id="rps-winrate">—</dd></div>
+            <div class="rps-stat"><dt>Best streak</dt><dd id="rps-streak">0</dd></div>
+          </dl>
+        </div>
       </div>
     </div>
 
-    <div class="interest-group">
-      <h3 class="interest-group-title">Reading &amp; Sci-Fi</h3>
-      <div class="interest-list">
-        <span class="interest-chip">Reading</span>
-        <span class="interest-chip">Sci-Fi</span>
-      </div>
-    </div>
+    <div class="play-build-col" id="build">
+      <h3 class="subsection-heading">Build / Create Your Own Bot</h3>
+      <p class="section-sub">Pick a shape to add it, drag blocks anywhere, click one to remove it — then save your bot.</p>
 
-    <div class="interest-group">
-      <h3 class="interest-group-title">Food &amp; Cooking</h3>
-      <div class="interest-list">
-        <span class="interest-chip">Cooking</span>
-        <span class="interest-chip">Trying new food</span>
-      </div>
-    </div>
+      <div class="lego-builder">
+        <div class="lego-controls">
+          <div class="lego-shape-picker" role="group" aria-label="Add a block of this shape">
+            <button class="lego-shape-btn" data-shape="square" title="Add square">▪</button>
+            <button class="lego-shape-btn" data-shape="circle" title="Add circle">●</button>
+            <button class="lego-shape-btn" data-shape="triangle" title="Add triangle">▲</button>
+            <button class="lego-shape-btn" data-shape="diamond" title="Add diamond">◆</button>
+            <button class="lego-shape-btn" data-shape="hexagon" title="Add hexagon">⬡</button>
+            <button class="lego-shape-btn" data-shape="star" title="Add star">★</button>
+          </div>
+          <button class="lego-btn" id="lego-recolor" type="button">⟲ Recolor</button>
+          <button class="lego-btn" id="lego-clear" type="button">✕ Clear canvas</button>
+          <button class="lego-btn lego-btn-save" id="lego-save" type="button">✓ Save bot</button>
+        </div>
 
-    <div class="interest-group">
-      <h3 class="interest-group-title">Travel &amp; Exploring</h3>
-      <div class="interest-list">
-        <span class="interest-chip">Exploring new places</span>
-        <span class="interest-chip">Nature &amp; cities</span>
-      </div>
-    </div>
+        <div class="lego-canvas" id="lego-canvas" aria-label="Drag blocks to build your bot; click a block to remove it"></div>
 
-    <div class="interest-group">
-      <h3 class="interest-group-title">Making &amp; Creating</h3>
-      <div class="interest-list">
-        <span class="interest-chip">Designing</span>
+        <p class="lego-count" id="lego-count">Bots created so far: 0</p>
+        <div class="lego-gallery" id="lego-gallery" aria-label="Your saved bots"></div>
       </div>
     </div>
   </div>
-</section>
-
-<!-- ============================================================
-     ARTICLES — not one of the 6 required sections, added on request.
-     These are OTHER PEOPLE'S articles found elsewhere on the web that
-     Hari wants to point visitors to — not his own writing. Each card
-     therefore always credits the original author/publication and links
-     out to the original, for copyright/attribution reasons. Never strip
-     the .article-source line when adding a real one.
-============================================================= -->
-<section id="articles" class="section reveal">
-  <span class="section-ghost" aria-hidden="true">cat articles/*.md</span>
-  <h2 class="section-heading"><span class="heading-index">07</span> Articles</h2>
-  <p class="section-sub">Reads from around the web I'd recommend — full credit to their original authors and publications, linked below.</p>
-  <div class="article-grid">
-    <!-- <?claude add-article?> Duplicate a card below for another article.
-         href = the original article's URL. .article-source = author name
-         and/or publication (e.g. "Jane Doe · Towards Data Science") so
-         credit is always visible, not just implied by the link. -->
-    <a class="article-card" href="[add original article link]" target="_blank" rel="noopener">
-      <span class="article-date">[Month Year]</span>
-      <h3>[Article Title]</h3>
-      <p>[One-line summary of what the article covers.]</p>
-      <span class="article-source">[Author name · Publication]</span>
-    </a>
-    <a class="article-card" href="[add original article link]" target="_blank" rel="noopener">
-      <span class="article-date">[Month Year]</span>
-      <h3>[Article Title]</h3>
-      <p>[One-line summary of what the article covers.]</p>
-      <span class="article-source">[Author name · Publication]</span>
-    </a>
-  </div>
-</section>
-
-<!-- ============================================================
-     BONUS: GITHUB ACTIVITY — not one of the 6 required sections, added
-     on request.
-
-     NOTE (Sept 2026): the two free embeddable-graph services this section
-     has tried — github-readme-activity-graph.vercel.app and
-     ghchart.rshah.org — are both currently erroring server-side (one
-     returns "402 Payment Required", the other a server error). These are
-     unmaintained community projects, not something in this site's own
-     code, and they're prone to breaking or going away over time. Using
-     ghchart for now since a 402 tends to be permanent while a server
-     error can be transient; a JS check in script.js hides the image and
-     shows a plain "view on GitHub" link instead if it fails to load, so
-     the section never looks broken either way. If this keeps failing,
-     the most reliable long-term fix is dropping the live embed and just
-     linking out to the GitHub profile.
-     To point at a different GitHub username, change "Hari-Etta" in the
-     img src below (and in the href).
-============================================================= -->
-<section id="github-activity" class="section reveal bonus-section">
-  <span class="section-ghost" aria-hidden="true">git log --oneline</span>
-  <h2 class="section-heading bonus-heading"><span class="bonus-tag">// live</span> GitHub Activity</h2>
-  <p class="section-sub">Pulled straight from GitHub — <a href="https://github.com/Hari-Etta" target="_blank" rel="noopener">github.com/Hari-Etta</a></p>
-  <a class="github-heatmap-link" href="https://github.com/Hari-Etta" target="_blank" rel="noopener" id="github-heatmap-link">
-    <img class="github-heatmap" id="github-heatmap-img" src="https://ghchart.rshah.org/B17861/Hari-Etta" alt="Hari Etta's GitHub contribution graph" loading="lazy">
-    <span class="github-fallback">⎋ Live graph unavailable right now — view activity on github.com/Hari-Etta →</span>
-  </a>
 </section>
 
 <footer class="site-footer">

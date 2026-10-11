@@ -27,8 +27,8 @@ jobs:
       - name: Run and test silver layer
         working-directory: 03-e-commerce-medallion-platform/dbt_projects
         run: |
-          dbt run
-          dbt test
+          dbt run --profiles-dir .
+          dbt test --profiles-dir .
 
       - name: Trigger gold layer Databricks job
         run: |

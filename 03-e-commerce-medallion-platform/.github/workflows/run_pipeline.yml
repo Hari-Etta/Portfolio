@@ -1,0 +1,38 @@
+# Runs the silver layer (dbt build + tests) then triggers the gold-layer Databricks job,
+# so the "single source of truth" stays current automatically instead of requiring a manual rerun.
+name: medallion-pipeline
+on:
+  schedule:
+    - cron: '0 6 * * *'   # daily at 6am UTC
+  workflow_dispatch: {}     # also allow manual runs from the GitHub UI
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+      DATABRICKS_HTTP_PATH: ${{ secrets.DATABRICKS_HTTP_PATH }}
+      DATABRICKS_JOB_ID: ${{ secrets.DATABRICKS_JOB_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install dbt-databricks
+
+      - name: Run and test silver layer
+        working-directory: 03-e-commerce-medallion-platform/dbt_projects
+        run: |
+          dbt run
+          dbt test
+
+      - name: Trigger gold layer Databricks job
+        run: |
+          curl -X POST "https://${DATABRICKS_HOST}/api/2.1/jobs/run-now" \
+            -H "Authorization: Bearer ${DATABRICKS_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "{\"job_id\": ${DATABRICKS_JOB_ID}}"

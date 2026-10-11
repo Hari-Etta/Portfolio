@@ -30,9 +30,15 @@ jobs:
           dbt run --profiles-dir .
           dbt test --profiles-dir .
 
-      - name: Trigger gold layer Databricks job
+            - name: Trigger gold layer Databricks job
         run: |
-          curl -X POST "https://${DATABRICKS_HOST}/api/2.1/jobs/run-now" \
+          response=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST "https://${DATABRICKS_HOST}/api/2.1/jobs/run-now" \
             -H "Authorization: Bearer ${DATABRICKS_TOKEN}" \
             -H "Content-Type: application/json" \
-            -d "{\"job_id\": ${DATABRICKS_JOB_ID}}"
+            -d "{\"job_id\": ${DATABRICKS_JOB_ID}}")
+          echo "$response"
+          status=$(echo "$response" | grep "HTTP_STATUS" | cut -d: -f2)
+          if [ "$status" -ne 200 ]; then
+            echo "Databricks API call failed with status $status"
+            exit 1
+          fi

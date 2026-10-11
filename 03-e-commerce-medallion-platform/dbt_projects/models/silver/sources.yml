@@ -2,6 +2,7 @@ version: 2
 
 sources:
   - name: bronze
+    database: dbt-medallion
     schema: bronze
     tables:
       - name: olist_orders_dataset
@@ -12,4 +13,4 @@ sources:
       - name: olist_order_reviews_dataset
       - name: olist_products_dataset
       - name: olist_sellers_dataset
-      - name: product_category_name_translation
+      - name: product_category_name_translationcd.

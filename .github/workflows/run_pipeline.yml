@@ -30,7 +30,7 @@ jobs:
           dbt run --profiles-dir .
           dbt test --profiles-dir .
 
-            - name: Trigger gold layer Databricks job
+      - name: Trigger gold layer Databricks job
         run: |
           response=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST "https://${DATABRICKS_HOST}/api/2.1/jobs/run-now" \
             -H "Authorization: Bearer ${DATABRICKS_TOKEN}" \

@@ -15,10 +15,10 @@ data/raw/*.csv
 data/raw/*.zip
 
 # dbt
-dbt_project/target/
-dbt_project/dbt_packages/
-dbt_project/logs/
-dbt_project/.user.yml
+dbt_projects/target/
+dbt_projects/dbt_packages/
+dbt_projects/logs/
+dbt_projects/.user.yml
 
 # Databricks
 .databricks/

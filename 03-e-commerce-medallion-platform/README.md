@@ -12,7 +12,7 @@
 
 Marketing, finance, and ops at a growing e-commerce company each pulled "revenue by region" from their own spreadsheet, re-cleaning the same raw order data their own way — and the numbers never matched. This project builds one medallion data pipeline (bronze → silver → gold) on real e-commerce order data, with automated data-quality tests baked into every layer, so every downstream team and dashboard reads from the same trusted, tested source instead of re-deriving their own numbers.
 
-**[Live Dashboard](#)** · **[GitHub Actions Run History](#)** · **[Portfolio Site](#)**
+**[Live Dashboard](#)** · **[GitHub Actions Run History](https://github.com/Hari-Etta/Portfolio/actions)** · **[Portfolio Site](#)**
 *(links go live once Steps 6–7 are published — see [Status](#status))*
 
 ---

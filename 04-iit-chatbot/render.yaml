@@ -1,0 +1,60 @@
+# Render Blueprint — FREE plan. Secrets marked sync:false are entered in the Render dashboard.
+services:
+  - type: web
+    name: iit-chatbot-api
+    runtime: python
+    plan: free
+    region: ohio            # keep Render and Neon in the same region (Neon: AWS us-east-2 / Ohio)
+    rootDir: CB_Backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn api_server:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/ping   # liveness only; never wakes Neon
+    autoDeploy: true
+
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13.5"
+
+      # LLM — Anthropic (the only paid service)
+      - key: LLM_PROVIDER
+        value: anthropic
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ANTHROPIC_MODEL
+        value: claude-haiku-5-5
+
+      # Embeddings — Google Gemini free tier
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_EMBED_MODEL
+        value: gemini-embedding-2
+      - key: EMBED_DIM
+        value: "768"
+
+      # Neon Postgres — chunks, vectors, feedback
+      - key: DATABASE_URL
+        sync: false
+      - key: AUTO_INGEST
+        value: "true"
+
+      # Feature flags
+      - key: USE_LLM_INTENT
+        value: "true"
+      - key: USE_LLM_SLOTS
+        value: "true"
+      - key: USE_LLM_NARRATION
+        value: "true"
+      - key: USE_LLM_ANSWER_SYNTHESIS
+        value: "true"
+
+      # Security / cost guards
+      - key: ALLOWED_ORIGINS
+        sync: false          # e.g. https://your-site.netlify.app
+      - key: PROXY_SECRET
+        generateValue: true  # copy this value into Netlify's PROXY_SECRET
+      - key: ADMIN_TOKEN
+        generateValue: true
+      - key: RATE_LIMIT_PER_HOUR
+        value: "30"
+      - key: DAILY_MESSAGE_CAP
+        value: "300"

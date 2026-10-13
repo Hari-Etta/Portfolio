@@ -1,0 +1,22 @@
+# deps / builds
+node_modules/
+.next/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# secrets
+.env
+.env.local
+.env.*.local
+
+# local artifacts
+CB_Backend/feedback_log.json
+.DS_Store
+*.bak
+_snapshot_original.tgz
+*.tsbuildinfo
+
+# files staged for manual deletion
+_to_delete/

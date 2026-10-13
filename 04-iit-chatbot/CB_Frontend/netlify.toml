@@ -1,0 +1,12 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+  # Free plan: each production deploy costs credits. Skip the build when nothing in
+  # CB_Frontend changed (e.g. backend-only commits). Exit code 0 = skip.
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- ."
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

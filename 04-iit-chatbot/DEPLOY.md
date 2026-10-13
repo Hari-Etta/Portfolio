@@ -16,18 +16,17 @@ Anthropic is the only paid service in this setup. Everything else runs on a free
 
 ## 0. Push the code to GitHub
 
-From the project folder:
+This project lives inside the **Portfolio** repo (`C:\Users\harip\Documents\Portfolio`). Don't run `git init` in `04-iit-chatbot`; commit from the Portfolio root:
 
-```bash
-git init
-git add .
-git commit -m "Free-tier stack: Neon pgvector, Gemini embeddings, Claude Haiku"
-git branch -M main
-git remote add origin https://github.com/<you>/<repo>.git
-git push -u origin main
+```powershell
+cd C:\Users\harip\Documents\Portfolio
+git status                      # should NOT list .env, .venv, node_modules, _to_delete or *.tgz
+git add 04-iit-chatbot
+git commit -m "iit-chatbot: free-tier stack (Neon pgvector, Gemini embeddings, Claude Haiku)"
+git push
 ```
 
-Check that no `.env` file got committed. `.gitignore` already excludes it.
+All paths below are relative to the Portfolio repo root.
 
 ## 1. Anthropic API key
 
@@ -51,32 +50,34 @@ Note: on Google's free tier, request content may be used to improve Google's pro
 
 ## 4. Render backend
 
-1. In the Render dashboard, go to **New → Blueprint** and pick your repo. Render reads `render.yaml`.
-2. Fill in the secret values when prompted:
-   - `ANTHROPIC_API_KEY` from step 1
-   - `GEMINI_API_KEY` from step 2
-   - `DATABASE_URL`: the Neon pooled string from step 3
-   - `ALLOWED_ORIGINS`: put `http://localhost:3000` for now. You'll update it in step 6.
+Render's one-click Blueprint looks for `render.yaml` at the repo root, and here it sits inside `04-iit-chatbot/`. So create the service by hand, using `04-iit-chatbot/render.yaml` as the reference for every value.
 
-   `PROXY_SECRET` and `ADMIN_TOKEN` are generated automatically.
-3. Deploy. On first boot the server indexes the 20 policy pages into Neon in the background. The logs show `Indexed N chunks from ...`, and it takes a few minutes. Chat replies "still loading" until indexing finishes.
-4. Open `https://<your-service>.onrender.com/api/health`. You should see `"status": "ok"`, a `document_count` of a few hundred, and `"ingest": {"status": "done"}`.
-5. Go to **Environment** and copy the value of `PROXY_SECRET`. You need it for Netlify.
-
-If Blueprints aren't available on your account, create the service with **New → Web Service** instead and use the same settings:
-- Root dir `CB_Backend`
-- Build `pip install -r requirements.txt`
-- Start `uvicorn api_server:app --host 0.0.0.0 --port $PORT`
-- Health check `/api/ping`
-- Instance type **Free**
-- The env vars from `render.yaml`. Generate your own `PROXY_SECRET` and `ADMIN_TOKEN`, for example with `python -c "import secrets;print(secrets.token_urlsafe(32))"`.
+1. In Render, go to **New → Web Service**, connect GitHub and pick the Portfolio repo.
+2. Settings:
+   - **Root Directory:** `04-iit-chatbot/CB_Backend`
+   - **Runtime:** Python 3
+   - **Build Command:** `pip install -r requirements.txt`
+   - **Start Command:** `uvicorn api_server:app --host 0.0.0.0 --port $PORT`
+   - **Instance Type:** Free
+   - **Region:** Ohio (same as Neon)
+   - **Advanced → Health Check Path:** `/api/ping`
+   - **Advanced → Build Filters → Included Paths:** `04-iit-chatbot/CB_Backend/**`. Without it, pushes to your other portfolio projects would redeploy this backend.
+3. Under **Environment**, add every key listed under `envVars` in `render.yaml`:
+   - Plain values: copy them exactly as written, e.g. `PYTHON_VERSION=3.13.5`, `LLM_PROVIDER=anthropic`, `ANTHROPIC_MODEL=claude-haiku-5-5`, `GEMINI_EMBED_MODEL=gemini-embedding-2`, `EMBED_DIM=768`, `AUTO_INGEST=true`, the four `USE_LLM_*=true` flags, `RATE_LIMIT_PER_HOUR=30`, `DAILY_MESSAGE_CAP=300`.
+   - `ANTHROPIC_API_KEY` from step 1.
+   - `GEMINI_API_KEY` from step 2.
+   - `DATABASE_URL`: the Neon pooled string from step 3.
+   - `ALLOWED_ORIGINS`: `http://localhost:3000` for now. You'll update it in step 6.
+   - `PROXY_SECRET` and `ADMIN_TOKEN`: generate two different random values with `python -c "import secrets;print(secrets.token_urlsafe(32))"`. Keep `PROXY_SECRET` for Netlify.
+4. Click **Deploy**. On first boot the server indexes the 20 policy pages into Neon in the background. The logs show `Indexed N chunks from ...`, and it takes a few minutes. Chat replies "still loading" until indexing finishes.
+5. Open `https://<your-service>.onrender.com/api/health`. You should see `"status": "ok"`, a `document_count` of a few hundred, and `"ingest": {"status": "done"}`.
 
 The server pings its own `/api/ping` every 14 minutes, so Render's free instance stays awake and recruiters don't hit a one-minute cold start. One always-on service uses about 744 of Render's 750 free hours a month. Don't run a second Render service in the same workspace. The ping never touches the database, so Neon can still scale to zero.
 
 ## 5. Netlify frontend
 
 1. Go to **Add new site → Import from GitHub** and pick the repo.
-   - Base directory: `CB_Frontend`
+   - Base directory: `04-iit-chatbot/CB_Frontend`
    - The build command and publish dir come from `netlify.toml`.
 2. Under **Environment variables**, set:
    - `BACKEND_URL` = `https://<your-service>.onrender.com`
@@ -103,26 +104,38 @@ curl -H "Authorization: Bearer <ADMIN_TOKEN>" https://<your-service>.onrender.co
 
 ---
 
-## Local development
+## Local development (Windows / PowerShell)
 
-```bash
-cd CB_Backend
-docker compose up -d                     # Postgres + pgvector on :5432
-cp .env.example .env                     # add your ANTHROPIC_API_KEY and GEMINI_API_KEY
+Backend: one virtual environment per project, inside `CB_Backend` (already git-ignored).
+
+```powershell
+cd C:\Users\harip\Documents\Portfolio\04-iit-chatbot\CB_Backend
+py -3.13 -m venv .venv                   # same Python version as Render
+.\.venv\Scripts\Activate.ps1             # if blocked: Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+python -m pip install --upgrade pip
 pip install -r requirements-dev.txt
-python -m ingest.ingest                  # or let the server do it on startup
+copy .env.example .env                   # then fill in ANTHROPIC_API_KEY, GEMINI_API_KEY, DATABASE_URL
 uvicorn api_server:app --reload --port 8000
-
-cd ../CB_Frontend
-cp .env.example .env.local               # BACKEND_URL=http://localhost:8000
-npm install && npm run dev
 ```
 
-Tests run offline with fake embeddings and no LLM:
+For `DATABASE_URL` locally, use either:
+- **Docker:** `docker compose up -d`, then `postgresql://postgres:postgres@localhost:5432/iit_chatbot`.
+- **A Neon dev branch:** in Neon, go to Branches → New branch `dev` (free) and use that branch's connection string. Never point local work at the production branch.
 
-```bash
-cd CB_Backend
-TEST_DATABASE_URL=postgresql://postgres:postgres@localhost:5432/iit_chatbot pytest -q
+Frontend:
+
+```powershell
+cd ..\CB_Frontend
+copy .env.example .env.local             # BACKEND_URL=http://localhost:8000
+npm install
+npm run dev
+```
+
+Tests run offline, with fake embeddings and no LLM. They **drop and rebuild tables**, so only ever point them at Docker or a throwaway Neon branch, never production:
+
+```powershell
+$env:TEST_DATABASE_URL="postgresql://postgres:postgres@localhost:5432/iit_chatbot"
+pytest -q
 ```
 
 ## Changing the embedding model or dimension

@@ -1,11 +1,15 @@
-# Render Blueprint — FREE plan. Secrets marked sync:false are entered in the Render dashboard.
+# Render service config — FREE plan. Secrets marked sync:false are entered in the Render dashboard.
+# This project lives in the Portfolio monorepo, so all paths are relative to the repo root.
 services:
   - type: web
     name: iit-chatbot-api
     runtime: python
     plan: free
     region: ohio            # keep Render and Neon in the same region (Neon: AWS us-east-2 / Ohio)
-    rootDir: CB_Backend
+    rootDir: 04-iit-chatbot/CB_Backend
+    buildFilter:            # only redeploy when this backend changes, not other portfolio projects
+      paths:
+        - 04-iit-chatbot/CB_Backend/**
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn api_server:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /api/ping   # liveness only; never wakes Neon

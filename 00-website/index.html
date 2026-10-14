@@ -79,8 +79,8 @@
       <a href="#contact" class="btn-primary">Get in touch ↓</a>
     </div>
 
-    <!-- Real photo — lives at images/hari-photo.jpg alongside this file
-         (i.e. 00-website/images/hari-photo.jpg). Swap the src if you save
+    <!-- Real photo — lives at images/hari-photo.jpeg alongside this file
+         (i.e. 00-website/images/hari-photo.jpeg). Swap the src if you save
          a different filename or want to update the photo later; the ring
          wrapper handles the circular crop via object-fit: cover, so any
          reasonably square, centered headshot will fit without stretching. -->
@@ -96,7 +96,7 @@
      ABOUT — not one of the 6 required sections, added on request.
 ============================================================= -->
 <section id="about" class="section reveal">
-  <span class="section-ghost" aria-hidden="true">who-am-i</span>
+  <span class="section-ghost" aria-hidden="true">whoami</span>
   <h2 class="section-heading"><span class="heading-index">00</span> About</h2>
   <p class="about-bio">I'm Hari, a data scientist and ML engineer who ships production ML. From a live RAG chatbot to cost-sensitive risk models and LLM-powered data pipelines, I build systems that are accurate, explainable, and tied to real business outcomes.</p>
 </section>
@@ -236,7 +236,7 @@
     <article class="exp-entry">
       <div class="exp-top">
         <h3>Data Scientist &amp; VC Analyst</h3>
-        <span class="exp-dates">May 2026 – Present</span>
+        <span class="exp-dates">Jan 2026 – Apr 2026</span>
       </div>
       <p class="exp-company-line"><span class="exp-company">UruQAI</span>, a quantum computing startup (Remote, Uruguay)</p>
       <ul class="exp-bullets">
@@ -249,7 +249,7 @@
     <article class="exp-entry">
       <div class="exp-top">
         <h3>Data &amp; Analytics Assistant <span class="exp-parttime">(part-time)</span></h3>
-        <span class="exp-dates">Sep 2025 – May 2026</span>
+        <span class="exp-dates">Sep 2025 – Apr 2026</span>
       </div>
       <p class="exp-company-line"><span class="exp-company">Chicago Public Schools</span> at Illinois Institute of Technology (Chicago, IL)</p>
       <ul class="exp-bullets">
@@ -279,16 +279,14 @@
 
 <!-- ============================================================
      6. PROJECTS
-     Duplicate the .project-card block to add another project.
-     Card is a real <a> — set href to the live demo if deployed,
-     otherwise the GitHub repo. Set data-status to planned |
-     in-progress | live to control the badge.
-
-     NOTE (Sept 2026): per-project repos aren't split out yet, so every
-     card below links to the main Portfolio repo as a placeholder and
-     shows "View repo" only (no separate live-demo link/button) — swap
-     each href for that project's own repo (or live URL) as they're
-     ready, and bring back a demo link/button at that point if wanted.
+     Duplicate a .project-card block to add another project. Each card is
+     an <article> (not a link) so it can hold more than one real link —
+     put those in .project-links at the bottom. Status badge classes:
+     status-awaiting-ideas → status-construction → status-deploy-pending →
+     status-live → status-idling (see the status-badge rules in style.css).
+     A card can optionally include a <details class="project-more"> with
+     a longer write-up for anyone who wants the full story, collapsed by
+     default so the grid stays scannable.
 ============================================================= -->
 <section id="projects" class="section reveal">
   <span class="section-ghost" aria-hidden="true">git push origin</span>
@@ -305,11 +303,11 @@
 
   <div class="project-grid">
 
-    <!-- <?claude add-project?> Duplicate this whole <a class="project-card"> block for a new project.
+    <!-- <?claude add-project?> Duplicate this whole <article class="project-card"> block for a new project.
          To show a real screenshot: replace the .project-preview div's content with
          <img src="path/to/screenshot.png" alt=""> — the browser-chrome frame around it stays. -->
 
-    <a class="project-card" href="https://github.com/Hari-Etta/Portfolio/tree/main" target="_blank" rel="noopener" data-tags="python,sql,ml">
+    <article class="project-card" data-tags="python,sql,ml">
       <div class="project-preview preview-pattern-1">
         <div class="preview-chrome">
           <span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
@@ -329,58 +327,119 @@
         <span class="tag">Streamlit</span>
         <span class="tag">Python</span>
       </div>
-      <span class="project-link-hint">View repo →</span>
-    </a>
+      <div class="project-links">
+        <a href="https://github.com/Hari-Etta/Portfolio/tree/main" target="_blank" rel="noopener">View repo →</a>
+      </div>
+    </article>
 
-    <a class="project-card" href="https://github.com/Hari-Etta/Portfolio/tree/main" target="_blank" rel="noopener" data-tags="python,ml">
+    <!-- IIT International Student Policy Assistant (renamed from "...Chatbot") — real repo
+         subfolder below; the live demo link is still pending from Hari, shown as plain text
+         rather than a dead link until it exists (per the content-honesty rule). -->
+    <article class="project-card" data-tags="python,ml">
       <div class="project-preview preview-pattern-2">
         <div class="preview-chrome">
           <span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
-          <span class="chrome-url">github.com/Hari-Etta/Portfolio</span>
+          <span class="chrome-url">github.com/.../04-iit-chatbot</span>
         </div>
         <div class="preview-body" aria-hidden="true"></div>
       </div>
       <div class="project-top">
-        <h3>IIT International Student Policy Chatbot</h3>
+        <h3>IIT International Student Policy Assistant</h3>
         <span class="status-badge status-deploy-pending">Deployment Pending</span>
       </div>
-      <p class="project-desc">A policy-grounded RAG chatbot answering international-student compliance questions (F-1 status, CPT/OPT, SSN) for IIT. Led the Azure OpenAI migration to GPT-4.1 with text-embedding-3-small for semantic search, contributing to a team-wide accuracy improvement from 72.1% to 90.4% on a 52-question evaluation benchmark. Built the production feedback system on Neon Postgres with dual-write reliability, and supported a 5-service cloud deployment (Azure OpenAI, Elastic Cloud, Render, Netlify, Neon) with per-IP rate limiting and automated health checks for 24/7 uptime on free-tier infrastructure.</p>
+      <p class="project-desc">RAG assistant answering F-1 immigration questions for Illinois Tech students, grounded in 20 official policy pages with citations. Uses hybrid retrieval (keyword + vector + RRF) and a deterministic rule engine for eligibility. 90.4% on a 52-question rubric (vs 88.5% NotebookLM baseline), and 4.63/5 in an 8-student pilot. I deployed it to production, built the feedback pipeline, and re-platformed it from a paid Elasticsearch cluster (about $100/mo) to free-tier Postgres + pgvector.</p>
       <div class="project-tags">
+        <span class="tag">Python</span>
         <span class="tag">FastAPI</span>
-        <span class="tag">Azure OpenAI</span>
-        <span class="tag">Elasticsearch</span>
-        <span class="tag">RAG</span>
         <span class="tag">Next.js</span>
+        <span class="tag">pgvector</span>
+        <span class="tag">Claude API</span>
+        <span class="tag">Gemini</span>
       </div>
-      <span class="project-link-hint">View repo →</span>
-    </a>
+      <div class="project-links">
+        <a href="https://github.com/Hari-Etta/Portfolio/tree/main/04-iit-chatbot" target="_blank" rel="noopener">Code →</a>
+        <span class="project-link-pending">Live demo — link coming soon</span>
+      </div>
+      <details class="project-more">
+        <summary>Read more</summary>
+        <div class="project-long">
+          <p>A wrong answer on CPT, OPT or enrollment rules can put a student's visa status at risk. So every answer comes from official IIT policy pages and cites its sources, and a deterministic rule engine decides eligibility — the LLM never decides eligibility.</p>
+          <h4>How it works</h4>
+          <ul>
+            <li>Ingestion: 20 official policy pages are split into about 330 chunks by a chunker that follows each page's section structure.</li>
+            <li>Hybrid retrieval: keyword and vector search run side by side, their results are merged with Reciprocal Rank Fusion, then a topic-aware reranker reorders them.</li>
+            <li>Orchestration: an 8-step pipeline handles out-of-scope requests, smalltalk, intent and topic detection, clarifying questions, eligibility rules, retrieval, answer writing, and cited responses.</li>
+            <li>Eligibility: a YAML rule engine with slot filling across turns returns allowed, not allowed, or the missing details it still needs.</li>
+            <li>Grounding: the LLM writes answers only from retrieved policy text, which minimizes hallucination. Every response lists its sources and points students to the Office of Global Services for official decisions.</li>
+          </ul>
+          <h4>Results</h4>
+          <ul>
+            <li>Offline eval (52-question rubric): answer quality went from 72.1% to 90.4% across two iterations, against an 88.5% AutoRAG/NotebookLM baseline. (Measured on the original Azure OpenAI + Elasticsearch version.)</li>
+            <li>Pilot with 8 F-1 students over 22 days: 4.63/5 average rating, 88% of questions fully answered, 100% would use it again.</li>
+            <li>Main weakness users reported: keeping context in long multi-turn conversations — that's the next fix.</li>
+          </ul>
+          <h4>What I built</h4>
+          <ul>
+            <li>Deployed and ran it in production:
+              <ul>
+                <li>FastAPI backend on Render with rate limiting, CORS, health checks and a keepalive.</li>
+                <li>Next.js frontend on Netlify, with a server-side proxy to the backend.</li>
+                <li>Feedback system on Neon Postgres, tracked by session and message.</li>
+              </ul>
+            </li>
+            <li>Migrated the LLM stack from OpenAI to Azure OpenAI, set up Elastic Cloud and ran ingestion, and integrated the v2 backend.</li>
+            <li>Fixed production bugs, including a 500 error and a key-check bug that silently skipped answer generation.</li>
+            <li>Re-platformed it to run at near-zero cost: replaced the paid Elasticsearch cluster (about $100/month) with Neon Postgres (pgvector plus full-text search), switched embeddings to Gemini's free tier, and switched the LLM to Claude Haiku behind a config-level provider switch. Also added per-user rate limits, a daily usage cap, a secret shared between the proxy and the backend, and an offline test suite.</li>
+            <li>New-stack eval score: [to be measured]</li>
+          </ul>
+          <p><strong>Stack:</strong> Python, FastAPI, Next.js/TypeScript, PostgreSQL + pgvector, Claude (Anthropic), Gemini embeddings, Render, Netlify, Neon</p>
+        </div>
+      </details>
+    </article>
 
-    <!-- 3rd project slot — e-commerce data pipeline -->
-    <a class="project-card" href="https://github.com/Hari-Etta/Portfolio/tree/main" target="_blank" rel="noopener" data-tags="sql,viz">
+    <!-- E-Commerce Medallion Data Platform (3rd project slot) — real repo subfolder +
+         GitHub Actions run history link below. -->
+    <article class="project-card" data-tags="python,sql,viz">
       <div class="project-preview preview-pattern-3">
         <div class="preview-chrome">
           <span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
-          <span class="chrome-url">github.com/Hari-Etta/Portfolio</span>
+          <span class="chrome-url">github.com/.../03-e-commerce-medallion-platform</span>
         </div>
         <div class="preview-body" aria-hidden="true"></div>
       </div>
       <div class="project-top">
-        <h3>E-commerce Data Pipeline</h3>
-        <span class="status-badge status-idling">Idling</span>
+        <h3>E-Commerce Medallion Data Platform</h3>
+        <span class="status-badge status-live">Live</span>
       </div>
-      <p class="project-desc">[One-paragraph description of what the project does, the problem it solves, and your role in building it.]</p>
+      <p class="project-desc">A bronze → silver → gold data pipeline on real e-commerce order data (Olist, ~100K orders), with automated data-quality tests at every layer and a live BI dashboard. Built on Databricks (PySpark), dbt, and GitHub Actions, with Tableau surfacing revenue, delivery performance, and customer lifetime value from tables that are computed once and tested — not re-derived by every team that touches them.</p>
       <div class="project-tags">
-        <span class="tag">SQL</span>
-        <span class="tag">Dashboarding</span>
+        <span class="tag">Databricks</span>
+        <span class="tag">PySpark</span>
+        <span class="tag">dbt</span>
+        <span class="tag">GitHub Actions</span>
+        <span class="tag">Tableau Public</span>
       </div>
-      <span class="project-link-hint">View repo →</span>
-    </a>
+      <div class="project-links">
+        <a href="https://github.com/Hari-Etta/Portfolio/tree/main/03-e-commerce-medallion-platform" target="_blank" rel="noopener">GitHub →</a>
+        <a href="https://github.com/Hari-Etta/Portfolio/actions" target="_blank" rel="noopener">Actions run history →</a>
+      </div>
+      <details class="project-more">
+        <summary>Read more</summary>
+        <div class="project-long">
+          <p>This project builds a full medallion data pipeline — bronze, silver, gold — on Brazil's real ~100K-order Olist e-commerce dataset, using PySpark on Databricks and dbt, with automated data-quality tests enforced at every layer rather than assumed.</p>
+          <p>The bronze layer ingests nine raw tables directly into Databricks. The silver layer cleans and types them through five dbt models, backed by 14 passing data-quality tests (uniqueness, not-null, accepted-value checks). Getting there surfaced two real issues worth documenting: a CSV upload bug that silently corrupted 2,236 review rows (caught because two different parsing tools disagreed with each other), and a genuine data anomaly (an out-of-range review score). Both were found, root-caused, and fixed — not hidden.</p>
+          <p>The gold layer aggregates the tested silver data into three business tables — revenue by region, delivery performance by order status, and customer lifetime value — computed once via a Databricks PySpark job that a GitHub Actions workflow triggers daily, with the Databricks job's own run history as the proof it actually runs unattended.</p>
+          <p>A follow-up investigation into the delivery-performance numbers surfaced a legitimate data quirk: 6 of 625 "canceled" orders turned out to have a real delivery date on them, averaging 20+ days — meaning those orders were delivered and canceled afterward, not canceled before shipping. That kind of finding, verified with a direct SQL query rather than taken at face value, is the difference between a pipeline that reports numbers and one that's actually been interrogated.</p>
+          <p>A Tableau dashboard, built on a live connection to the Databricks gold tables, surfaces all three metrics: São Paulo's outsized share of revenue, the delivery-time gap between completed and the mis-flagged canceled orders, and a steep long-tail in customer lifetime value showing the business is driven by mostly one-time buyers.</p>
+        </div>
+      </details>
+    </article>
 
     <!-- 4th project slot — fully placeholder, ready whenever you have a new project.
          Swap the status class + label as it moves along: status-awaiting-ideas →
          status-construction → status-deploy-pending → status-live (see the
          status-badge rules in style.css). -->
-    <a class="project-card" href="https://github.com/Hari-Etta/Portfolio/tree/main" target="_blank" rel="noopener" data-tags="python">
+    <article class="project-card" data-tags="python">
       <div class="project-preview preview-pattern-1">
         <div class="preview-chrome">
           <span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
@@ -396,11 +455,13 @@
       <div class="project-tags">
         <span class="tag">[Tech]</span>
       </div>
-      <span class="project-link-hint">View repo →</span>
-    </a>
+      <div class="project-links">
+        <a href="https://github.com/Hari-Etta/Portfolio/tree/main" target="_blank" rel="noopener">View repo →</a>
+      </div>
+    </article>
 
     <!-- 5th project slot — fully placeholder, ready whenever you have a new project. -->
-    <a class="project-card" href="https://github.com/Hari-Etta/Portfolio/tree/main" target="_blank" rel="noopener" data-tags="python">
+    <article class="project-card" data-tags="python">
       <div class="project-preview preview-pattern-2">
         <div class="preview-chrome">
           <span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
@@ -416,8 +477,10 @@
       <div class="project-tags">
         <span class="tag">[Tech]</span>
       </div>
-      <span class="project-link-hint">View repo →</span>
-    </a>
+      <div class="project-links">
+        <a href="https://github.com/Hari-Etta/Portfolio/tree/main" target="_blank" rel="noopener">View repo →</a>
+      </div>
+    </article>
 
     <!-- <?claude add-project?> Duplicate any card above this line for another project. -->
 

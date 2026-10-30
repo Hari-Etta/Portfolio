@@ -1,0 +1,7 @@
+pybaseball
+pandas
+pyarrow
+boto3
+duckdb
+requests
+python-dotenv

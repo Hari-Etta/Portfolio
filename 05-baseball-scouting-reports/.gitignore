@@ -1,0 +1,36 @@
+@'
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Secrets: never committed
+.env
+.env.*
+!.env.example
+
+# Data: lives in S3 only, never in git
+**/*.parquet
+**/*.csv
+.pybaseball/
+athena-results/
+
+# dbt build artifacts (Phase 2)
+**/target/
+**/dbt_packages/
+**/logs/
+**/.user.yml
+
+# Terraform (Phase 4): state files can contain secrets
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/*.tfvars
+!**/*.tfvars.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+'@ | Set-Content -Path .gitignore -Encoding utf8

@@ -1,4 +1,3 @@
-@'
 # Python
 venv/
 __pycache__/
@@ -33,4 +32,6 @@ athena-results/
 Thumbs.db
 .vscode/
 .idea/
-'@ | Set-Content -Path .gitignore -Encoding utf8
+# DuckDB database files (dbt working db)
+**/*.duckdb
+**/*.duckdb.wal

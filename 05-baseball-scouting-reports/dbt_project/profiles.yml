@@ -1,0 +1,17 @@
+# Connection settings. No secrets here: DuckDB finds the AWS keys itself
+# from environment variables (credential_chain), so dbt never sees or prints them.
+scouting:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: scouting.duckdb
+      threads: 4
+      extensions:
+        - httpfs
+        - parquet
+        - aws
+      secrets:
+        - type: s3
+          provider: credential_chain
+          region: "{{ env_var('AWS_REGION') }}"

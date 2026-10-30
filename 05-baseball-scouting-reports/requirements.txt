@@ -1,7 +1,7 @@
-pybaseball
-pandas
-pyarrow
-boto3
-duckdb
-requests
-python-dotenv
+pybaseball==2.2.7
+pandas==3.1.0
+pyarrow==26.0.0
+boto3==1.43.122
+duckdb==2.0.0
+requests==2.34.2
+python-dotenv==1.2.4

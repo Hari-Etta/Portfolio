@@ -6,3 +6,6 @@ sources:
       - name: statcast
         meta:
           external_location: "read_parquet('s3://{{ env_var('S3_BUCKET') }}/bronze/statcast/season=*/*.parquet', union_by_name=true, hive_partitioning=true)"
+      - name: people
+        meta:
+          external_location: "read_parquet('s3://{{ env_var('S3_BUCKET') }}/bronze/mlb/people/season=*/*.parquet', union_by_name=true, hive_partitioning=true)"

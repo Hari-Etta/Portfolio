@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: silver_players
+    description: "One row per player who appeared in 2026 Statcast data, with official MLB position."
+    columns:
+      - name: player_id
+        data_tests: [unique, not_null]
+      - name: full_name
+        data_tests: [not_null]
+      - name: position_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Pitcher', 'Infielder', 'Outfielder', 'Catcher', 'Hitter', 'Two-Way Player']

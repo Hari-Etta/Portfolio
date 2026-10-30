@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: int_pitches
+    description: "All pitches with player names, scouting flags, and the thrown_by_position_player flag."
+    columns:
+      - name: pitch_id
+        data_tests: [unique, not_null]
+      - name: thrown_by_position_player
+        data_tests: [not_null]

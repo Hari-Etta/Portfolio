@@ -27,8 +27,8 @@ jobs:
       AWS_REGION: ${{ secrets.BASEBALL_AWS_REGION }}
       S3_BUCKET: ${{ secrets.BASEBALL_S3_BUCKET }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.13"
           cache: pip

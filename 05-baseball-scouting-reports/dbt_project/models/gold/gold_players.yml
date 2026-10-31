@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: gold_players
+    description: "Player directory for the app: unique display names, position, handedness, most recent team."
+    columns:
+      - name: player_id
+        data_tests: [unique, not_null]
+      - name: display_name
+        description: "Guaranteed unique; shared names get position and team, e.g. 'Max Muncy (3B, LAD)'."
+        data_tests: [unique, not_null]

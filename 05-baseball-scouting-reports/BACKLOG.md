@@ -43,3 +43,22 @@ Items deliberately left as "good for now". Each has the reason it was deferred.
   - **Batted-ball type:** is the gap in grounders, line drives or fly balls? Split by bb_type.
   - **Who the lefties are:** are left-handed regulars more often power hitters? Compare bat speed and attack direction.
   - **Ballparks:** short right-field fences may reward pulling for lefties. Compare home/road and by park.
+- **Is HBP a hitter's strategy (crowding the plate)?** 2026 evidence so far: HBP rate and walk rate are unrelated
+  (correlation -0.09 across 265 hitters with 300+ PA), and the most-hit batters do NOT see more inside pitches
+  (league 29.3% inside; e.g. 22-27% for several top-HBP hitters). Points to the hitter's side (plate position,
+  not moving out of the way) rather than pitchers attacking inside. Confirm with batting-stance data (Tier 2):
+  plate distance vs HBP rate. Caveat: "inside" is measured from the plate center, not the batter's body.
+- **HBP vs walk scoring:** after an HBP, teams score in the rest of the inning 41.0% of the time vs 37.8% after a walk.
+  In the same base-out state they are usually close, but HBP is higher in several (runner on 1st, 0 outs:
+  72.3% vs 61.4%, only 130 HBPs). Hypothesis: an HBP signals a pitcher losing control. Test: compare the next
+  hitters' results after HBP vs walk with the same pitcher still in.
+- **Two-out quirk:** runner on 3rd only scores 25.7% vs 22.5% with runners on 2nd and 3rd. Possibly pitching around
+  hitters with first base open; check walk rates in that state.
+
+## Advanced features (end stage)
+- **Runner effect on pitchers ("does this runner disturb the pitcher?"):** with a given runner on base, does the
+  pitcher's mix (more fastballs), velocity, pickoffs or location change, and do hitters beat expectations?
+  Needs sprint speed and pickoff data (Tier 2), runner-level (not batter x runner) samples, and a control for
+  pitcher quality, since runners are on base more often when the pitcher is already struggling.
+- **Lineup simulator:** simulate innings from run expectancy and player probabilities to compare batting orders.
+  Expect small gains (research finds order matters by a handful of runs a season); depends on stable effects.

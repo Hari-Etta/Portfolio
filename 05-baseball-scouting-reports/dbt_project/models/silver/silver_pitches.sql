@@ -77,5 +77,7 @@ select
     try_cast(on_2b as bigint)                              as runner_on_2b,
     try_cast(on_3b as bigint)                              as runner_on_3b,
     try_cast(fielder_2 as bigint)                          as catcher_id,
+    try_cast(bat_score as int)                             as bat_score,
+    try_cast(post_bat_score as int)                        as post_bat_score,
     ingested_at
 from deduped

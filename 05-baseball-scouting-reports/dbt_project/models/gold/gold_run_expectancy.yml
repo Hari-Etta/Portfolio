@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: gold_run_expectancy
+    description: "Chance of scoring and average runs in the rest of the inning after each event, by base-out state."
+    columns:
+      - name: re_id
+        data_tests: [unique, not_null]

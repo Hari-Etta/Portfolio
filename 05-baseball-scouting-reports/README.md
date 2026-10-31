@@ -7,7 +7,7 @@ Automated MLB advance scouting reports: Statcast + MLB Stats API -> AWS S3 data 
 - [x] Phase 2: dbt silver/gold models + tests passing
 - [x] Scouting additions (Tier 1): home/road, player directory, attack zones, command, swing decisions, bat tracking,
       spray charts, HBP, run expectancy, situational hitting
-- [ ] Phase 3: whiff model trained, calibration checked
+- [x] Phase 3: whiff model trained, calibration checked, trained in GitHub Actions
 - [ ] Phase 4: Terraform + Lambda/EventBridge daily pull + scheduled dbt
 - [ ] Phase 5: Streamlit app live
 - [ ] Phase 6: README, resume bullet, pitch, outreach
@@ -115,7 +115,52 @@ hard-hit, HBP, teams and park, attack zones, pitch groups); `int_batted_balls` a
 - **No opponent-quality adjustment.**
 - **Spray location is where the ball was fielded,** not always where it first landed (first-landing distance kept separately).
 
-## Planned model rules (Phase 3, to prevent leakage)
-- No after-the-pitch inputs (bat speed, swing length, exit velocity, launch angle, hit location, outcome, run value).
-- Player tendencies computed only from games before each pitch's date; full-season gold tables are for reports, not features.
-- Time-based train/test split, plus a mid-season check so one unusual month can't mislead.
+## Whiff model (Phase 3)
+**Question:** if a hitter swings at this pitch, what is the chance he misses? (whiff per swing; base rate 22.9%)
+
+**Data:** 339,601 swings (real pitchers, tracked pitches), built as a tested dbt model (`ml_whiff_features`).
+
+**Features, all known before the pitch:** pitch type, velocity, spin, arm angle, movement (arm-side and vertical,
+flipped so lefties and righties compare); location relative to each batter's own zone; contrast with the pitcher's
+own fastball (velocity and movement differences); count and handedness; batter and pitcher whiff tendencies.
+
+**Leakage prevention:**
+- No after-the-pitch inputs (bat speed, exit velocity, launch angle, outcome, run value).
+- Tendencies come from strictly earlier game dates (as-of joins); two dbt tests fail the build if any feature
+  sees same-day or same-game data.
+- Time-based splits only, never random.
+
+**Results:**
+| Evaluation | Log-loss | Baseline (always 22.9%) | Improvement | AUC |
+|---|---|---|---|---|
+| Rolling: test June | 0.419 | 0.539 | 22% | 0.80 |
+| Rolling: test July | 0.421 | 0.539 | 22% | 0.80 |
+| Rolling: test August | 0.413 | 0.533 | 23% | 0.80 |
+| Rolling: test September | 0.418 | 0.539 | 22% | 0.80 |
+| Cross-fitted, full season | 0.418 | 0.537 | 22% | — |
+
+- **Calibrated:** on unseen September, every predicted-probability bin is within about 1.3 points of the actual
+  whiff rate (e.g. predicted 29.3% -> actual 29.6%). Cross-fitted calibration error 0.003 across the season.
+- **Stable across the season:** 22.0-22.7% better than the baseline in every test month.
+- **What drives it:** location (about 58% of importance), then batter tendencies, count, pitch movement, and
+  speed difference from the pitcher's fastball (whiff rate nearly doubles from within 2 mph to 6-10 mph slower).
+
+**Experiments and decisions:**
+- **Fatigue and recent-form features** (pitch count, times through the order, velocity so far today, days rest,
+  30-day form): consistently lower log-loss but only by 0.0003. Not adopted: velocity and location already carry
+  the fatigue signal, and three of these are only known during a game, while reports are pre-game.
+- **Whiffs over expected** (actual minus cross-fitted expected, per pitcher and pitch type): well calibrated league-wide
+  (77,815 actual vs 77,981 expected) but not repeatable (first-half vs second-half correlation 0.01), because the
+  model already knows each pitcher's track record. Used as a "due to regress" flag, not a skill measure.
+
+**Production:**
+- Final model trained on the full season (tree count by early stopping on the last 14 days), saved to S3 with a
+  model card: features, exact category lists, training dates and the rolling-evaluation results.
+- Reusable scoring module (`src/model/score.py`) loads the model from S3 and applies the saved categories; smoke-tested.
+- **GitHub Actions** retrains end to end (dbt build and tests, evaluation, final model, cross-fitted scores) in
+  about 6 minutes.
+- **Reproducibility:** rows sorted and seed fixed, so runs on the same machine match exactly. Windows and Linux
+  differ slightly in where early stopping lands (734 vs 802 trees) with the same quality.
+
+**Limitations:** location dominates, so this model answers "where should this pitch go?" more than "how good is the
+pitch itself?"; a location-free stuff model is on the backlog. Train AUC 0.85 vs test 0.80: mild overfitting.

@@ -87,3 +87,8 @@ Items deliberately left as "good for now". Each has the reason it was deferred.
   Cause: the model already uses each pitcher's past whiff rates, so the residual is mostly luck. Use the table as a
   "due to regress" flag, not a skill measure. A true stuff model must EXCLUDE pitcher/batter tendency features.
 
+
+## Before Opening Day 2027 (deferred because the 2026 season is over)
+- Add "yesterday's games" to the daily Lambda: Statcast pitches + play-by-play running-game events.
+- Weekly scheduled refresh of Savant leaderboards (sprint speed, pop time, OAA, catch probability, outfielder jump).
+- Decide AWS paid plan vs MotherDuck first: the AWS free plan ends Apr 29, 2027, right after Opening Day.

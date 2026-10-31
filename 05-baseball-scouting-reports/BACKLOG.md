@@ -69,3 +69,16 @@ Items deliberately left as "good for now". Each has the reason it was deferred.
 - **Runner-on-first effect:** pitchers barely change (fastball 56.4% -> 56.7%, four-seam -0.08 mph), yet hitter wOBA
   rises .310 -> .326. Candidate causes: first baseman holding the runner, or struggling pitchers allowing the runners
   (confounding). Separate them later with fielder alignment, pitcher controls, and sprint speed (Tier 2).
+
+## Model ideas (Phase 3 follow-ups)
+- **Fatigue / recent-form features (tested, not adopted):** with reproducible rolling evaluation, the extended set
+  was lower in all 4 months but only by ~0.0003 log-loss (0.4176 vs 0.4179) with slightly better calibration
+  (0.0064 vs 0.0079). Kept the simpler baseline because three features (pitch count so far, times facing batter,
+  velocity so far today) are only known DURING a game, and our reports are pre-game.
+- **Pre-game-only extended set:** baseline + 30-day recent form + days rest + season workload. Test with the same
+  rolling folds; adopt if it captures most of the calibration gain.
+- **Live in-game whiff model:** use the in-game fatigue features for a separate, in-game product.
+- **Swing model (version 2):** P(swing) x P(whiff | swing) = P(whiff per pitch), each calibrated.
+- **Location-independent "stuff" model:** location drives ~58% of the current model; a model without location
+  would rate the pitch itself (velocity, movement, contrast with his fastball).
+- **Regularization tuning:** train AUC 0.85 vs test 0.80; try larger min_child_samples / fewer leaves.

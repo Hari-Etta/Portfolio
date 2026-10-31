@@ -1,6 +1,7 @@
 -- ML training data: one row per swing (real pitchers, tracked pitches), target is_whiff (whiff per swing).
--- ONLY pre-pitch information as features. Prior tendencies come from ASOF joins on STRICTLY earlier game dates,
--- so no feature can see the pitch's own game or any later game (guarded by assert_no_same_day_leakage).
+-- ONLY pre-pitch information. Cross-day tendencies come from ASOF joins / windows on STRICTLY earlier dates;
+-- in-game fatigue features use only EARLIER pitches in the same game (window frames end at "1 preceding").
+-- Guarded by assert_no_same_day_leakage and assert_no_in_game_leakage.
 -- Excluded on purpose (after-the-pitch): bat speed, swing length, exit velocity, launch angle, outcome, run value.
 -- Orientation: arm_side_break_in > 0 = toward the pitcher's arm side (lefties flipped);
 -- plate_x_away > 0 = away from the batter (left-handed batters flipped); plate_z_norm 0 = bottom of his zone, 1 = top.
@@ -10,11 +11,19 @@
 ) }}
 
 with thrown as (
-    select *
+    select
+        *,
+        row_number() over (partition by game_pk, pitcher_id order by at_bat_number, pitch_number) - 1   as pitcher_game_pitch_count,
+        dense_rank() over (partition by game_pk, pitcher_id, batter_id order by at_bat_number)          as times_facing_batter,
+        sum(case when pitch_group = 'fastball' then release_speed end) over g
+            / nullif(sum(case when pitch_group = 'fastball' and release_speed is not null then 1 end) over g, 0)
+                                                                                                         as game_fb_velo_so_far
     from {{ ref('int_pitches') }}
     where not thrown_by_position_player
       and is_pitch_thrown
       and pitch_type <> 'UN'
+    window g as (partition by game_pk, pitcher_id order by at_bat_number, pitch_number
+                 rows between unbounded preceding and 1 preceding)
 ),
 
 swings as (
@@ -50,7 +59,17 @@ fb_cum as (
     window w as (partition by pitcher_id order by game_date rows between unbounded preceding and current row)
 ),
 
--- Batter tendencies (overall and vs pitch group), cumulative through each date
+-- Pitcher appearance history: days of rest and season workload before today
+pit_days as (
+    select
+        pitcher_id,
+        game_date,
+        lag(game_date) over (partition by pitcher_id order by game_date)                                   as prev_date,
+        sum(n) over (partition by pitcher_id order by game_date rows between unbounded preceding and 1 preceding) as prior_season_pitches
+    from (select pitcher_id, game_date, count(*) as n from thrown group by 1, 2)
+),
+
+-- Batter tendencies: season-to-date (cumulative) and last 30 days (before today)
 bat_daily as (
     select batter_id, game_date, count(*) as swings, sum(case when is_whiff then 1 else 0 end) as whiffs
     from thrown where is_swing group by 1, 2
@@ -59,6 +78,12 @@ bat_cum as (
     select batter_id, game_date, sum(swings) over w as prior_swings, sum(whiffs) over w as prior_whiffs
     from bat_daily
     window w as (partition by batter_id order by game_date rows between unbounded preceding and current row)
+),
+bat_l30 as (
+    select batter_id, game_date, sum(swings) over r as l30_swings, sum(whiffs) over r as l30_whiffs
+    from bat_daily
+    window r as (partition by batter_id order by game_date
+                 range between interval 30 days preceding and interval 1 day preceding)
 ),
 batgrp_daily as (
     select batter_id, pitch_group, game_date, count(*) as swings, sum(case when is_whiff then 1 else 0 end) as whiffs
@@ -70,7 +95,7 @@ batgrp_cum as (
     window w as (partition by batter_id, pitch_group order by game_date rows between unbounded preceding and current row)
 ),
 
--- Pitcher tendencies (overall and for this pitch type), cumulative through each date
+-- Pitcher tendencies: season-to-date (overall and by pitch type) and last 30 days
 pit_daily as (
     select pitcher_id, game_date, count(*) as swings, sum(case when is_whiff then 1 else 0 end) as whiffs
     from thrown where is_swing group by 1, 2
@@ -79,6 +104,12 @@ pit_cum as (
     select pitcher_id, game_date, sum(swings) over w as prior_swings, sum(whiffs) over w as prior_whiffs
     from pit_daily
     window w as (partition by pitcher_id order by game_date rows between unbounded preceding and current row)
+),
+pit_l30 as (
+    select pitcher_id, game_date, sum(swings) over r as l30_swings, sum(whiffs) over r as l30_whiffs
+    from pit_daily
+    window r as (partition by pitcher_id order by game_date
+                 range between interval 30 days preceding and interval 1 day preceding)
 ),
 pittype_daily as (
     select pitcher_id, pitch_type, game_date, count(*) as swings, sum(case when is_whiff then 1 else 0 end) as whiffs
@@ -124,7 +155,7 @@ select
     s.stand,
     s.same_side,
 
-    -- tendencies (earlier dates only)
+    -- tendencies, season-to-date (earlier dates only)
     b.prior_swings                                                           as bat_prior_swings,
     b.prior_whiffs / nullif(b.prior_swings, 0)                               as bat_prior_whiff_rate,
     bg.prior_swings                                                          as bat_grp_prior_swings,
@@ -132,7 +163,20 @@ select
     p.prior_swings                                                           as pit_prior_swings,
     p.prior_whiffs / nullif(p.prior_swings, 0)                               as pit_prior_whiff_rate,
     pt.prior_swings                                                          as pit_type_prior_swings,
-    pt.prior_whiffs / nullif(pt.prior_swings, 0)                             as pit_type_prior_whiff_rate
+    pt.prior_whiffs / nullif(pt.prior_swings, 0)                             as pit_type_prior_whiff_rate,
+
+    -- NEW: fatigue (earlier pitches in this game; earlier dates)
+    s.pitcher_game_pitch_count,
+    s.times_facing_batter,
+    s.game_fb_velo_so_far - fb.fb_velo                                       as game_velo_vs_norm,
+    date_diff('day', pd.prev_date, s.game_date)                              as days_rest,
+    pd.prior_season_pitches,
+
+    -- NEW: recent form (the 30 days before today)
+    bl.l30_swings                                                            as bat_l30_swings,
+    bl.l30_whiffs / nullif(bl.l30_swings, 0)                                 as bat_l30_whiff_rate,
+    pl.l30_swings                                                            as pit_l30_swings,
+    pl.l30_whiffs / nullif(pl.l30_swings, 0)                                 as pit_l30_whiff_rate
 
 from swings s
 asof left join fb_cum fb
@@ -145,3 +189,9 @@ asof left join pit_cum p
     on s.pitcher_id = p.pitcher_id and s.game_date > p.game_date
 asof left join pittype_cum pt
     on s.pitcher_id = pt.pitcher_id and s.pitch_type = pt.pitch_type and s.game_date > pt.game_date
+left join pit_days pd
+    on s.pitcher_id = pd.pitcher_id and s.game_date = pd.game_date
+left join bat_l30 bl
+    on s.batter_id = bl.batter_id and s.game_date = bl.game_date
+left join pit_l30 pl
+    on s.pitcher_id = pl.pitcher_id and s.game_date = pl.game_date

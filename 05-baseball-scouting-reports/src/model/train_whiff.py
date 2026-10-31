@@ -47,6 +47,7 @@ LGB_PARAMS = dict(
     subsample_freq=1,
     colsample_bytree=0.8,
     reg_lambda=1.0,
+    random_state=42,
     verbose=-1,
 )
 
@@ -66,6 +67,7 @@ def load() -> pd.DataFrame:
         f"SELECT * FROM read_parquet('s3://{os.environ['S3_BUCKET']}/ml/whiff_features.parquet')"
     ).df()
     df["game_date"] = pd.to_datetime(df["game_date"])
+    df = df.sort_values(["game_date", "pitch_id"]).reset_index(drop=True)  # fixed row order -> reproducible training
     df["same_side"] = df["same_side"].astype("float")
     for c in CATEGORICAL:
         df[c] = df[c].astype("category")  # categories fixed on the full data, so all splits share them
@@ -156,3 +158,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

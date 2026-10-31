@@ -1,8 +1,8 @@
 """Rolling (walk-forward) evaluation of the whiff model across the season.
 For each test month: train on everything before it (minus the last 14 days), use those 14 days for early
 stopping, then score the test month. Mimics predicting the future at that point in the season.
-Uses the same LGB_PARAMS / fit_model as train_whiff.py. The --features option lets experiments compare
-feature sets on identical folds."""
+Uses the same LGB_PARAMS / fit_model as train_whiff.py. --set picks the feature set, so experiments are
+compared on identical folds."""
 import argparse
 import json
 
@@ -14,6 +14,12 @@ from src.model.train_whiff import FEATURES, OUT, TARGET, calibration_error, fit_
 
 TEST_MONTHS = ["2026-06-01", "2026-07-01", "2026-08-01", "2026-09-01"]
 VALID_DAYS = 14
+
+NEW_FEATURES = [
+    "pitcher_game_pitch_count", "times_facing_batter", "game_velo_vs_norm", "days_rest", "prior_season_pitches",
+    "bat_l30_swings", "bat_l30_whiff_rate", "pit_l30_swings", "pit_l30_whiff_rate",
+]
+FEATURE_SETS = {"baseline": FEATURES, "extended": FEATURES + NEW_FEATURES}
 
 
 def run(df: pd.DataFrame, features: list[str], label: str) -> pd.DataFrame:
@@ -49,18 +55,18 @@ def run(df: pd.DataFrame, features: list[str], label: str) -> pd.DataFrame:
 
 def main() -> None:
     p = argparse.ArgumentParser()
-    p.add_argument("--label", default="baseline_features")
+    p.add_argument("--set", choices=list(FEATURE_SETS), default="baseline")
     a = p.parse_args()
 
     df = load()
-    res = run(df, FEATURES, a.label)
+    res = run(df, FEATURE_SETS[a.set], a.set)
     print("\n=== rolling evaluation ===")
     print(res.to_string(index=False))
     print("\n=== average across folds ===")
     print(res[["log_loss", "baseline", "improvement_pct", "auc", "calib_error"]].mean().round(4).to_string())
 
-    (OUT / f"rolling_{a.label}.json").write_text(json.dumps(res.to_dict(orient="records"), indent=2))
-    print(f"\nsaved to {OUT / f'rolling_{a.label}.json'}")
+    (OUT / f"rolling_{a.set}.json").write_text(json.dumps(res.to_dict(orient="records"), indent=2))
+    print(f"\nsaved to {OUT / f'rolling_{a.set}.json'}")
 
 
 if __name__ == "__main__":

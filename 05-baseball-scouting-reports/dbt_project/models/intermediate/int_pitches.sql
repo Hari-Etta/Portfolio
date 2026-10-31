@@ -44,6 +44,7 @@ select
     *,
     is_pa and events in ('strikeout', 'strikeout_double_play')          as is_strikeout,
     is_pa and events = 'walk'                                           as is_walk,
+    is_pa and events = 'hit_by_pitch'                                   as is_hbp,
     case when is_pa then
         case when events in ('field_error', 'fielders_choice') then 0 else woba_value end
     end                                                                 as woba_pts,
@@ -73,4 +74,5 @@ select
         else 'other'
     end                                                                 as pitch_group
 from base
+
 

@@ -16,6 +16,7 @@ with agg as (
         sum(case when is_pa then 1 else 0 end)                       as pa,
         sum(case when is_strikeout then 1 else 0 end)                as strikeouts,
         sum(case when is_walk then 1 else 0 end)                     as walks,
+        sum(case when is_hbp then 1 else 0 end)                      as hbps,
         sum(woba_pts)                                                as woba_num,
         sum(woba_statcast_pts)                                       as woba_statcast_num,
         sum(xwoba_pts)                                               as xwoba_num,
@@ -41,6 +42,7 @@ select
     pa,
     round(1.0 * strikeouts / nullif(pa, 0), 3)                   as k_pct,
     round(1.0 * walks / nullif(pa, 0), 3)                        as bb_pct,
+    round(1.0 * hbps / nullif(pa, 0), 3)                         as hbp_pct,
     round(woba_num / nullif(pa, 0), 3)                           as woba,
     round(woba_statcast_num / nullif(pa, 0), 3)                  as woba_statcast,
     round(xwoba_num / nullif(pa, 0), 3)                          as xwoba,
@@ -49,3 +51,5 @@ select
     round(1.0 * hard_hit / nullif(batted_balls, 0), 3)           as hard_hit_pct,
     pa < 50                                                      as small_sample
 from agg
+
+

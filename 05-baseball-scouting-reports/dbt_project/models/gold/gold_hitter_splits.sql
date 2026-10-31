@@ -29,6 +29,7 @@ agg as (
         sum(case when is_pa then 1 else 0 end)                       as pa,
         sum(case when is_strikeout then 1 else 0 end)                as strikeouts,
         sum(case when is_walk then 1 else 0 end)                     as walks,
+        sum(case when is_hbp then 1 else 0 end)                      as hbps,
         sum(woba_pts)                                                as woba_num,
         sum(woba_statcast_pts)                                       as woba_statcast_num,
         sum(xwoba_pts)                                               as xwoba_num,
@@ -54,6 +55,7 @@ select
     a.pa,
     round(1.0 * a.strikeouts / nullif(a.pa, 0), 3)               as k_pct,
     round(1.0 * a.walks / nullif(a.pa, 0), 3)                    as bb_pct,
+    round(1.0 * a.hbps / nullif(a.pa, 0), 3)                     as hbp_pct,
     round(a.woba_num / nullif(a.pa, 0), 3)                       as woba,
     round(a.woba_statcast_num / nullif(a.pa, 0), 3)              as woba_statcast,
     round(a.xwoba_num / nullif(a.pa, 0), 3)                      as xwoba,
@@ -63,3 +65,5 @@ select
     a.pa < 50                                                    as small_sample
 from agg a
 join teams t on a.batter_id = t.batter_id
+
+

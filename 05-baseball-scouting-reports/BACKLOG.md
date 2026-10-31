@@ -32,3 +32,14 @@ Items deliberately left as "good for now". Each has the reason it was deferred.
 
 ## On hold (owner's call)
 - 2024-2025 backfill: multi-season trends and organization effects ("do players improve after joining team X?").
+
+## Questions to investigate
+- **Why do left-handed hitters pull more?** 2026: lefties pull 46.7% of batted balls vs 43.1% for righties
+  (center 28.1% vs 29.1%, opposite 25.2% vs 27.9%). Hypotheses to test, one at a time:
+  - **Matchups:** lefties face mostly right-handed pitchers (opposite-handed). Split pull % by pitcher hand
+    (same vs opposite side) to see whether the gap is a platoon effect.
+  - **Pitch mix and location:** do lefties see more inside pitches or more breaking balls moving toward them?
+    Split by pitch group and attack zone.
+  - **Batted-ball type:** is the gap in grounders, line drives or fly balls? Split by bb_type.
+  - **Who the lefties are:** are left-handed regulars more often power hitters? Compare bat speed and attack direction.
+  - **Ballparks:** short right-field fences may reward pulling for lefties. Compare home/road and by park.

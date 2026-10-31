@@ -12,6 +12,25 @@ sources:
       - name: transactions
         meta:
           external_location: "read_parquet('s3://{{ env_var('S3_BUCKET') }}/bronze/mlb/transactions/pulled=*/*.parquet', union_by_name=true, hive_partitioning=true)"
+      - name: running_game
+        description: "Pickoff throws, steals, caught stealing and pickoffs from the MLB play-by-play feed (mlb_pbp.py)."
+        meta:
+          external_location: "read_parquet('s3://{{ env_var('S3_BUCKET') }}/bronze/mlb/running_game/season=*/*.parquet', union_by_name=true, hive_partitioning=true)"
+      - name: savant_sprint_speed
+        meta:
+          external_location: "read_parquet('s3://{{ env_var('S3_BUCKET') }}/bronze/savant/sprint_speed/season=*/*.parquet', union_by_name=true, hive_partitioning=true)"
+      - name: savant_catcher_poptime
+        meta:
+          external_location: "read_parquet('s3://{{ env_var('S3_BUCKET') }}/bronze/savant/catcher_poptime/season=*/*.parquet', union_by_name=true, hive_partitioning=true)"
+      - name: savant_outs_above_average
+        meta:
+          external_location: "read_parquet('s3://{{ env_var('S3_BUCKET') }}/bronze/savant/outs_above_average/season=*/*.parquet', union_by_name=true, hive_partitioning=true)"
+      - name: savant_outfield_catch_prob
+        meta:
+          external_location: "read_parquet('s3://{{ env_var('S3_BUCKET') }}/bronze/savant/outfield_catch_prob/season=*/*.parquet', union_by_name=true, hive_partitioning=true)"
+      - name: savant_outfielder_jump
+        meta:
+          external_location: "read_parquet('s3://{{ env_var('S3_BUCKET') }}/bronze/savant/outfielder_jump/season=*/*.parquet', union_by_name=true, hive_partitioning=true)"
 
   - name: ml
     description: "Outputs written by the Python model code (src/model)."

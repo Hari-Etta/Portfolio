@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: silver_running_game
+    description: "Running-game events from the play-by-play feed, categorized, with catcher and teams from Statcast."
+    columns:
+      - name: event_id
+        data_tests: [unique, not_null]
+      - name: category
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['pickoff_throw', 'stolen_base', 'caught_stealing', 'pickoff_out', 'pickoff_error']
+      - name: pitcher_id
+        data_tests: [not_null]
+      - name: runner_id
+        description: "Null for pickoff throws (the feed doesn't name the runner on the throw itself)."
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('silver_players')
+                field: player_id
+              config:
+                severity: warn

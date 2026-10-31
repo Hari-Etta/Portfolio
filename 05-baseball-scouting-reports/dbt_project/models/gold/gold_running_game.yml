@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: gold_runner_running_game
+    description: "Basestealing per runner: opportunities, attempt rate, success, pickoffs, sprint speed."
+    columns:
+      - name: runner_id
+        data_tests: [unique, not_null]
+
+  - name: gold_pitcher_running_game
+    description: "Running game per pitcher: pickoff throws per opportunity, pickoffs, steals and success against."
+    columns:
+      - name: pitcher_id
+        data_tests: [unique, not_null]
+
+  - name: gold_catcher_defense
+    description: "Catcher throwing vs basestealers, plus Savant pop time, exchange time and arm strength."
+    columns:
+      - name: catcher_id
+        data_tests: [unique, not_null]

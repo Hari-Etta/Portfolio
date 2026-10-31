@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: gold_hitter_spray
+    description: "Batted-ball counts per hitter by pitcher hand, pitch group, speed band and field zone (12 zones)."
+    columns:
+      - name: spray_id
+        data_tests: [unique, not_null]
+      - name: field_zone
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['infield_front_left', 'infield_front_center', 'infield_front_right',
+                         'infield_back_left', 'infield_back_center', 'infield_back_right',
+                         'outfield_front_left', 'outfield_front_center', 'outfield_front_right',
+                         'outfield_back_left', 'outfield_back_center', 'outfield_back_right']
+
+  - name: gold_pitcher_spray_allowed
+    description: "Batted-ball counts allowed per pitcher by batter side, pitch group, speed band and field zone."
+    columns:
+      - name: spray_id
+        data_tests: [unique, not_null]
+      - name: field_zone
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['infield_front_left', 'infield_front_center', 'infield_front_right',
+                         'infield_back_left', 'infield_back_center', 'infield_back_right',
+                         'outfield_front_left', 'outfield_front_center', 'outfield_front_right',
+                         'outfield_back_left', 'outfield_back_center', 'outfield_back_right']

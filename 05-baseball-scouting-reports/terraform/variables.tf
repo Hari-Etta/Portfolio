@@ -15,3 +15,11 @@ variable "data_bucket_name" {
   type        = string
   default     = "hari-baseball-scouting-001800894194-us-east-2-an"
 }
+
+variable "alert_email" {
+  description = "Email for budget alerts. Set in terraform.tfvars (git-ignored), never in code."
+  type        = string
+  sensitive   = true
+}
+
+

@@ -59,5 +59,23 @@ select
     try_cast(estimated_woba_using_speedangle as double)    as xwoba,
     try_cast(woba_value as double)                         as woba_value,
     try_cast(woba_denom as double)                         as woba_denom,
+    -- Tier 1 additions: batted-ball location, bat tracking, run value, arm slot, defense, runners
+    try_cast(hc_x as double)                               as hc_x,
+    try_cast(hc_y as double)                               as hc_y,
+    try_cast(hit_distance_sc as double)                    as hit_distance,
+    try_cast(hit_location as int)                          as hit_location,
+    try_cast(bat_speed as double)                          as bat_speed,
+    try_cast(swing_length as double)                       as swing_length,
+    try_cast(attack_angle as double)                       as attack_angle,
+    try_cast(attack_direction as double)                   as attack_direction,
+    try_cast(swing_path_tilt as double)                    as swing_path_tilt,
+    try_cast(delta_run_exp as double)                      as run_value,
+    try_cast(arm_angle as double)                          as arm_angle,
+    if_fielding_alignment                                  as if_alignment,
+    of_fielding_alignment                                  as of_alignment,
+    try_cast(on_1b as bigint)                              as runner_on_1b,
+    try_cast(on_2b as bigint)                              as runner_on_2b,
+    try_cast(on_3b as bigint)                              as runner_on_3b,
+    try_cast(fielder_2 as bigint)                          as catcher_id,
     ingested_at
 from deduped

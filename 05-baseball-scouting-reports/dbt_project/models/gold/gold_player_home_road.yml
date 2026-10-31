@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: gold_player_home_road
+    description: "Home vs road results for every hitter and pitcher. Shows park effects; does not adjust for them."
+    columns:
+      - name: home_road_id
+        data_tests: [unique, not_null]
+      - name: role
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['pitcher', 'hitter']
+      - name: venue
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['home', 'road']

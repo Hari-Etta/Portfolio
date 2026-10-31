@@ -5,6 +5,7 @@
 -- PA columns: is_pa = wOBA-eligible plate appearance (woba_denom = 1). The *_pts columns are each row's
 -- contribution to wOBA: woba_pts counts reached-on-error / fielder's choice as outs (default);
 -- woba_statcast_pts follows Statcast (they count like singles); xwoba_pts uses expected value on contact.
+-- Teams: home team pitches in the top of the inning. park = home team (the ballpark the game was played in).
 {{ config(materialized='view') }}
 
 with base as (
@@ -45,5 +46,9 @@ select
     end                                                                 as xwoba_pts,
     is_pitch_thrown and zone is not null and not in_zone                as is_out_of_zone,
     is_pitch_thrown and zone is not null and not in_zone and is_swing   as is_chase,
-    is_in_play and launch_speed >= 95                                   as is_hard_hit
+    is_in_play and launch_speed >= 95                                   as is_hard_hit,
+    inning_topbot = 'Top'                                               as pitcher_is_home,
+    case when inning_topbot = 'Top' then home_team else away_team end   as pitcher_team,
+    case when inning_topbot = 'Top' then away_team else home_team end   as batter_team,
+    home_team                                                           as park
 from base

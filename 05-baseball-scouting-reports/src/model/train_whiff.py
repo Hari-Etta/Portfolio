@@ -1,7 +1,8 @@
 """Trains the whiff-per-swing model (Phase 3).
 Time-based split, never random: train = Mar-Jul, validation = Aug (early stopping only),
 test = Sep (untouched until final evaluation). Reports log-loss, AUC and Brier against a
-constant baseline (the training whiff rate), plus a calibration table and plot on the test month."""
+constant baseline (the training whiff rate), plus a calibration table and plot on the test month.
+LGB_PARAMS and fit_model are shared with eval_rolling.py so every evaluation uses the same model."""
 import json
 import os
 from pathlib import Path
@@ -36,6 +37,19 @@ TARGET = "is_whiff"
 TRAIN_END = pd.Timestamp("2026-07-31")
 VALID_END = pd.Timestamp("2026-08-31")
 
+LGB_PARAMS = dict(
+    objective="binary",
+    n_estimators=3000,
+    learning_rate=0.03,
+    num_leaves=63,
+    min_child_samples=200,
+    subsample=0.8,
+    subsample_freq=1,
+    colsample_bytree=0.8,
+    reg_lambda=1.0,
+    verbose=-1,
+)
+
 
 def load() -> pd.DataFrame:
     con = duckdb.connect()
@@ -58,6 +72,25 @@ def load() -> pd.DataFrame:
     return df
 
 
+def fit_model(train: pd.DataFrame, valid: pd.DataFrame, features: list[str]) -> lgb.LGBMClassifier:
+    """Fits LightGBM with early stopping on the validation set (validation is never used for scoring)."""
+    model = lgb.LGBMClassifier(**LGB_PARAMS)
+    model.fit(
+        train[features], train[TARGET],
+        eval_X=valid[features],
+        eval_y=valid[TARGET],
+        eval_metric="binary_logloss",
+        callbacks=[lgb.early_stopping(100, verbose=False)],
+    )
+    return model
+
+
+def calibration_error(y: pd.Series, p: np.ndarray, bins: int = 10) -> float:
+    """Average |predicted - actual| across equal-size bins (0.01 = about 1 point off on average)."""
+    frac_pos, mean_pred = calibration_curve(y, p, n_bins=bins, strategy="quantile")
+    return float(np.mean(np.abs(frac_pos - mean_pred)))
+
+
 def evaluate(y: pd.Series, p: np.ndarray, base_rate: float, name: str) -> dict:
     return {
         "split": name,
@@ -77,27 +110,8 @@ def main() -> None:
     test = df[df.game_date > VALID_END]
     print(f"train {len(train):,} | valid {len(valid):,} | test {len(test):,}")
 
-    base_rate = float(train[TARGET].mean())  # what you'd know beforehand: the training whiff rate
-
-    model = lgb.LGBMClassifier(
-        objective="binary",
-        n_estimators=3000,
-        learning_rate=0.03,
-        num_leaves=63,
-        min_child_samples=200,
-        subsample=0.8,
-        subsample_freq=1,
-        colsample_bytree=0.8,
-        reg_lambda=1.0,
-        verbose=-1,
-    )
-    model.fit(
-        train[FEATURES], train[TARGET],
-        eval_X=valid[FEATURES],
-        eval_y=valid[TARGET],
-        eval_metric="binary_logloss",
-        callbacks=[lgb.early_stopping(100, verbose=False)],
-    )
+    base_rate = float(train[TARGET].mean())
+    model = fit_model(train, valid, FEATURES)
     print(f"best iteration: {model.best_iteration_}")
 
     results = []
@@ -107,7 +121,6 @@ def main() -> None:
     print("\n=== metrics ===")
     print(pd.DataFrame(results).to_string(index=False))
 
-    # Calibration on the untouched test month
     p_test = model.predict_proba(test[FEATURES])[:, 1]
     frac_pos, mean_pred = calibration_curve(test[TARGET], p_test, n_bins=10, strategy="quantile")
     calib = pd.DataFrame({"predicted": mean_pred, "actual": frac_pos})
@@ -143,4 +156,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

@@ -57,5 +57,7 @@ select
     try_cast(launch_speed as double)                       as launch_speed,
     try_cast(launch_angle as double)                       as launch_angle,
     try_cast(estimated_woba_using_speedangle as double)    as xwoba,
+    try_cast(woba_value as double)                         as woba_value,
+    try_cast(woba_denom as double)                         as woba_denom,
     ingested_at
 from deduped

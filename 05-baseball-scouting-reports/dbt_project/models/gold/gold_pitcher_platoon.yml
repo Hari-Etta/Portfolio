@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: gold_pitcher_platoon
+    description: "Each pitcher vs LHH and RHH: K%, BB%, wOBA, xwOBA, whiff, chase, hard-hit. PA = wOBA-eligible PA."
+    columns:
+      - name: platoon_id
+        data_tests: [unique, not_null]
+      - name: batter_side
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['L', 'R']
+      - name: pitches
+        data_tests: [not_null]

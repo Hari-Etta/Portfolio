@@ -8,7 +8,7 @@ Automated MLB advance scouting reports: Statcast + MLB Stats API -> AWS S3 data 
 - [x] Scouting additions (Tier 1): home/road, player directory, attack zones, command, swing decisions, bat tracking,
       spray charts, HBP, run expectancy, situational hitting
 - [x] Phase 3: whiff model trained, calibration checked, trained in GitHub Actions
-- [ ] Phase 4: Terraform + Lambda/EventBridge daily pull + scheduled dbt
+- [x] Phase 4: Terraform + Lambda/EventBridge daily pull + scheduled dbt, running game and defense data
 - [ ] Phase 5: Streamlit app live
 - [ ] Phase 6: README, resume bullet, pitch, outreach
 
@@ -164,3 +164,50 @@ own fastball (velocity and movement differences); count and handedness; batter a
 
 **Limitations:** location dominates, so this model answers "where should this pitch go?" more than "how good is the
 pitch itself?"; a location-free stuff model is on the backlog. Train AUC 0.85 vs test 0.80: mild overfitting.
+
+## Automation and infrastructure (Phase 4)
+**Runs itself every day:**
+- **6:00 AM Denver:** EventBridge Scheduler triggers a Lambda that pulls 40-man rosters (dated snapshot) and recent
+  transactions from the MLB Stats API into S3 bronze. Python 3.13 with the official AWS SDK for pandas layer
+  (pinned version, looked up via SSM); about 3 seconds per run, far inside Lambda's free allowance.
+- **About an hour later:** GitHub Actions rebuilds silver and gold and runs every dbt test; GitHub emails on failure.
+- **On demand:** GitHub Actions workflows for the Statcast backfill, play-by-play backfill, and model training.
+
+**Infrastructure as code (Terraform):**
+- Remote state in a dedicated, versioned, private S3 bucket with native state locking.
+- Hand-made Phase 1 resources (data bucket, pipeline user, budget alarm) imported with no drift; the data bucket
+  has `prevent_destroy`.
+- Lambda, scheduler, IAM roles and log retention (14 days) defined in code.
+
+**Least-privilege identities:**
+| Identity | Can do | Where its keys live |
+|---|---|---|
+| `scouting-pipeline` | Read/write the data bucket only | `.env` (local) and GitHub Secrets |
+| `scouting-app-readonly` | Read gold tables and the model only | Streamlit secrets (Phase 5) |
+| Lambda role | Write `bronze/mlb/*` and its own logs only | None (AWS role) |
+| Scheduler role | Invoke the one Lambda only | None (AWS role) |
+| `terraform-deployer` | Deploy infrastructure | Local AWS CLI profile only, never in the repo or CI |
+
+The read-only user was verified with real requests (reads gold; denied on bronze and on writes), because the IAM
+policy simulator reported organization-level denies that don't apply on this free-plan account.
+
+## Running game and defense
+- **Play-by-play feed (MLB Stats API):** 14,392 running-game events from all 184 game dates: 9,680 pickoff throws,
+  3,289 stolen bases, 1,015 caught stealing (incl. pickoff caught stealing), 222 pickoffs, 186 pickoff errors.
+  99.4% join to a Statcast at-bat with the same pitcher; the rest are outs on the bases before any pitch.
+- **Baseball Savant leaderboards:** sprint speed, catcher pop time, Outs Above Average (by direction and batter
+  hand), outfield catch probability, outfielder jump.
+- **Reports:** runner (attempt rate per opportunity, success, sprint speed), pitcher (pickoff throws per
+  opportunity, steals and success against), catcher (caught-stealing rate, pop time, arm strength), fielder (OAA,
+  catch probability, jump).
+- **Validation:** runner, pitcher and catcher steal totals reconcile; faster runners attempt more (correlation
+  +0.62) but don't succeed more (+0.06, likely selection: slow runners only go when sure); quicker catcher pop
+  times mean more runners caught (-0.58); outfielder jump tracks OAA (+0.79).
+- **Not available publicly:** pitcher step-offs without a throw, lead distances, steal timing.
+- **40-man rosters listing up to 51 players** are explained by 60-day injured players, who appear on the list but
+  don't count against the limit in season.
+
+## Operational notes
+- GitHub pauses scheduled workflows in public repos after 60 days without commits; re-enable with one click.
+- The AWS free plan ends Apr 29, 2027; the app reads data behind a `DATA_BACKEND` setting so it can switch to
+  MotherDuck if the account isn't upgraded. See [BACKLOG.md](BACKLOG.md).

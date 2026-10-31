@@ -94,3 +94,7 @@ Items deliberately left as "good for now". Each has the reason it was deferred.
 - Decide AWS paid plan vs MotherDuck first: the AWS free plan ends Apr 29, 2027, right after Opening Day.
 - **Outfielder route efficiency vs OAA is negative (-0.28, 88 outfielders)** while total jump vs OAA is +0.79.
   Check Savant's sign convention for rel_league_routing_distance before interpreting it in the app.
+- **Free plan ends Apr 29, 2027 (decide by ~March 2027):** default = upgrade AWS to paid (expected well under
+  $1/month; confirm from the real bill). Fallback = MotherDuck Lite (10 GB, 10 compute-hours/month; check their
+  "internal business use" terms first). The Streamlit app reads data behind a DATA_BACKEND setting so the switch
+  is one line. Avoid publishing data files publicly (MLB/Savant redistribution terms).

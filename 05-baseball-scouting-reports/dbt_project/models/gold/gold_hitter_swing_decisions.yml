@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: gold_hitter_swing_decisions
+    description: "Swing/take decisions and run value per hitter and attack zone. Positive runs = good for the hitter."
+    columns:
+      - name: decision_id
+        data_tests: [unique, not_null]
+      - name: attack_zone
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['heart', 'shadow', 'chase', 'waste']

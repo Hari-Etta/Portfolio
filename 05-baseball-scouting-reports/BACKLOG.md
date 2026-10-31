@@ -82,3 +82,7 @@ Items deliberately left as "good for now". Each has the reason it was deferred.
 - **Location-independent "stuff" model:** location drives ~58% of the current model; a model without location
   would rate the pitch itself (velocity, movement, contrast with his fastball).
 - **Regularization tuning:** train AUC 0.85 vs test 0.80; try larger min_child_samples / fewer leaves.
+- **Whiffs over expected is not a repeatable skill:** cross-fitted expectations are well calibrated (77,815 actual vs
+  77,981 expected whiffs), but first-half vs second-half over-performance has correlation 0.01 (338 pitch types).
+  Cause: the model already uses each pitcher's past whiff rates, so the residual is mostly luck. Use the table as a
+  "due to regress" flag, not a skill measure. A true stuff model must EXCLUDE pitcher/batter tendency features.

@@ -12,3 +12,11 @@ sources:
       - name: transactions
         meta:
           external_location: "read_parquet('s3://{{ env_var('S3_BUCKET') }}/bronze/mlb/transactions/pulled=*/*.parquet', union_by_name=true, hive_partitioning=true)"
+
+  - name: ml
+    description: "Outputs written by the Python model code (src/model)."
+    tables:
+      - name: whiff_scores
+        description: "Cross-fitted expected whiff probability (xwhiff) per swing, from score_crossfit.py."
+        meta:
+          external_location: "read_parquet('s3://{{ env_var('S3_BUCKET') }}/ml/whiff_scores.parquet')"

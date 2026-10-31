@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: gold_pitcher_whiff_over_expected
+    description: "Actual vs model-expected whiffs per pitcher x pitch type (cross-fitted, out-of-sample expectations)."
+    columns:
+      - name: woe_id
+        data_tests: [unique, not_null]

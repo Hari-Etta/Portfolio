@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: gold_pitcher_locations
+    description: "Pitch locations by Statcast zone per pitcher, batter side, and pitch type, with swing/whiff/contact results."
+    columns:
+      - name: location_id
+        data_tests: [unique, not_null]
+      - name: zone
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14]
+                quote: false
+      - name: batter_side
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['L', 'R']

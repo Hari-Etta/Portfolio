@@ -1,0 +1,47 @@
+name: baseball-pbp-backfill
+
+# One-time (or occasional) backfill of running-game events from the MLB play-by-play feed.
+# ~1 request per second; dates already in S3 are skipped, so reruns resume where they stopped.
+on:
+  workflow_dispatch:
+    inputs:
+      start:
+        description: "Start date (YYYY-MM-DD)"
+        required: true
+      end:
+        description: "End date (YYYY-MM-DD)"
+        required: true
+      season:
+        description: "Season (e.g. 2026)"
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: baseball-pbp-backfill
+  cancel-in-progress: false
+
+defaults:
+  run:
+    working-directory: 05-baseball-scouting-reports
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.BASEBALL_AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.BASEBALL_AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.BASEBALL_AWS_REGION }}
+      S3_BUCKET: ${{ secrets.BASEBALL_S3_BUCKET }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: 05-baseball-scouting-reports/requirements.txt
+      - run: pip install -r requirements.txt
+      - name: Backfill running-game events
+        run: python -m src.ingest.mlb_pbp --start "${{ inputs.start }}" --end "${{ inputs.end }}" --season "${{ inputs.season }}"

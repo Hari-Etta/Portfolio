@@ -38,3 +38,6 @@ Thumbs.db
 
 # Model artifacts (stored in S3, not git)
 artifacts/
+
+# Lambda build output
+build/

@@ -92,3 +92,5 @@ Items deliberately left as "good for now". Each has the reason it was deferred.
 - Add "yesterday's games" to the daily Lambda: Statcast pitches + play-by-play running-game events.
 - Weekly scheduled refresh of Savant leaderboards (sprint speed, pop time, OAA, catch probability, outfielder jump).
 - Decide AWS paid plan vs MotherDuck first: the AWS free plan ends Apr 29, 2027, right after Opening Day.
+- **Outfielder route efficiency vs OAA is negative (-0.28, 88 outfielders)** while total jump vs OAA is +0.79.
+  Check Savant's sign convention for rel_league_routing_distance before interpreting it in the app.

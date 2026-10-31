@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: gold_fielder_defense
+    description: "Fielding value per fielder: OAA (total, by direction, by batter hand), catch probability, outfielder jump."
+    columns:
+      - name: player_id
+        data_tests: [unique, not_null]

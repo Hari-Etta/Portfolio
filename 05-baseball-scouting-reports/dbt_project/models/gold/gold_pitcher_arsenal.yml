@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: gold_pitcher_arsenal
+    description: "One row per pitcher x pitch type: usage, velocity, movement, whiff/chase/CSW rates. Real pitchers only."
+    columns:
+      - name: arsenal_id
+        data_tests: [unique, not_null]
+      - name: pitcher_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('silver_players')
+                field: player_id
+      - name: usage_pct
+        data_tests: [not_null]

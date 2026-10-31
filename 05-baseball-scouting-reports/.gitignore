@@ -41,3 +41,6 @@ artifacts/
 
 # Lambda build output
 build/
+
+# Streamlit secrets (read-only AWS key) - never committed
+.streamlit/secrets.toml

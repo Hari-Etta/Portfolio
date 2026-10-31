@@ -29,6 +29,27 @@ team = st.selectbox(
 st.session_state["team"] = team
 team_id = int(teams.loc[teams["abbreviation"] == team, "team_id"].iloc[0])
 display = players[["player_id", "display_name"]]
+roster = load("current_roster")
+
+
+def status_text(r) -> str:
+    """Plain-language roster status as of the latest daily snapshot."""
+    if r["on_40_man"] and r["roster_team"] != team:
+        return f"🔁 Now with {r['roster_team']}"
+    if r["status_label"] == "Active (40-man)":
+        return "✅ Active"
+    if r["status_label"] == "60-day IL":
+        return "🩹 60-day IL"
+    if r["on_40_man"]:
+        return f"🟡 {r['status_label']}"
+    if pd.notna(r["last_move"]):
+        return f"⚠️ {r['last_move']} ({pd.to_datetime(r['last_move_date']):%b %d})"
+    return "⚠️ Not on 40-man"
+
+
+roster["Status"] = roster.apply(status_text, axis=1)
+status = roster[["player_id", "Status"]]
+st.caption(f"Roster status as of {pd.to_datetime(roster['snapshot_date'].max()):%b %d, %Y} (updated daily).")
 
 left, right = st.columns(2)
 with left:
@@ -38,7 +59,8 @@ with left:
          .groupby("pitcher_id", as_index=False)["pitches"].sum()
          .merge(display, left_on="pitcher_id", right_on="player_id")
          .sort_values("pitches", ascending=False))
-    st.dataframe(p[["display_name", "pitches"]].rename(columns={"display_name": "Pitcher", "pitches": "Pitches"}),
+    p = p.merge(status, on="player_id", how="left")
+    st.dataframe(p[["display_name", "Status", "pitches"]].rename(columns={"display_name": "Pitcher", "pitches": "Pitches"}),
                  hide_index=True, width="stretch", height=300)
     st.page_link("pages/pitcher.py", label="Open pitcher report", icon="🎯")
 
@@ -49,7 +71,8 @@ with right:
          .groupby("batter_id", as_index=False)["pa"].sum()
          .merge(display, left_on="batter_id", right_on="player_id")
          .sort_values("pa", ascending=False))
-    st.dataframe(h[["display_name", "pa"]].rename(columns={"display_name": "Hitter", "pa": "PA"}),
+    h = h.merge(status, on="player_id", how="left")
+    st.dataframe(h[["display_name", "Status", "pa"]].rename(columns={"display_name": "Hitter", "pa": "PA"}),
                  hide_index=True, width="stretch", height=300)
     st.page_link("pages/hitter.py", label="Open hitter report", icon="🏏")
 
@@ -74,3 +97,5 @@ else:
         column_config={"Date": st.column_config.DateColumn(format="MMM D, YYYY")},
     )
     st.caption(f"{len(recent)} roster moves since {cutoff:%b %d, %Y}. Jersey-number changes and other non-roster moves are hidden.")
+
+

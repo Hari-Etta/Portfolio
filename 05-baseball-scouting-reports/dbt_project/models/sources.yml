@@ -15,6 +15,9 @@ sources:
       - name: teams
         meta:
           external_location: "read_parquet('s3://{{ env_var('S3_BUCKET') }}/bronze/mlb/teams/season=*/*.parquet', union_by_name=true, hive_partitioning=true)"
+      - name: rosters
+        meta:
+          external_location: "read_parquet('s3://{{ env_var('S3_BUCKET') }}/bronze/mlb/rosters/snapshot_date=*/*.parquet', union_by_name=true, hive_partitioning=true)"
       - name: running_game
         description: "Pickoff throws, steals, caught stealing and pickoffs from the MLB play-by-play feed (mlb_pbp.py)."
         meta:
@@ -42,4 +45,5 @@ sources:
         description: "Cross-fitted expected whiff probability (xwhiff) per swing, from score_crossfit.py."
         meta:
           external_location: "read_parquet('s3://{{ env_var('S3_BUCKET') }}/ml/whiff_scores.parquet')"
+
 

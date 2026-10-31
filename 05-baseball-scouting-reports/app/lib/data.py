@@ -6,7 +6,7 @@ import pandas as pd
 import streamlit as st
 
 GOLD_TABLES = {
-    "players", "teams", "pitcher_arsenal", "pitcher_usage_by_count", "pitcher_locations", "pitcher_platoon",
+    "players", "teams", "current_roster", "pitcher_arsenal", "pitcher_usage_by_count", "pitcher_locations", "pitcher_platoon",
     "pitcher_spray_allowed", "pitcher_form", "pitcher_whiff_over_expected", "pitcher_running_game",
     "hitter_splits", "hitter_vs_pitch_type", "hitter_zones", "hitter_swing_decisions", "hitter_bat_tracking",
     "hitter_spray", "hitter_situational", "hitter_form", "runner_running_game", "catcher_defense",
@@ -43,4 +43,5 @@ def load(table: str) -> pd.DataFrame:
         raise ValueError(f"unknown table: {table}")
     path = f"s3://{st.secrets['aws']['bucket']}/gold/{table}.parquet"
     return _connection().execute(f"SELECT * FROM read_parquet('{path}')").df()
+
 

@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: gold_current_roster
+    description: "Each player's current 40-man status (latest daily snapshot) and most recent roster move."
+    columns:
+      - name: player_id
+        data_tests: [unique, not_null]
+      - name: status_label
+        data_tests: [not_null]

@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: gold_pitcher_usage_by_count
+    description: "Pitch usage per pitcher, batter side, and count. count_group is from the pitcher's view."
+    columns:
+      - name: usage_id
+        data_tests: [unique, not_null]
+      - name: batter_side
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['L', 'R']
+      - name: count_group
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['first pitch', 'ahead', 'behind', 'even']

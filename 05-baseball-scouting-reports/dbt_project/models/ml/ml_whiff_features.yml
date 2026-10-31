@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: ml_whiff_features
+    description: "Whiff-per-swing training data: pre-pitch features only; tendencies from strictly earlier dates."
+    columns:
+      - name: pitch_id
+        data_tests: [unique, not_null]
+      - name: is_whiff
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+                quote: false

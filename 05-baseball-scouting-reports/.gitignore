@@ -35,3 +35,6 @@ Thumbs.db
 # DuckDB database files (dbt working db)
 **/*.duckdb
 **/*.duckdb.wal
+
+# Model artifacts (stored in S3, not git)
+artifacts/

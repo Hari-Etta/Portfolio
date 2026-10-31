@@ -7,3 +7,5 @@ requests==2.34.2
 python-dotenv==1.2.4
 dbt-core==1.12.6
 dbt-duckdb==1.11.1
+lightgbm==4.7.0
+scikit-learn==1.9.1

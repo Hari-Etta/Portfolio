@@ -21,7 +21,7 @@ Items deliberately left as "good for now". Each has the reason it was deferred.
 - **Opponent-quality adjustment** for pitcher and hitter results.
 
 ## Open questions
-- **40-man rosters showing up to 51 players:** check roster status fields; likely injured-list or end-of-season moves.
+- **40-man rosters showing up to 51 players (mostly explained):** the API lists 60-day injured players with their team (130 on Oct 31), and they don't count against the 40-man limit in season; the biggest roster (50) has only 34 active. Loose end: one team shows 41 active on Oct 29-31, possibly the post-World Series window to trim rosters. The daily Lambda snapshots will show how it resolves (src/quality/check_roster_status.py).
 - **4 slow pitches (under 50 mph) by real pitchers,** all unlabeled (UN): tracking misreads or something unusual?
 
 ## Planned data (Tier 2, with Phase 4)
@@ -86,3 +86,4 @@ Items deliberately left as "good for now". Each has the reason it was deferred.
   77,981 expected whiffs), but first-half vs second-half over-performance has correlation 0.01 (338 pitch types).
   Cause: the model already uses each pitcher's past whiff rates, so the residual is mostly luck. Use the table as a
   "due to regress" flag, not a skill measure. A true stuff model must EXCLUDE pitcher/batter tendency features.
+

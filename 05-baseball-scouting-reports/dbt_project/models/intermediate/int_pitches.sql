@@ -64,5 +64,13 @@ select
         when zone_ratio < 1.33    then 'shadow'
         when zone_ratio < 2.0     then 'chase'
         else 'waste'
-    end                                                                 as attack_zone
+    end                                                                 as attack_zone,
+    -- pitch_group: fastball / breaking / offspeed / other (defined once; used by bat tracking and spray charts)
+    case
+        when pitch_type in ('FF', 'SI', 'FC', 'FA')                 then 'fastball'
+        when pitch_type in ('SL', 'ST', 'CU', 'KC', 'SV', 'CS')      then 'breaking'
+        when pitch_type in ('CH', 'FS', 'FO', 'SC')                  then 'offspeed'
+        else 'other'
+    end                                                                 as pitch_group
 from base
+

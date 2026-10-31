@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: gold_hitter_bat_tracking
+    description: "Bat speed, swing length, attack angle/direction, swing path tilt per hitter and pitch group (competitive swings)."
+    columns:
+      - name: bat_tracking_id
+        data_tests: [unique, not_null]
+      - name: pitch_group
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['all', 'fastball', 'breaking', 'offspeed', 'other']

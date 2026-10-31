@@ -62,3 +62,10 @@ Items deliberately left as "good for now". Each has the reason it was deferred.
   pitcher quality, since runners are on base more often when the pitcher is already struggling.
 - **Lineup simulator:** simulate innings from run expectancy and player probabilities to compare batting orders.
   Expect small gains (research finds order matters by a handful of runs a season); depends on stable effects.
+- **Situational hitting findings (2026):** hitters do better with runners on (wOBA .310 bases empty vs .323 runner on
+  1st, .321 RISP). "Clutch" is not a stable skill here: a hitter's RISP-minus-overall wOBA in the first half has
+  correlation 0.02 with the second half (199 hitters, 40+ RISP PA each half). Implication: a lineup simulator should
+  use overall hitting quality, not situational splits.
+- **Runner-on-first effect:** pitchers barely change (fastball 56.4% -> 56.7%, four-seam -0.08 mph), yet hitter wOBA
+  rises .310 -> .326. Candidate causes: first baseman holding the runner, or struggling pitchers allowing the runners
+  (confounding). Separate them later with fielder alignment, pitcher controls, and sprint speed (Tier 2).

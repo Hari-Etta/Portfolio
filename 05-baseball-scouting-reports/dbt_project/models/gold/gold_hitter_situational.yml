@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: gold_hitter_situational
+    description: "Each hitter by base situation: batting average, wOBA, xwOBA, K%, and wOBA vs his own overall level."
+    columns:
+      - name: situational_id
+        data_tests: [unique, not_null]
+      - name: situation
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['bases_empty', 'runner_on_1st', 'runner_on_2nd', 'runner_on_3rd', 'risp', 'bases_loaded']

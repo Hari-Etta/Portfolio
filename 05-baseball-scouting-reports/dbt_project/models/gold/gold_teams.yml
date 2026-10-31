@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: gold_teams
+    description: "MLB teams: ID, abbreviation, full name."
+    columns:
+      - name: team_id
+        data_tests: [unique, not_null]
+      - name: abbreviation
+        data_tests: [unique, not_null]

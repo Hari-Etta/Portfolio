@@ -6,6 +6,9 @@
 -- contribution to wOBA: woba_pts counts reached-on-error / fielder's choice as outs (default);
 -- woba_statcast_pts follows Statcast (they count like singles); xwoba_pts uses expected value on contact.
 -- Teams: home team pitches in the top of the inning. park = home team (the ballpark the game was played in).
+-- attack_zone (our implementation of Savant's concept): distance from the zone center relative to zone size,
+-- using the larger of the horizontal and vertical ratios. Width = half-plate 0.708 ft + ball radius 0.12 ft;
+-- height = each batter's own sz_top/sz_bot (+ ball radius). Bands: heart < 0.67, shadow < 1.33, chase < 2.0, else waste.
 {{ config(materialized='view') }}
 
 with base as (
@@ -27,7 +30,11 @@ with base as (
         )                                                   as is_whiff,
         p.description = 'called_strike'                     as is_called_strike,
         p.description = 'hit_into_play'                     as is_in_play,
-        coalesce(p.woba_denom, 0) = 1                       as is_pa
+        coalesce(p.woba_denom, 0) = 1                       as is_pa,
+        greatest(
+            abs(p.plate_x) / 0.828,
+            abs(p.plate_z - (p.sz_top + p.sz_bot) / 2) / ((p.sz_top - p.sz_bot) / 2 + 0.12)
+        )                                                   as zone_ratio
     from {{ ref('silver_pitches') }} p
     join {{ ref('silver_players') }} pit on p.pitcher_id = pit.player_id
     join {{ ref('silver_players') }} bat on p.batter_id  = bat.player_id
@@ -50,5 +57,12 @@ select
     inning_topbot = 'Top'                                               as pitcher_is_home,
     case when inning_topbot = 'Top' then home_team else away_team end   as pitcher_team,
     case when inning_topbot = 'Top' then away_team else home_team end   as batter_team,
-    home_team                                                           as park
+    home_team                                                           as park,
+    case
+        when zone_ratio is null   then null
+        when zone_ratio < 0.67    then 'heart'
+        when zone_ratio < 1.33    then 'shadow'
+        when zone_ratio < 2.0     then 'chase'
+        else 'waste'
+    end                                                                 as attack_zone
 from base

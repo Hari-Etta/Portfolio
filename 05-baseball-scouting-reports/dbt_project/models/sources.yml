@@ -9,3 +9,6 @@ sources:
       - name: people
         meta:
           external_location: "read_parquet('s3://{{ env_var('S3_BUCKET') }}/bronze/mlb/people/season=*/*.parquet', union_by_name=true, hive_partitioning=true)"
+      - name: transactions
+        meta:
+          external_location: "read_parquet('s3://{{ env_var('S3_BUCKET') }}/bronze/mlb/transactions/pulled=*/*.parquet', union_by_name=true, hive_partitioning=true)"

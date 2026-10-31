@@ -1,0 +1,12 @@
+version: 2
+
+models:
+  - name: gold_transactions
+    description: "One row per MLB transaction (deduplicated across overlapping pulls), newest copy kept."
+    columns:
+      - name: transaction_id
+        data_tests: [unique, not_null]
+      - name: transaction_date
+        data_tests: [not_null]
+      - name: type_desc
+        data_tests: [not_null]

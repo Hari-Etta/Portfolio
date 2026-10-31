@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: gold_hitter_splits
+    description: "Each hitter vs LHP and RHP: K%, BB%, wOBA (both conventions), xwOBA, whiff, chase, hard-hit."
+    columns:
+      - name: split_id
+        data_tests: [unique, not_null]
+      - name: batter_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('silver_players')
+                field: player_id
+      - name: pitcher_hand
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['L', 'R']
+
+  - name: gold_hitter_vs_pitch_type
+    description: "Each hitter vs each pitch type by pitcher hand: swing/whiff/chase, and outcomes of PAs ending on that pitch."
+    columns:
+      - name: hitter_pitch_id
+        data_tests: [unique, not_null]
+      - name: pitcher_hand
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['L', 'R']

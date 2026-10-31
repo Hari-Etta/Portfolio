@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: gold_hitter_form
+    description: "Each hitter's last 30 days vs earlier in the season, with a hot/cold/steady label (xwOBA-based)."
+    columns:
+      - name: batter_id
+        data_tests: [unique, not_null]
+      - name: form
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['hot', 'cold', 'steady', 'insufficient sample']
+
+  - name: gold_pitcher_form
+    description: "Each pitcher's last 30 days vs earlier in the season: xwOBA allowed, K%, primary fastball velocity."
+    columns:
+      - name: pitcher_id
+        data_tests: [unique, not_null]
+      - name: form
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['hot', 'cold', 'steady', 'insufficient sample']
+      - name: velo_drop
+        data_tests: [not_null]

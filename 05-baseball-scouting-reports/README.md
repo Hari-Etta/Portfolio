@@ -75,7 +75,7 @@ non-commercial portfolio project; data used under the sources' public terms.
 | 3 | Whiff model: leakage-guarded features, walk-forward evaluation, calibration, cloud training | ✅ Done |
 | 4 | Terraform, daily Lambda + EventBridge pull, scheduled dbt, running game & defense data | ✅ Done |
 | 5 | Streamlit app live | ✅ Done — [live](https://baseball-advance-scouting.streamlit.app) |
-| 6 | README, résumé bullet, interview pitch, outreach | 🔧 In progress |
+| 6 | README | ✅ Done |
 
 Ideas deliberately deferred, with reasons, are tracked in [BACKLOG.md](BACKLOG.md).
 

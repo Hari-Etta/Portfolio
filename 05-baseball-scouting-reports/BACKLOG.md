@@ -98,3 +98,8 @@ Items deliberately left as "good for now". Each has the reason it was deferred.
   $1/month; confirm from the real bill). Fallback = MotherDuck Lite (10 GB, 10 compute-hours/month; check their
   "internal business use" terms first). The Streamlit app reads data behind a DATA_BACKEND setting so the switch
   is one line. Avoid publishing data files publicly (MLB/Savant redistribution terms).
+
+## App polish (Phase 5, revisit at the end)
+- **Location heatmap:** show sample size per cell and gray out thin cells (xwOBA on contact for one pitch vs one
+  side can rest on a handful of balls in play, e.g. 0.000 / 0.609); make cells taller than wide like a real zone.
+- **Field chart:** show only the fan (hide the empty half circle), add an outfield-fence arc, larger labels.

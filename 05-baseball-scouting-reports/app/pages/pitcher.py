@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-from lib.charts import movement_chart, name_colors
+from lib.charts import field_chart, movement_chart, name_colors, zone_heatmap
 from lib.data import load
 
 st.title("🎯 Pitcher report")
@@ -96,3 +96,110 @@ else:
     st.plotly_chart(fig, width="stretch")
     st.caption("Count groups are from the pitcher's view: ahead = more strikes than balls. "
                "n = pitches in that situation; small n means less reliable percentages.")
+
+
+# ---------- Location ----------
+st.subheader("Where he throws it (catcher's view)")
+loc = load("pitcher_locations")
+loc = loc[loc["pitcher_id"] == pid]
+lc1, lc2, lc3 = st.columns(3)
+pitch_opts = ["All pitches"] + mine["pitch_name"].tolist()
+loc_pitch = lc1.selectbox("Pitch", pitch_opts)
+loc_side = lc2.radio("Batter side ", ["R", "L"], horizontal=True,
+                     format_func=lambda s: "vs RHH" if s == "R" else "vs LHH")
+metric = lc3.selectbox("Color by", ["Where he throws it", "Whiff % on swings", "xwOBA on contact"])
+cells = loc[loc["batter_side"] == loc_side]
+if loc_pitch != "All pitches":
+    cells = cells[cells["pitch_name"] == loc_pitch]
+if cells.empty:
+    st.info("No pitches for this selection.")
+else:
+    cells = cells.assign(swings=cells["swing_rate"] * cells["pitches"])
+    cells = cells.assign(whiffs=cells["whiff_rate"].fillna(0) * cells["swings"],
+                         xw=cells["xwoba_contact"] * cells["pitches"])
+    z = cells.groupby("zone", as_index=False)[["pitches", "swings", "whiffs", "xw"]].sum()
+    z["share"] = 100 * z["pitches"] / z["pitches"].sum()
+    z["whiff"] = 100 * z["whiffs"] / z["swings"].where(z["swings"] > 0)
+    z["xwoba"] = z["xw"] / z["pitches"]
+    if metric == "Where he throws it":
+        fig = zone_heatmap(z, "share", "{:.0f}%")
+    elif metric == "Whiff % on swings":
+        fig = zone_heatmap(z, "whiff", "{:.0f}%", colorscale="Blues")
+    else:
+        fig = zone_heatmap(z, "xwoba", "{:.3f}", colorscale="RdYlGn_r")
+    st.plotly_chart(fig, width="stretch")
+    st.caption(f"Based on {int(z['pitches'].sum()):,} pitches. Zones are adjusted to each batter's height. "
+               "For a right-handed hitter, inside is the catcher's left.")
+
+# ---------- Platoon, form, home/road ----------
+st.subheader("Results vs left- and right-handed hitters")
+plat = load("pitcher_platoon")
+plat = plat[plat["pitcher_id"] == pid].set_index("batter_side").reindex(["R", "L"])
+plat_tbl = pd.DataFrame({
+    "vs": ["Right-handed hitters", "Left-handed hitters"],
+    "PA": plat["pa"].values,
+    "K %": (100 * plat["k_pct"]).values,
+    "BB %": (100 * plat["bb_pct"]).values,
+    "wOBA": plat["woba"].values,
+    "xwOBA": plat["xwoba"].values,
+    "Whiff %": (100 * plat["whiff_rate"]).values,
+    "Chase %": (100 * plat["chase_rate"]).values,
+    "Hard-hit %": (100 * plat["hard_hit_pct"]).values,
+})
+f1, f3 = st.column_config.NumberColumn(format="%.1f"), st.column_config.NumberColumn(format="%.3f")
+st.dataframe(plat_tbl, hide_index=True, width="stretch", column_config={
+    "K %": f1, "BB %": f1, "Whiff %": f1, "Chase %": f1, "Hard-hit %": f1, "wOBA": f3, "xwOBA": f3})
+st.caption("wOBA counts reached-on-error as an out; xwOBA judges contact quality (less luck). Lower is better for the pitcher.")
+
+fc, hc = st.columns(2)
+with fc:
+    st.subheader("Recent form")
+    form = load("pitcher_form")
+    frow = form[form["pitcher_id"] == pid]
+    if frow.empty:
+        st.info("No form data.")
+    else:
+        fr = frow.iloc[0]
+        st.metric("Form (last 30 days vs earlier)", str(fr["form"]).title())
+        m1, m2 = st.columns(2)
+        if pd.notna(fr["l30_xwoba_allowed"]):
+            m1.metric("xwOBA allowed, last 30", f"{fr['l30_xwoba_allowed']:.3f}",
+                      delta=f"{fr['xwoba_change']:+.3f}" if pd.notna(fr["xwoba_change"]) else None, delta_color="inverse")
+        if pd.notna(fr["l30_fb_velo"]):
+            m2.metric(f"{fr['fb_type']} velo, last 30", f"{fr['l30_fb_velo']:.1f} mph",
+                      delta=f"{fr['fb_velo_change']:+.1f} mph" if pd.notna(fr["fb_velo_change"]) else None)
+        if fr["velo_drop"]:
+            st.warning("Fastball velocity is down 1+ mph from earlier in the season: worth a closer look (fatigue or injury?).")
+        st.caption(f"Window ends {pd.to_datetime(fr['as_of_date']):%b %d, %Y}. "
+                   "Backtest: about half of a 30-day streak tends to carry forward.")
+with hc:
+    st.subheader("Home vs road")
+    hr = load("player_home_road")
+    hr = hr[(hr["role"] == "pitcher") & (hr["player_id"] == pid)].set_index("venue").reindex(["home", "road"])
+    st.dataframe(pd.DataFrame({
+        "Venue": ["Home", "Road"], "PA": hr["pa"].values,
+        "wOBA": hr["woba"].values, "xwOBA": hr["xwoba"].values, "K %": (100 * hr["k_pct"]).values,
+    }), hide_index=True, width="stretch", column_config={"wOBA": f3, "xwOBA": f3, "K %": f1})
+    st.caption("Shows park effects (e.g. Coors Field); not park-adjusted.")
+
+# ---------- Spray allowed ----------
+st.subheader("Where hitters hit it against him (for positioning)")
+spray = load("pitcher_spray_allowed")
+spray = spray[spray["pitcher_id"] == pid]
+s1, s2 = st.columns(2)
+sp_side = s1.radio("Batter side  ", ["R", "L"], horizontal=True,
+                   format_func=lambda s: "vs RHH" if s == "R" else "vs LHH")
+sp_group = s2.selectbox("Pitch group", ["All", "fastball", "breaking", "offspeed"])
+sel = spray[spray["batter_side"] == sp_side]
+if sp_group != "All":
+    sel = sel[sel["pitch_group"] == sp_group]
+if sel.empty:
+    st.info("No batted balls for this selection.")
+else:
+    zones = sel.groupby(["field_zone", "depth", "direction"], as_index=False)["batted_balls"].sum()
+    zones["share"] = zones["batted_balls"] / zones["batted_balls"].sum()
+    st.plotly_chart(field_chart(zones), width="stretch")
+    top = zones.sort_values("share", ascending=False).iloc[0]
+    st.caption(f"{int(zones['batted_balls'].sum())} batted balls. Most common: "
+               f"{top['depth'].replace('_', ' ')} {top['direction']} ({100 * top['share']:.0f}%). "
+               "Location = where the ball was fielded. Left field is on the left.")

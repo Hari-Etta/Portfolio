@@ -1,5 +1,7 @@
 # Baseball Advance Scouting Report Generator
 
+**Live app:** https://baseball-advance-scouting.streamlit.app (may take a moment to wake up)
+
 Automated MLB advance scouting reports: Statcast + MLB Stats API -> AWS S3 data lake -> dbt -> whiff model -> Streamlit app.
 
 ## Status
@@ -9,7 +11,7 @@ Automated MLB advance scouting reports: Statcast + MLB Stats API -> AWS S3 data 
       spray charts, HBP, run expectancy, situational hitting
 - [x] Phase 3: whiff model trained, calibration checked, trained in GitHub Actions
 - [x] Phase 4: Terraform + Lambda/EventBridge daily pull + scheduled dbt, running game and defense data
-- [ ] Phase 5: Streamlit app live
+- [x] Phase 5: Streamlit app live: https://baseball-advance-scouting.streamlit.app
 - [ ] Phase 6: README, resume bullet, pitch, outreach
 
 Ideas deliberately deferred, with reasons, are tracked in [BACKLOG.md](BACKLOG.md).
@@ -211,3 +213,19 @@ policy simulator reported organization-level denies that don't apply on this fre
 - GitHub pauses scheduled workflows in public repos after 60 days without commits; re-enable with one click.
 - The AWS free plan ends Apr 29, 2027; the app reads data behind a `DATA_BACKEND` setting so it can switch to
   MotherDuck if the account isn't upgraded. See [BACKLOG.md](BACKLOG.md).
+
+## The app (Phase 5)
+**Live:** https://baseball-advance-scouting.streamlit.app · Streamlit Community Cloud · reads gold tables and the
+model from S3 with a read-only key (behind a `DATA_BACKEND` setting, so it can switch to MotherDuck later).
+
+| Page | What a coach gets |
+|---|---|
+| Home | Pick the opponent; its pitchers and hitters with **current roster status** (daily snapshot: active, IL, left in free agency); "What changed" roster moves |
+| Pitcher report | **How to attack him** summary; arsenal with command and movement; movement chart; usage by count; location heatmap; platoon; form and velocity flag; home/road; spray allowed (12 field zones) for positioning |
+| Hitter report | **How to attack him** summary; splits; results vs each pitch type; zone map; swing decisions; bat tracking; spray chart by pitcher hand, pitch group and speed; runners on base (with clutch caveat); form; home/road |
+| Running game & defense | Runners (attempt rate, sprint speed), pitchers' hold (pickoff throws per opportunity), catchers (pop time chart), fielders (OAA by direction, outfielder jump) |
+| Pitch planner | The whiff model scores one of our pitches against their hitter across 121 locations; "whiff if he swings" and "whiff per pitch" views |
+| Methods & data | Freshness, sources, definitions, every summary threshold, validations, limitations |
+
+**Honesty features:** rule-based summaries (deterministic, every claim shows its sample size); small samples
+flagged; thin heatmap cells hidden; a global toggle for counting reached-on-error as hits (Statcast convention).

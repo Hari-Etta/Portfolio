@@ -45,3 +45,17 @@ def load(table: str) -> pd.DataFrame:
     return _connection().execute(f"SELECT * FROM read_parquet('{path}')").df()
 
 
+
+
+def errors_as_hits() -> bool:
+    """Global sidebar toggle: count reached-on-error as hits (Statcast wOBA convention)."""
+    return bool(st.session_state.get("errors_as_hits", False))
+
+
+def woba_col() -> str:
+    return "woba_statcast" if errors_as_hits() else "woba"
+
+
+def woba_note() -> str:
+    return ("wOBA uses Statcast's convention (reached-on-error counts like a single)."
+            if errors_as_hits() else "wOBA counts reached-on-error as an out.")

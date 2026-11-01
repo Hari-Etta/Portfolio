@@ -4,7 +4,7 @@ import plotly.express as px
 import streamlit as st
 
 from lib.charts import field_chart, zone_heatmap
-from lib.data import load
+from lib.data import load, woba_col, woba_note
 
 f1 = st.column_config.NumberColumn(format="%.1f")
 f3 = st.column_config.NumberColumn(format="%.3f")
@@ -34,7 +34,7 @@ st.session_state["batter_id"] = bid
 bats = hitters.loc[hitters["batter_id"] == bid, "bats"].iloc[0]
 mine = team_splits[team_splits["batter_id"] == bid]
 pa = int(mine["pa"].sum())
-woba = (mine["woba"] * mine["pa"]).sum() / pa if pa else float("nan")
+woba = (mine[woba_col()] * mine["pa"]).sum() / pa if pa else float("nan")
 xwoba = (mine["xwoba"] * mine["pa"]).sum() / pa if pa else float("nan")
 status = roster.loc[bid, "status_label"] if bid in roster.index else "Unknown"
 
@@ -62,14 +62,14 @@ st.dataframe(pd.DataFrame({
     "K %": (100 * sp["k_pct"]).values,
     "BB %": (100 * sp["bb_pct"]).values,
     "HBP %": (100 * sp["hbp_pct"]).values,
-    "wOBA": sp["woba"].values,
+    "wOBA": sp[woba_col()].values,
     "xwOBA": sp["xwoba"].values,
     "Whiff %": (100 * sp["whiff_rate"]).values,
     "Chase %": (100 * sp["chase_rate"]).values,
     "Hard-hit %": (100 * sp["hard_hit_pct"]).values,
 }), hide_index=True, width="stretch", column_config={
     "K %": f1, "BB %": f1, "HBP %": f1, "Whiff %": f1, "Chase %": f1, "Hard-hit %": f1, "wOBA": f3, "xwOBA": f3})
-st.caption("wOBA counts reached-on-error as an out; xwOBA judges contact quality (less luck). Higher is better for the hitter.")
+st.caption(f"{woba_note()} xwOBA judges contact quality (less luck). Higher is better for the hitter.")
 
 # ---------- vs pitch types ----------
 st.subheader("vs each pitch type")
@@ -259,7 +259,8 @@ with hc:
     hr = hr[(hr["role"] == "hitter") & (hr["player_id"] == bid)].set_index("venue").reindex(["home", "road"])
     st.dataframe(pd.DataFrame({
         "Venue": ["Home", "Road"], "PA": hr["pa"].values,
-        "wOBA": hr["woba"].values, "xwOBA": hr["xwoba"].values, "K %": (100 * hr["k_pct"]).values,
+        "wOBA": hr[woba_col()].values, "xwOBA": hr["xwoba"].values, "K %": (100 * hr["k_pct"]).values,
     }), hide_index=True, width="stretch", column_config={"wOBA": f3, "xwOBA": f3, "K %": f1})
     st.caption("Shows park effects (e.g. Coors Field); not park-adjusted.")
+
 

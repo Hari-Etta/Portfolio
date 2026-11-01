@@ -4,7 +4,7 @@ import plotly.express as px
 import streamlit as st
 
 from lib.charts import field_chart, movement_chart, name_colors, zone_heatmap
-from lib.data import load
+from lib.data import load, woba_col, woba_note
 
 st.title("🎯 Pitcher report")
 team = st.session_state.get("team")
@@ -148,7 +148,7 @@ plat_tbl = pd.DataFrame({
     "PA": plat["pa"].values,
     "K %": (100 * plat["k_pct"]).values,
     "BB %": (100 * plat["bb_pct"]).values,
-    "wOBA": plat["woba"].values,
+    "wOBA": plat[woba_col()].values,
     "xwOBA": plat["xwoba"].values,
     "Whiff %": (100 * plat["whiff_rate"]).values,
     "Chase %": (100 * plat["chase_rate"]).values,
@@ -157,7 +157,7 @@ plat_tbl = pd.DataFrame({
 f1, f3 = st.column_config.NumberColumn(format="%.1f"), st.column_config.NumberColumn(format="%.3f")
 st.dataframe(plat_tbl, hide_index=True, width="stretch", column_config={
     "K %": f1, "BB %": f1, "Whiff %": f1, "Chase %": f1, "Hard-hit %": f1, "wOBA": f3, "xwOBA": f3})
-st.caption("wOBA counts reached-on-error as an out; xwOBA judges contact quality (less luck). Lower is better for the pitcher.")
+st.caption(f"{woba_note()} xwOBA judges contact quality (less luck). Lower is better for the pitcher.")
 
 fc, hc = st.columns(2)
 with fc:
@@ -186,7 +186,7 @@ with hc:
     hr = hr[(hr["role"] == "pitcher") & (hr["player_id"] == pid)].set_index("venue").reindex(["home", "road"])
     st.dataframe(pd.DataFrame({
         "Venue": ["Home", "Road"], "PA": hr["pa"].values,
-        "wOBA": hr["woba"].values, "xwOBA": hr["xwoba"].values, "K %": (100 * hr["k_pct"]).values,
+        "wOBA": hr[woba_col()].values, "xwOBA": hr["xwoba"].values, "K %": (100 * hr["k_pct"]).values,
     }), hide_index=True, width="stretch", column_config={"wOBA": f3, "xwOBA": f3, "K %": f1})
     st.caption("Shows park effects (e.g. Coors Field); not park-adjusted.")
 
@@ -211,4 +211,5 @@ else:
     st.caption(f"{int(zones['batted_balls'].sum())} batted balls. Most common: "
                f"{top['depth'].replace('_', ' ')} {top['direction']} ({100 * top['share']:.0f}%). "
                "Location = where the ball was fielded. Left field is on the left.")
+
 

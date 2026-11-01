@@ -1,7 +1,9 @@
 # Streamlit app dependencies only (Streamlit Community Cloud installs from this file).
-# Pinned to the versions tested locally. lightgbm is added in step 5.7 (pitch planner).
+# Pinned to the versions tested locally.
 streamlit==1.66.1
 plotly==7.1.0
 duckdb==2.0.0
 pandas==3.1.0
 pyarrow==26.0.0
+lightgbm==4.7.0
+

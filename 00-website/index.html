@@ -435,29 +435,74 @@
       </details>
     </article>
 
-    <!-- 4th project slot — fully placeholder, ready whenever you have a new project.
-         Swap the status class + label as it moves along: status-awaiting-ideas →
-         status-construction → status-deploy-pending → status-live (see the
-         status-badge rules in style.css). -->
-    <article class="project-card" data-tags="python">
+    <!-- Baseball Advance Scouting Report Generator (4th project slot) — real live app +
+         real repo subfolder link below. -->
+    <article class="project-card" data-tags="python,sql,ml">
       <div class="project-preview preview-pattern-1">
         <div class="preview-chrome">
           <span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
-          <span class="chrome-url">github.com/Hari-Etta/Portfolio</span>
+          <span class="chrome-url">github.com/.../05-baseball-scouting-reports</span>
         </div>
         <div class="preview-body" aria-hidden="true"></div>
       </div>
       <div class="project-top">
-        <h3>[Project Title]</h3>
-        <span class="status-badge status-awaiting-ideas">Awaiting Ideas</span>
+        <h3>Baseball Advance Scouting Report Generator</h3>
+        <span class="status-badge status-live">Live</span>
       </div>
-      <p class="project-desc">[One-paragraph description of what the project does, the problem it solves, and your role in building it.]</p>
+      <p class="project-desc">An automated advance-scouting platform that turns 716,792 real Statcast pitches (2,429 games, full 2026 MLB season) into coach-ready reports in seconds instead of hours. A daily AWS Lambda job pulls from the MLB Stats API and Baseball Savant, 31 dbt models with 116 tests clean and shape the data on DuckDB/S3, and a LightGBM model (AUC 0.80) scores pitch-level whiff probability. A Streamlit app serves six report types — pitcher, hitter, running game &amp; defense, pitch planner, and a methods/data page that shows exactly where every number comes from.</p>
       <div class="project-tags">
-        <span class="tag">[Tech]</span>
+        <span class="tag">Python</span>
+        <span class="tag">dbt</span>
+        <span class="tag">DuckDB</span>
+        <span class="tag">AWS Lambda</span>
+        <span class="tag">Terraform</span>
+        <span class="tag">LightGBM</span>
+        <span class="tag">Streamlit</span>
       </div>
       <div class="project-links">
-        <a href="https://github.com/Hari-Etta/Portfolio/tree/main" target="_blank" rel="noopener">View repo →</a>
+        <a href="https://baseball-advance-scouting.streamlit.app/" target="_blank" rel="noopener">Live App →</a>
+        <a href="https://github.com/Hari-Etta/Portfolio/tree/main/05-baseball-scouting-reports" target="_blank" rel="noopener">Code →</a>
       </div>
+      <details class="project-more">
+        <summary>Read more</summary>
+        <div class="project-long">
+          <p>Advance scouting reports are normally hand-built by a coach or analyst the night before a series — this project automates that process end to end, from raw pitch tracking data to a report a coach can actually read, on real public Statcast data covering the full 2026 MLB season.</p>
+          <h4>At a glance</h4>
+          <ul>
+            <li>716,792 pitches across 2,429 games, pulled from the MLB Stats API and Baseball Savant.</li>
+            <li>Daily AWS Lambda job runs the pipeline on a schedule — no manual step keeps it current.</li>
+            <li>31 dbt models with 116 automated tests transform raw pitch-by-pitch data into gold-level tables (DuckDB on S3).</li>
+            <li>A LightGBM whiff-probability model scores pitch-level swing-and-miss likelihood, AUC 0.80 on rolling out-of-time test months.</li>
+            <li>Infrastructure defined in Terraform; the whole stack runs on free-tier cloud accounts.</li>
+          </ul>
+          <h4>What makes it different</h4>
+          <ul>
+            <li>Built "honest by design" — the Methods &amp; Data page in the app shows exactly which query and which assumptions produced every number, rather than presenting polished stats with no way to check them.</li>
+            <li>Testing didn't just confirm the pipeline worked — it actively found and fixed real bugs (see below) rather than being a checkbox exercise.</li>
+            <li>Findings are verified, not just reported: a "hot streak" claim or a hit-by-pitch pattern is checked against the underlying at-bats before it's shown as a finding, and claims that didn't hold up (e.g. "clutch hitting" as a stable skill) are reported as not holding up.</li>
+          </ul>
+          <h4>The app</h4>
+          <ul>
+            <li>Home — entry point and season overview</li>
+            <li>Pitcher report — pitch mix, tendencies, whiff model output by count/situation</li>
+            <li>Hitter report — plate discipline and batted-ball profile</li>
+            <li>Running game &amp; defense — stolen-base and defensive positioning tendencies</li>
+            <li>Pitch planner — situational pitch-calling support</li>
+            <li>Methods &amp; data — full transparency page: data sources, transformations, and model details</li>
+          </ul>
+          <h4>What testing found (and fixed)</h4>
+          <ul>
+            <li>116 dbt tests across 31 models surfaced real data-quality issues — not just schema checks — including inconsistencies between raw feeds that were traced back to their source and corrected rather than silently dropped.</li>
+          </ul>
+          <h4>Known limitations</h4>
+          <ul>
+            <li>Single-season data (2026) — no multi-year trend modeling yet.</li>
+            <li>Whiff model is pitch-level, not yet extended to full at-bat outcome modeling.</li>
+            <li>Running entirely on free-tier infrastructure, so there are deliberate scale ceilings (documented in the repo's own backlog).</li>
+          </ul>
+          <p><strong>Stack:</strong> Python, AWS Lambda, Terraform, DuckDB, dbt, LightGBM, Streamlit — MLB Stats API &amp; Baseball Savant as data sources</p>
+        </div>
+      </details>
     </article>
 
     <!-- 5th project slot — fully placeholder, ready whenever you have a new project. -->

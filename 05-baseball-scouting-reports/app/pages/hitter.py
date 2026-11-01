@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-from lib.charts import zone_heatmap
+from lib.charts import field_chart, zone_heatmap
 from lib.data import load
 
 f1 = st.column_config.NumberColumn(format="%.1f")
@@ -141,3 +141,116 @@ else:
     st.caption("Heart = middle of the zone, shadow = edges, chase = just off the plate, waste = far off. "
                "Swinging more than the league at chase/waste pitches is a weakness to exploit. "
                "Runs per 100 includes contact results, not decisions alone.")
+
+
+# ---------- Bat tracking ----------
+st.subheader("Bat tracking")
+bt_all = load("hitter_bat_tracking")
+league = bt_all[bt_all["pitch_group"] == "all"]
+lg_speed = (league["avg_bat_speed"] * league["competitive_swings"]).sum() / league["competitive_swings"].sum()
+lg_fast = (league["fast_swing_rate"] * league["competitive_swings"]).sum() / league["competitive_swings"].sum()
+bt = bt_all[bt_all["batter_id"] == bid].set_index("pitch_group").reindex(["all", "fastball", "breaking", "offspeed"])
+bt = bt.dropna(subset=["competitive_swings"]).reset_index()
+if bt.empty:
+    st.info("No bat-tracking data.")
+else:
+    allrow = bt[bt["pitch_group"] == "all"]
+    if not allrow.empty:
+        a = allrow.iloc[0]
+        b1, b2, b3 = st.columns(3)
+        b1.metric("Average bat speed", f"{a['avg_bat_speed']:.1f} mph", delta=f"{a['avg_bat_speed'] - lg_speed:+.1f} vs league")
+        b2.metric("Top-end bat speed", f"{a['top_bat_speed']:.1f} mph")
+        b3.metric("Fast swings (75+ mph)", f"{100 * a['fast_swing_rate']:.0f}%",
+                  delta=f"{100 * (a['fast_swing_rate'] - lg_fast):+.0f} pts vs league")
+    st.dataframe(pd.DataFrame({
+        "Pitch group": bt["pitch_group"].str.title() + bt["small_sample"].map({True: " ⚠️", False: ""}),
+        "Swings": bt["competitive_swings"],
+        "Bat speed": bt["avg_bat_speed"], "Top-end": bt["top_bat_speed"],
+        "Fast swing %": 100 * bt["fast_swing_rate"],
+        "Swing length (ft)": bt["avg_swing_length"],
+        "Attack angle": bt["avg_attack_angle"],
+    }), hide_index=True, width="stretch", column_config={
+        "Bat speed": f1, "Top-end": f1, "Fast swing %": f1, "Attack angle": f1,
+        "Swing length (ft)": st.column_config.NumberColumn(format="%.2f")})
+    st.caption(f"Competitive swings only (50+ mph, no bunts). League average bat speed {lg_speed:.1f} mph. "
+               "A longer swing against breaking/offspeed than fastballs can mean he's being fooled.")
+
+# ---------- Spray chart ----------
+st.subheader("Where he hits it (12 field zones)")
+spr = load("hitter_spray")
+spr = spr[spr["batter_id"] == bid]
+s1, s2, s3 = st.columns(3)
+sp_hand = s1.radio("Pitcher hand  ", ["R", "L"], horizontal=True,
+                   format_func=lambda h: "vs RHP" if h == "R" else "vs LHP")
+sp_group = s2.selectbox("Pitch group ", ["All", "fastball", "breaking", "offspeed"])
+sp_velo = s3.selectbox("Pitch speed", ["All", "<85", "85-92", "93-96", "97+"])
+sel = spr[spr["pitcher_hand"] == sp_hand]
+if sp_group != "All":
+    sel = sel[sel["pitch_group"] == sp_group]
+if sp_velo != "All":
+    sel = sel[sel["velo_band"] == sp_velo]
+if sel.empty:
+    st.info("No batted balls for this selection.")
+else:
+    zones = sel.groupby(["field_zone", "depth", "direction"], as_index=False)["batted_balls"].sum()
+    zones["share"] = zones["batted_balls"] / zones["batted_balls"].sum()
+    st.plotly_chart(field_chart(zones), width="stretch")
+    pull = sel.groupby("pull_side")["batted_balls"].sum()
+    total = pull.sum()
+    p1, p2, p3, p4 = st.columns(4)
+    p1.metric("Batted balls", int(total))
+    p2.metric("Pull", f"{100 * pull.get('pull', 0) / total:.0f}%")
+    p3.metric("Center", f"{100 * pull.get('center', 0) / total:.0f}%")
+    p4.metric("Opposite field", f"{100 * pull.get('opposite', 0) / total:.0f}%")
+    hard = (sel["hard_hit"].sum() / total) if total else 0
+    st.caption(f"Hard-hit on these balls: {100 * hard:.0f}%. Location = where the ball was fielded; "
+               "left field is on the left. Narrow filters (one pitch speed vs one hand) can leave few balls; check the count.")
+
+# ---------- Situational, form, home/road ----------
+st.subheader("With runners on base")
+sit = load("hitter_situational")
+order = ["bases_empty", "runner_on_1st", "runner_on_2nd", "runner_on_3rd", "risp", "bases_loaded"]
+sit = sit[sit["batter_id"] == bid].set_index("situation").reindex(order).dropna(subset=["pa"]).reset_index()
+if sit.empty:
+    st.info("No situational data.")
+else:
+    st.dataframe(pd.DataFrame({
+        "Situation": sit["situation"].str.replace("_", " ").str.replace("risp", "runners in scoring position")
+                     + sit["small_sample"].map({True: " ⚠️", False: ""}),
+        "PA": sit["pa"], "AVG": sit["batting_avg"], "wOBA": sit["woba"], "xwOBA": sit["xwoba"],
+        "K %": 100 * sit["k_pct"], "wOBA vs his overall": sit["woba_vs_overall"],
+    }), hide_index=True, width="stretch", column_config={
+        "AVG": f3, "wOBA": f3, "xwOBA": f3, "K %": f1,
+        "wOBA vs his overall": st.column_config.NumberColumn(format="%+.3f")})
+    st.caption("⚠️ = fewer than 30 PA. Caution: in 2026, a hitter's runners-in-scoring-position edge in the first half "
+               "had essentially no link to the second half (correlation 0.02). Treat these as context, not a skill.")
+
+fc, hc = st.columns(2)
+with fc:
+    st.subheader("Recent form")
+    form = load("hitter_form")
+    frow = form[form["batter_id"] == bid]
+    if frow.empty:
+        st.info("No form data.")
+    else:
+        fr = frow.iloc[0]
+        st.metric("Form (last 30 days vs earlier)", str(fr["form"]).title())
+        m1, m2 = st.columns(2)
+        if pd.notna(fr["l30_xwoba"]):
+            m1.metric("xwOBA, last 30", f"{fr['l30_xwoba']:.3f}",
+                      delta=f"{fr['xwoba_change']:+.3f}" if pd.notna(fr["xwoba_change"]) else None)
+        if pd.notna(fr["l30_k_pct"]):
+            m2.metric("K %, last 30", f"{100 * fr['l30_k_pct']:.1f}%",
+                      delta=f"{100 * (fr['l30_k_pct'] - fr['base_k_pct']):+.1f} pts" if pd.notna(fr["base_k_pct"]) else None,
+                      delta_color="inverse")
+        st.caption(f"{int(fr['l30_pa'])} PA in the window ending {pd.to_datetime(fr['as_of_date']):%b %d, %Y}. "
+                   "Backtest: about half of a 30-day streak tends to carry forward.")
+with hc:
+    st.subheader("Home vs road")
+    hr = load("player_home_road")
+    hr = hr[(hr["role"] == "hitter") & (hr["player_id"] == bid)].set_index("venue").reindex(["home", "road"])
+    st.dataframe(pd.DataFrame({
+        "Venue": ["Home", "Road"], "PA": hr["pa"].values,
+        "wOBA": hr["woba"].values, "xwOBA": hr["xwoba"].values, "K %": (100 * hr["k_pct"]).values,
+    }), hide_index=True, width="stretch", column_config={"wOBA": f3, "xwOBA": f3, "K %": f1})
+    st.caption("Shows park effects (e.g. Coors Field); not park-adjusted.")

@@ -103,3 +103,5 @@ Items deliberately left as "good for now". Each has the reason it was deferred.
 - **Location heatmap:** show sample size per cell and gray out thin cells (xwOBA on contact for one pitch vs one
   side can rest on a handful of balls in play, e.g. 0.000 / 0.609); make cells taller than wide like a real zone.
 - **Field chart:** show only the fan (hide the empty half circle), add an outfield-fence arc, larger labels.
+- **Hitter zone map ("How pitchers attack him"):** gray scale makes the busiest cells nearly black on the dark
+  theme; switch to a scale that reads well on dark backgrounds.

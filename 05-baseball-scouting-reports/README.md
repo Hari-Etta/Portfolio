@@ -2,6 +2,65 @@
 
 **Live app:** https://baseball-advance-scouting.streamlit.app (may take a moment to wake up)
 
+## At a glance
+An automated advance-scouting platform for MLB: pick an opponent, get pitcher and hitter reports that end in a
+plain-language **"how to attack him"** plan, plus running-game, defense, and a model-driven pitch planner.
+
+- **Data:** 716,792 Statcast pitches (2,429 games, full 2026 regular season), MLB Stats API rosters, transactions and
+  play-by-play (14,392 running-game events), and Baseball Savant leaderboards.
+- **Runs itself:** a Lambda pulls rosters and transactions every morning; GitHub Actions rebuilds and tests every table daily.
+- **Tested:** 31 dbt models and 116 data tests, including leakage guards and cross-table reconciliations.
+- **Model:** LightGBM whiff probability, 22% better than a constant baseline in every walk-forward test month,
+  AUC 0.80, calibrated within about 1 point.
+- **Infrastructure as code:** Terraform with remote state; least-privilege IAM; the public app is read-only.
+- **Honest by design:** rule-based summaries show sample sizes; our own tests found clutch hitting and
+  "whiffs over expected" weren't repeatable, and we report that.
+
+## Architecture
+```mermaid
+flowchart LR
+    subgraph Sources
+        SC[Statcast via pybaseball]
+        API[MLB Stats API<br/>rosters, transactions,<br/>play-by-play]
+        SAV[Baseball Savant<br/>leaderboards]
+    end
+
+    subgraph Ingestion
+        GHA1[GitHub Actions<br/>backfills]
+        LAM[AWS Lambda<br/>daily 6 AM<br/>EventBridge Scheduler]
+    end
+
+    subgraph S3[AWS S3 data lake - Parquet]
+        BR[(bronze<br/>raw)]
+        SI[(silver<br/>clean, deduplicated)]
+        GO[(gold<br/>report tables)]
+        ML[(ml<br/>features, model, scores)]
+    end
+
+    subgraph Transform
+        DBT[dbt + DuckDB<br/>31 models, 116 tests<br/>daily in GitHub Actions]
+        TRAIN[LightGBM training<br/>GitHub Actions]
+    end
+
+    APP[Streamlit app<br/>read-only key]
+    TF[Terraform<br/>S3, IAM, Lambda,<br/>scheduler, budget]
+
+    SC --> GHA1
+    SAV --> GHA1
+    API --> GHA1
+    API --> LAM
+    GHA1 --> BR
+    LAM --> BR
+    BR --> DBT --> SI --> DBT
+    DBT --> GO
+    DBT --> ML
+    ML --> TRAIN --> ML
+    GO --> APP
+    ML --> APP
+    TF -. manages .-> S3
+    TF -. manages .-> LAM
+```
+
 Automated MLB advance scouting reports: Statcast + MLB Stats API -> AWS S3 data lake -> dbt -> whiff model -> Streamlit app.
 
 ## Status
@@ -229,3 +288,4 @@ model from S3 with a read-only key (behind a `DATA_BACKEND` setting, so it can s
 
 **Honesty features:** rule-based summaries (deterministic, every claim shows its sample size); small samples
 flagged; thin heatmap cells hidden; a global toggle for counting reached-on-error as hits (Statcast convention).
+

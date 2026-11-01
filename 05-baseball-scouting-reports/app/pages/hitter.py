@@ -45,6 +45,14 @@ c3.metric("wOBA", f"{woba:.3f}")
 c4.metric("xwOBA", f"{xwoba:.3f}")
 c5.metric("Roster status", status)
 
+from lib.summaries import hitter_summary
+
+with st.container(border=True):
+    st.markdown("#### 📝 How to attack him")
+    for line in hitter_summary(bid):
+        st.markdown(f"- {line}")
+    st.caption("Rule-based from the tables below; every claim shows its sample size. Thresholds are on the Methods page.")
+
 # ---------- Splits ----------
 st.subheader("vs right- and left-handed pitchers")
 sp = mine.set_index("pitcher_hand").reindex(["R", "L"])
@@ -254,3 +262,4 @@ with hc:
         "wOBA": hr["woba"].values, "xwOBA": hr["xwoba"].values, "K %": (100 * hr["k_pct"]).values,
     }), hide_index=True, width="stretch", column_config={"wOBA": f3, "xwOBA": f3, "K %": f1})
     st.caption("Shows park effects (e.g. Coors Field); not park-adjusted.")
+

@@ -105,3 +105,6 @@ Items deliberately left as "good for now". Each has the reason it was deferred.
 - **Field chart:** show only the fan (hide the empty half circle), add an outfield-fence arc, larger labels.
 - **Hitter zone map ("How pitchers attack him"):** gray scale makes the busiest cells nearly black on the dark
   theme; switch to a scale that reads well on dark backgrounds.
+- **Summary rules to tune:** (1) "attack with" can rest on few PA (e.g. 17) while a close alternative has twice the
+  sample; raise the minimum to ~25 PA or prefer the larger sample when xwOBA is within ~.020. (2) "Out pitch" picks
+  the highest whiff rate with 100+ pitches; weigh usage too (e.g. a 32% whiff pitch thrown 728 times vs 34% on 166).

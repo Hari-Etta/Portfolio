@@ -38,6 +38,14 @@ c2.metric("2026 pitches", f"{int(mine['pitches'].sum()):,}")
 c3.metric("Pitch types", int((~mine["small_sample"]).sum()))
 c4.metric("Roster status", status)
 
+from lib.summaries import pitcher_summary
+
+with st.container(border=True):
+    st.markdown("#### 📝 How to attack him")
+    for line in pitcher_summary(pid):
+        st.markdown(f"- {line}")
+    st.caption("Rule-based from the tables below; every claim shows its sample size. Thresholds are on the Methods page.")
+
 # ---------- Arsenal ----------
 st.subheader("Arsenal")
 tbl = pd.DataFrame({
@@ -203,3 +211,4 @@ else:
     st.caption(f"{int(zones['batted_balls'].sum())} batted balls. Most common: "
                f"{top['depth'].replace('_', ' ')} {top['direction']} ({100 * top['share']:.0f}%). "
                "Location = where the ball was fielded. Left field is on the left.")
+

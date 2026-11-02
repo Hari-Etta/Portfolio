@@ -28,11 +28,9 @@ DATA_ROOT = Path(__file__).resolve().parents[1] / "data"
 
 
 def sha256_file(path: Path) -> str:
-    h = hashlib.sha256()
-    with path.open("rb") as f:
-        for block in iter(lambda: f.read(8192), b""):
-            h.update(block)
-    return h.hexdigest()
+    # Normalize Windows (\r\n) line endings so the same page hashes the same on Windows and Linux.
+    data = path.read_bytes().replace(b"\r\n", b"\n")
+    return hashlib.sha256(data).hexdigest()
 
 
 def iter_md_files() -> List[Path]:

@@ -40,6 +40,7 @@ from backend.orchestrator import chat_turn  # noqa: E402
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
 log = logging.getLogger("api")
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 # ── env ───────────────────────────────────────────────────────────────────────
 ALLOWED_ORIGINS: List[str] = [

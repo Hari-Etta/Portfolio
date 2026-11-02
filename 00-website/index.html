@@ -416,20 +416,24 @@
       </details>
     </article>
 
-<!-- IIT International Student Policy Assistant (renamed from "...Chatbot") — real repo
-         subfolder below; the live demo link is still pending from Hari, shown as plain text
-         rather than a dead link until it exists (per the content-honesty rule). -->
+<!-- IIT International Student Policy Assistant (renamed from "...Chatbot") — real live app +
+         real repo subfolder link below. Cover image: place IIT-ChatBot_icon.jpg in the
+         images/ folder next to hari-photo.jpeg — the path below expects it there. -->
     <article class="project-card" data-tags="python,ml">
       <div class="project-preview preview-pattern-2">
         <div class="preview-chrome">
           <span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
           <span class="chrome-url">github.com/.../04-iit-chatbot</span>
         </div>
-        <div class="preview-body" aria-hidden="true"></div>
+        <img class="preview-cover" src="images/IIT-ChatBot_icon.jpg" alt="" aria-hidden="true">
+      </div>
+      <div class="project-links">
+        <a href="https://iit-studentagent.netlify.app/" target="_blank" rel="noopener">Live App →</a>
+        <a href="https://github.com/Hari-Etta/Portfolio/tree/main/04-iit-chatbot" target="_blank" rel="noopener">Code →</a>
       </div>
       <div class="project-top">
         <h3>IIT International Student Policy Assistant</h3>
-        <span class="status-badge status-deploy-pending">Deployment Pending</span>
+        <span class="status-badge status-live">Live</span>
       </div>
       <p class="project-desc">RAG assistant answering F-1 immigration questions for Illinois Tech students, grounded in 20 official policy pages with citations. Uses hybrid retrieval (keyword + vector + RRF) and a deterministic rule engine for eligibility. 90.4% on a 52-question rubric (vs 88.5% NotebookLM baseline), and 4.63/5 in an 8-student pilot. I deployed it to production, built the feedback pipeline, and re-platformed it from a paid Elasticsearch cluster (about $100/mo) to free-tier Postgres + pgvector.</p>
       <div class="project-tags">
@@ -439,10 +443,6 @@
         <span class="tag">pgvector</span>
         <span class="tag">Claude API</span>
         <span class="tag">Gemini</span>
-      </div>
-      <div class="project-links">
-        <a href="https://github.com/Hari-Etta/Portfolio/tree/main/04-iit-chatbot" target="_blank" rel="noopener">Code →</a>
-        <span class="project-link-pending">Live demo — link coming soon</span>
       </div>
       <details class="project-more">
         <summary>Read more</summary>

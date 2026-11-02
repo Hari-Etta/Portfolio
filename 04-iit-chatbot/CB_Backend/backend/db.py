@@ -8,6 +8,7 @@ Neon free tier notes:
   prepared statements are disabled for PgBouncer compatibility.
 """
 
+import atexit
 from contextlib import contextmanager
 import logging
 from typing import Iterator, Optional
@@ -45,6 +46,7 @@ def get_pool():
             check=ConnectionPool.check_connection,
             open=True,
         )
+        atexit.register(_pool.close)  # close cleanly when a script/server exits
     return _pool
 
 
